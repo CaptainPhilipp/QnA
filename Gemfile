@@ -39,6 +39,7 @@ gem 'slim-rails'
 
 group :test do
   gem 'shoulda-matchers'
+  gem 'rails-controller-testing'
 end
 
 group :development, :test do
