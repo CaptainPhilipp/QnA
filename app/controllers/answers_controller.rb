@@ -20,6 +20,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_question
-    { question_id: params[:question_id] }
+    params.permit :question_id
   end
 end
