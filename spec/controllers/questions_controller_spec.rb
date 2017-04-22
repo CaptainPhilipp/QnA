@@ -12,7 +12,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     it 'renders view index' do
-      should render_template(:index)
+      should render_template :index
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns :question).to eq(question)
     end
 
-    it { should render_template(:show) }
+    it { should render_template :show }
   end
 
   describe 'GET #new' do
@@ -35,7 +35,7 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns :question).to be_a_new(Question)
     end
 
-    it { should render_template(:new) }
+    it { should render_template :new }
   end
 
   describe 'GET #edit' do
@@ -45,7 +45,7 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns :question).to eq(question)
     end
 
-    it { should render_template(:edit) }
+    it { should render_template :edit }
   end
 
   describe 'POST #create' do
@@ -60,7 +60,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to new question' do
         send_request
-        should redirect_to(question_path assigns(:question))
+        should redirect_to question_path(assigns :question)
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 're-renders new view' do
         send_request
-        should render_template(:new)
+        should render_template :new
       end
     end
   end
@@ -107,9 +107,10 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'changes question attributes' do
         patch :update, params: { question: attributes, id: question }
+        old_title, old_body = question.title, question.body
         question.reload
-        expect(question.title).to_not eq attributes[:title]
-        expect(question.body).to_not eq attributes[:body]
+        expect(question.title).to eq old_title
+        expect(question.body).to eq old_body
       end
 
       it 'redirects to the updated question' do
@@ -130,7 +131,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'redirects to index' do
       send_request
-      should redirect_to(questions_url)
+      should redirect_to questions_url
     end
   end
 end
