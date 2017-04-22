@@ -36,7 +36,7 @@ RSpec.describe AnswersController, type: :controller do
       let(:answer_params) { { question_id: question.id }.merge answer: attributes_for(:answer) }
 
       it 'saves new answer' do
-        expect { send_request }.to change(question.answers, :count)
+        expect { send_request }.to change(question.answers, :count).by 1
       end
 
       it 'redirects to new answer' do
@@ -45,17 +45,17 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    # context 'with invalid attrs' do
-    #   let(:answer_params) { { answer: attributes_for(:invalid_answer) } }
-    #
-    #   it 'does not save the answer' do
-    #     expect { send_request }.to_not change(Answer, :count)
-    #   end
-    #
-    #   it 're-renders new view' do
-    #     send_request
-    #     should render_template :new
-    #   end
-    # end
+    context 'with invalid attrs' do
+      let(:answer_params) { { question_id: question.id }.merge answer: attributes_for(:invalid_answer) }
+
+      it 'does not save the answer' do
+        expect { send_request }.to_not change(Answer, :count)
+      end
+
+      it 're-renders new view' do
+        send_request
+        should render_template :new
+      end
+    end
   end
 end
