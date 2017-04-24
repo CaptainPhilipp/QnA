@@ -10,7 +10,10 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer) { build :answer }
 
     it 'assigns a new Answer to @answer' do
-      expect(assigns :answer).to be_a_new(Answer)
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'answer\'s question should be right question' do
       expect(assigns(:answer).question).to eq(question)
     end
 

@@ -8,7 +8,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:questions) { create_list :question, 2 + rand(5) }
 
     it 'populates an array of questions' do
-      expect(assigns :questions).to match_array(questions)
+      expect(assigns(:questions)).to match_array(questions)
     end
 
     it 'renders view index' do
@@ -22,11 +22,11 @@ RSpec.describe QuestionsController, type: :controller do
     let(:answers) { create_list :answer, 2 + rand(5), question: question }
 
     it 'assigns requested question to @question' do
-      expect(assigns :question).to eq(question)
+      expect(assigns(:question)).to eq(question)
     end
 
     it 'populates an array of answers' do
-      expect(assigns :answers).to match_array(answers)
+      expect(assigns(:answers)).to match_array(answers)
     end
 
     it { should render_template :show }
@@ -37,7 +37,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:question) { build :question }
 
     it 'assigns a new Question to @question' do
-      expect(assigns :question).to be_a_new(Question)
+      expect(assigns(:question)).to be_a_new(Question)
     end
 
     it { should render_template :new }
@@ -47,7 +47,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { get :edit, params: { id: question } }
 
     it 'assigns requested question to @question' do
-      expect(assigns :question).to eq(question)
+      expect(assigns(:question)).to eq(question)
     end
 
     it { should render_template :edit }

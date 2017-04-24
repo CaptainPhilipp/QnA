@@ -1,12 +1,14 @@
 class AnswersController < ApplicationController
+  before_action :load_question
+
   def new
-    @answer = Answer.new(answer_question)
+    @answer = @question.answers.new
   end
 
   def create
-    @answer = Answer.new(answers_params)
+    @answer = @question.answers.new(answers_params)
     if @answer.save
-      redirect_to question_path(answers_params[:question_id])
+      redirect_to @question
     else
       render :new
     end
@@ -14,12 +16,11 @@ class AnswersController < ApplicationController
 
   private
 
-  def answers_params
-    params.require(:answer).permit(:body)
-      .merge answer_question
+  def load_question
+    @question = Question.find(params[:question_id])
   end
 
-  def answer_question
-    params.permit :question_id
+  def answers_params
+    params.require(:answer).permit(:body)
   end
 end
