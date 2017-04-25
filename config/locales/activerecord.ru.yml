@@ -1,0 +1,13 @@
+ru:
+  activerecord:
+    models:
+      question:
+        one: 'Вопрос'
+        other: 'Вопросы'
+    attributes:
+      question:
+        title: 'Заголовок вопроса'
+        body: 'Вопрос'
+    errors:
+      messages:
+      models:

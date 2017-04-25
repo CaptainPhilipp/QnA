@@ -1,0 +1,6 @@
+ru:
+  questions:
+    index:
+      create: 'Задать вопрос'
+    form:
+      create: 'Задать вопрос'
