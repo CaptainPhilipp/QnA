@@ -1,11 +1,15 @@
 FactoryGirl.define do
-  factory :question do
-    title "MyString"
-    body "MyText"
+  sequence :title do |n|
+    "Question #{n}"
   end
 
-  factory :invalid_question, class: Question do
-    title ""
-    body ""
+  factory :question do
+    title
+    body 'MyText'
+
+    factory :invalid_question do
+      title ''
+      body ''
+    end
   end
 end

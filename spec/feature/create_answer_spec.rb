@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'create question', %q(
+feature 'create answer', %q(
     In order to get answer from community,
     User can ask the question
   ) do
