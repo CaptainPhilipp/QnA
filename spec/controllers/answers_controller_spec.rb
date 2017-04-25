@@ -13,7 +13,7 @@ RSpec.describe AnswersController, type: :controller do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it 'answer\'s question should be right question' do
+    it "answer's question should be right question" do
       expect(assigns(:answer).question).to eq(question)
     end
 
