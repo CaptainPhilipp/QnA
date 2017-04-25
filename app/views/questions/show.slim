@@ -1,0 +1,11 @@
+dl
+  dt = t(:title)
+  dd = @question.title
+  
+  dt = t(:body)
+  dd = @question.body
+
+ul
+  = render @answers
+
+= link_to t(:answer), new_question_answer_path(@question)
