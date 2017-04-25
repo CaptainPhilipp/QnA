@@ -4,3 +4,7 @@ ru:
       create: 'Задать вопрос'
     form:
       create: 'Задать вопрос'
+  answers:
+    form:
+      create: 'Ответить'
+    # show:

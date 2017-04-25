@@ -1,6 +1,6 @@
-= form_for [:question, @answer] do |f|
+= form_for [@question, @answer] do |f|
   div
     = f.label :body
     = f.text_area :body
-    
-  = f.submit
+
+  = f.submit t '.create'

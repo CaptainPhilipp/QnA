@@ -29,6 +29,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answers)).to match_array(answers)
     end
 
+    it 'prepares new @answer' do
+      expect(assigns(:answer)).to be_a_new Answer
+    end
+
     it { should render_template :show }
   end
 
