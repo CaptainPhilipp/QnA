@@ -28,3 +28,17 @@ feature 'User can sign in' do
     expect(page).to have_content I18n.t(:signed_in, scope: 'devise.sessions')
   end
 end
+
+feature 'User can log_out' do
+  let(:log_out) { I18n.t(:log_out, scope: 'devise.links') }
+  let(:user) { create :user }
+
+  scenario 'with right data' do
+    visit new_user_session_path
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
+    click_on 'Log in'
+    click_link log_out
+    expect(page).to have_content I18n.t(:signed_out, scope: 'devise.sessions')
+  end
+end
