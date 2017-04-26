@@ -37,6 +37,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    login_user
     before { get :new }
     let(:question) { build :question }
 
@@ -48,6 +49,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    login_user
     before { get :edit, params: { id: question } }
 
     it 'assigns requested question to @question' do
@@ -58,6 +60,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    login_user
     let(:send_request) { post :create, params: { question: attributes } }
 
     context 'with valid attrs' do
@@ -88,6 +91,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    login_user
     let(:attributes) { attributes_for(:question) }
     let(:question_params) { { id: question, question: attributes } }
 
@@ -129,6 +133,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    login_user
     let(:question_params) { { id: question } }
     let(:send_request) { delete :destroy, params: question_params }
 
