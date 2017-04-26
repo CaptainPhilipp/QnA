@@ -32,8 +32,7 @@ feature 'User can log_out' do
   let(:user) { create :user }
 
   scenario 'with right data' do
-    visit new_user_session_path
-    fill_log_in(user)
+    log_in(user)
     click_link log_out
     expect(page).to have_content I18n.t(:signed_out, scope: 'devise.sessions')
   end

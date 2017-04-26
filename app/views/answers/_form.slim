@@ -1,6 +1,9 @@
-= form_for [@question, @answer] do |f|
-  div
-    = f.label :body
-    = f.text_area :body
+- if user_signed_in?
+  = form_for [@question, @answer] do |f|
+    div
+      = f.label :body
+      = f.text_area :body
 
-  = f.submit t '.create'
+    = f.submit t '.create'
+- else
+  = t('.authentication_required')
