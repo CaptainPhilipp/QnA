@@ -12,6 +12,7 @@ feature 'create answer', %q(
   end
 
   let(:answer_body) { 'Great answer' }
+  let(:user) { create :user }
 
   scenario 'with valid answer' do
     new_question_from_index

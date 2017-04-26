@@ -22,9 +22,7 @@ feature 'User can sign in' do
   scenario 'with right data' do
     visit root_path
     click_link sign_in
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Log in'
+    fill_log_in(user)
     expect(page).to have_content I18n.t(:signed_in, scope: 'devise.sessions')
   end
 end
@@ -35,9 +33,7 @@ feature 'User can log_out' do
 
   scenario 'with right data' do
     visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Log in'
+    fill_log_in(user)
     click_link log_out
     expect(page).to have_content I18n.t(:signed_out, scope: 'devise.sessions')
   end
