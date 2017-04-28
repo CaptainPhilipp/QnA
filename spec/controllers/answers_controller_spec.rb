@@ -25,14 +25,12 @@ RSpec.describe AnswersController, type: :controller do
       let(:answer_params) { { question_id: question.id }.merge answer: attributes_for(:invalid_answer) }
 
       it 'does not save the answer' do
-        pending
-        # expect { send_request }.to_not change(Answer, :count)
+        expect { send_request }.to_not change(Answer, :count)
       end
 
       it 're-renders new view' do
-        pending
-        # send_request
-        # should render_template :new
+        send_request
+        should render_template 'questions/show', id: question
       end
     end
   end
