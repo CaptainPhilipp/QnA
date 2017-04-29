@@ -7,22 +7,23 @@ feature 'create answer', %q(
 
   let(:user) { create :user }
   let(:question) { create :question, user: user }
-
-  scenario 'new answer form must exist' do
-    log_in(user)
-    visit question_path(question)
-    expect(page).to have_content Answer.human_attribute_name(:body)
-  end
-
-  let(:answer_body) { 'Great answer' }
+  let(:answer_body) { attributes_for(:answer)[:body] }
   let(:user) { create :user }
 
-  scenario 'with valid answer' do
-    log_in(user)
-    visit question_path(question)
-    fill_in Answer.human_attribute_name(:body), with: answer_body
-    click_on I18n.t(:create, scope: 'answers.form')
-    expect(page).to have_content(answer_body)
+  context 'when authorized' do
+    before { log_in(user) }
+
+    scenario 'new answer form must exist' do
+      visit question_path(question)
+      expect(page).to have_content Answer.human_attribute_name(:body)
+    end
+
+    scenario 'with valid answer' do
+      visit question_path(question)
+      fill_in Answer.human_attribute_name(:body), with: answer_body
+      click_on I18n.t(:create, scope: 'answers.form')
+      expect(page).to have_content(answer_body)
+    end
   end
 
   scenario "not authorized user can't create answer" do
