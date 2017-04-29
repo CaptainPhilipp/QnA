@@ -5,6 +5,9 @@ dl
   dt = t(:body)
   dd = @question.body
 
+- if user_owns_entity? @question
+  div = link_to t(:delete), question_path(@question), method: :delete, data: { confirm: t(:sure?) }
+
 ul
   = render @answers
 = render 'answers/form'

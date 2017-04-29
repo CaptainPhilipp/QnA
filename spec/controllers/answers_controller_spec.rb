@@ -1,36 +1,60 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create :question }
-  let(:answer)   { create :answer, question: question }
-  let(:with_question) { { question_id: question } }
+  let(:user)     { create :user }
+  let(:question) { create :question, user: create(:user) }
+  let(:answer)   { create :answer, question: question, user:(user) }
 
   describe 'POST #create' do
-    let(:send_request) { post :create, params: answer_params }
+    let(:send_request) { post :create, params: { question_id: question.id, answer: attributes } }
+    let(:attributes) { attributes_for(:answer) }
 
-    context 'with valid attrs' do
-      let(:answer_params) { { question_id: question.id }.merge answer: attributes_for(:answer) }
+    context 'when signed in' do
+      before { login_user(user) }
 
-      it 'saves new answer' do
-        expect { send_request }.to change(question.answers, :count).by 1
+      context 'Anyway' do
+        before { send_request }
+
+        it 'have right owner' do
+          expect(assigns(:answer).user_id).to eq user.id
+        end
+
+        it 'have right question' do
+          expect(assigns(:answer).question_id).to eq question.id
+        end
       end
 
-      it 'redirects to new answer' do
-        send_request
-        should redirect_to question_url(question)
+      context 'when user is owner' do
+        context 'with valid attrs' do
+          it 'saves new answer' do
+            expect { send_request }.to change(question.answers, :count).by 1
+          end
+
+          it 'redirects to new answer' do
+            send_request
+            should redirect_to question_url(question)
+          end
+        end
+
+        context 'with invalid attrs' do
+          let(:attributes) { attributes_for(:invalid_answer) }
+
+          it 'does not save the answer' do
+            expect { send_request }.to_not change(Answer, :count)
+          end
+
+          it 're-renders new view' do
+            send_request
+            should render_template 'questions/show', id: question
+          end
+        end
       end
     end
 
-    context 'with invalid attrs' do
-      let(:answer_params) { { question_id: question.id }.merge answer: attributes_for(:invalid_answer) }
-
-      it 'does not save the answer' do
-        expect { send_request }.to_not change(Answer, :count)
-      end
-
-      it 're-renders new view' do
+    context 'when user is not signed in' do
+      it 'should redirect to sign in' do
         send_request
-        should render_template 'questions/show', id: question
+        should redirect_to new_user_session_path
       end
     end
   end

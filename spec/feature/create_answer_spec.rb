@@ -5,7 +5,8 @@ feature 'create answer', %q(
     User can ask the question
   ) do
 
-  let(:question) { create :question }
+  let(:user) { create :user }
+  let(:question) { create :question, user: user }
 
   scenario 'new answer form must exist' do
     log_in(user)
