@@ -1,9 +1,11 @@
+/ TODO: errors
 - if user_signed_in?
   = form_for [@question, @answer] do |f|
     div
       = f.label :body
       = f.text_area :body
 
+      / TODO: translate
     = f.submit t '.create'
 - else
   = t('.authentication_required')

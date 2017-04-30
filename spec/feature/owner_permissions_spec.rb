@@ -28,6 +28,7 @@ feature 'Only owner can operate with his entity' do
   end
 
   context 'Answer.' do
+    # TODO: отдельная фича
     let(:answer) { create :answer, user: owner_user }
   end
 end

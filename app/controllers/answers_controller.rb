@@ -9,8 +9,12 @@ class AnswersController < ApplicationController
       redirect_to @question
     else
       @answers = @question.answers
-      render 'questions/show', id: @question.id
+      render 'questions/show'
     end
+  end
+
+  def destroy
+    # TODO
   end
 
   private

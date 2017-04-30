@@ -48,6 +48,7 @@ class QuestionsController < ApplicationController
   end
 
   def check_ownership!
+    # TODO: owner? instead of helper
     redirect_to question_path(@question) unless user_owns_entity? @question
   end
 
