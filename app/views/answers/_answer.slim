@@ -1,2 +1,5 @@
 li
   = answer.body
+  - if user_owns_entity? answer
+    |  
+    = link_to t(:delete), answer, method: :delete
