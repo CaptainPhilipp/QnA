@@ -24,13 +24,13 @@ feature 'create answer', %q(
       click_on I18n.t(:create, scope: 'answers.form')
       expect(page).to have_content(answer_body)
     end
-
-    scenario 'with invalid answer'
   end
 
-  scenario "not authorized user can't create answer" do
-    visit question_path(question)
-    expect(page).to_not have_content Answer.human_attribute_name(:body)
-    expect(page).to     have_content I18n.t(:authentication_required, scope: 'answers.form')
+  context "when not authorized" do
+    scenario "can't create answer" do
+      visit question_path(question)
+      expect(page).to_not have_content Answer.human_attribute_name(:body)
+      expect(page).to     have_content I18n.t(:authentication_required, scope: 'answers.form')
+    end
   end
 end

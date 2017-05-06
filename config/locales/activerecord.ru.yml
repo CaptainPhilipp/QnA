@@ -13,4 +13,13 @@ ru:
         body: 'Ваш ответ'
     errors:
       messages:
+        blank: 'не может быть пустым'
+        too_short: 'имеет слишком мало символов'
+        too_long: 'имеет слишком много символов'
+        taken: 'уже занят'
+        record_invalid: 'Значение позиции не должно повторяться'
       models:
+        carriage:
+          attributes:
+            type:
+              existance: 'Тип "%{type}" не существует'

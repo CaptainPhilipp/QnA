@@ -19,14 +19,19 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    before { get :show, params: { id: question } }
     let(:answers) { create_list :answer, 3, question: question, user: user }
+
+    before do
+      answers
+      get :show, params: { id: question }
+    end
 
     it 'assigns requested question to @question' do
       expect(assigns(:question)).to eq(question)
     end
 
     it 'populates an array of answers' do
+      answers
       expect(assigns(:answers)).to match_array(answers)
     end
 

@@ -18,7 +18,7 @@ class QuestionsController < ApplicationController
 
   def show
     @question = Question.find(params[:id])
-    @answers  = @question.answers
+    @answers  = @question.answers.select(&:persisted?)
     @answer   = Answer.new
   end
 
@@ -48,8 +48,7 @@ class QuestionsController < ApplicationController
   end
 
   def check_ownership!
-    # TODO: owner? instead of helper
-    redirect_to question_path(@question) unless user_owns_entity? @question
+    redirect_to question_path(@question) unless current_user.owner? @question
   end
 
   def questions_params
