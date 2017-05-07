@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create :question }
+  let(:user) { create :user }
+  let(:other_user) { create :user }
+  let(:question) { create :question, user: user }
 
   describe 'GET #index' do
     before { get :index }
-    let(:questions) { create_list :question, 2 + rand(5) }
+    let(:questions) { create_list :question, 3, user: user }
 
     it 'populates an array of questions' do
       expect(assigns(:questions)).to match_array(questions)
@@ -17,22 +19,31 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    before { get :show, params: { id: question } }
-    let(:question) { create :question }
-    let(:answers) { create_list :answer, 2 + rand(5), question: question }
+    let(:answers) { create_list :answer, 3, question: question, user: user }
+
+    before do
+      answers
+      get :show, params: { id: question }
+    end
 
     it 'assigns requested question to @question' do
       expect(assigns(:question)).to eq(question)
     end
 
     it 'populates an array of answers' do
+      answers
       expect(assigns(:answers)).to match_array(answers)
+    end
+
+    it 'prepares new @answer' do
+      expect(assigns(:answer)).to be_a_new Answer
     end
 
     it { should render_template :show }
   end
 
   describe 'GET #new' do
+    before { login_user(user) }
     before { get :new }
     let(:question) { build :question }
 
@@ -44,21 +55,42 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    before { get :edit, params: { id: question } }
+    let(:send_request) { get :edit, params: { id: question } }
 
-    it 'assigns requested question to @question' do
-      expect(assigns(:question)).to eq(question)
+    context 'Owner' do
+      before do
+        login_user(user)
+        send_request
+      end
+
+      it 'assigns requested question to @question' do
+        expect(assigns(:question)).to eq(question)
+      end
+
+      it { should render_template :edit }
     end
 
-    it { should render_template :edit }
+    context 'Not owner' do
+      before do
+        login_user(other_user)
+        send_request
+      end
+
+      it { should redirect_to question_path(question) }
+    end
   end
 
   describe 'POST #create' do
-    let(:send_request) { post :create, params: question_params }
+    before { login_user(user) }
+    let(:attributes) { attributes_for(:question) }
+    let(:send_request) { post :create, params: { question: attributes } }
+
+    it '@question must have right owner' do
+      send_request
+      expect(assigns(:question).user_id).to eq user.id
+    end
 
     context 'with valid attrs' do
-      let(:question_params) { { question: attributes_for(:question) } }
-
       it 'saves new question' do
         expect { send_request }.to change(Question, :count)
       end
@@ -70,7 +102,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid attrs' do
-      let(:question_params) { { question: attributes_for(:invalid_question) } }
+      let(:attributes) { attributes_for(:invalid_question) }
 
       it 'does not save the question' do
         expect { send_request }.to_not change(Question, :count)
@@ -84,44 +116,64 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:question_params) { { question: attributes }.merge(id: question) }
+    let(:attributes) { attributes_for(:question) }
+    let(:question_params) { { id: question, question: attributes } }
+    let(:send_request) { patch :update, params: question_params }
+    let(:question_instance) { assigns(:question) }
 
-    it 'assings the requested question to @question' do
-      patch :update, params: { id: question, question: attributes_for(:question) }
-      expect(assigns(:question)).to eq question
-    end
+    context 'when right owner' do
+      before { login_user(user) }
 
-    context 'valid attributes' do
-      let(:attributes) { { title: 'new title', body: 'new body' } }
-
-      it 'changes question attributes' do
-        patch :update, params: question_params
-        question.reload
-        expect(question.title).to eq attributes[:title]
-        expect(question.body).to eq attributes[:body]
+      it 'assings the requested question to @question' do
+        send_request
+        expect(question_instance).to eq question
       end
 
-      it 'redirects to the updated question' do
-        patch :update, params: question_params
-        should redirect_to question
+      context 'valid attributes' do
+        before { send_request }
+
+        it 'changes question attributes' do
+          expect(question_instance.title).to eq attributes[:title]
+          expect(question_instance.body).to eq attributes[:body]
+        end
+
+        it 'redirects to the updated question' do
+          should redirect_to question
+        end
+      end
+
+      context 'invalid attributes' do
+        let(:attributes) { attributes_for(:invalid_question) }
+
+        it 'not changes question attributes' do
+          old_title, old_body = question.title, question.body
+          send_request
+          question.reload
+          expect(question.title).to eq old_title
+          expect(question.body).to eq old_body
+        end
+
+        it 'redirects to the updated question' do
+          send_request
+          should render_template :edit
+        end
       end
     end
 
-    context 'invalid attributes' do
-      let(:attributes) { { title: '', body: '' } }
+    context 'when not owner' do
+      before do
+        login_user(other_user)
+        send_request
+      end
 
-      it 'changes question attributes' do
-        patch :update, params: { question: attributes, id: question }
+      it 'not changes question attributes' do
         old_title, old_body = question.title, question.body
         question.reload
         expect(question.title).to eq old_title
         expect(question.body).to eq old_body
       end
 
-      it 'redirects to the updated question' do
-        patch :update, params: question_params
-        should render_template :edit
-      end
+      it { should redirect_to question_url(question) }
     end
   end
 
@@ -129,14 +181,27 @@ RSpec.describe QuestionsController, type: :controller do
     let(:question_params) { { id: question } }
     let(:send_request) { delete :destroy, params: question_params }
 
-    it 'deletes question' do
-      question
-      expect { send_request }.to change(Question, :count).by(-1)
+    context 'when owner' do
+      before { login_user(user) }
+
+      it 'deletes his question' do
+        question
+        expect { send_request }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index' do
+        send_request
+        should redirect_to :questions
+      end
     end
 
-    it 'redirects to index' do
-      send_request
-      should redirect_to questions_url
+    context 'when not owner' do
+      before { login_user(other_user) }
+
+      it 'deletes his question' do
+        question
+        expect { send_request }.to_not change(Question, :count)
+      end
     end
   end
 end

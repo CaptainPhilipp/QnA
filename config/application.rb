@@ -19,6 +19,10 @@ module Qna
                        routing_specs: false,
                        controller_specs: true
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
+
+      config.i18n.default_locale = :ru
+      config.i18n.available_locales = [:en, :ru]
     end
+
   end
 end

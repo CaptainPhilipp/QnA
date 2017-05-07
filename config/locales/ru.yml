@@ -1,0 +1,10 @@
+ru:
+  questions:
+    index:
+      create: 'Задать вопрос'
+    form:
+      create: 'Задать вопрос'
+  answers:
+    form:
+      create: 'Ответить'
+      authentication_required: 'Что бы написать ответ необходимо авторизоваться'
