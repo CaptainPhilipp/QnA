@@ -24,6 +24,8 @@ feature 'create answer', %q(
       click_on I18n.t(:create, scope: 'answers.form')
       expect(page).to have_content(answer_body)
     end
+
+    # scenario 'with invalid answer'
   end
 
   context "when not authorized" do

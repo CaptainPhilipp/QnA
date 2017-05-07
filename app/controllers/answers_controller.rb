@@ -10,7 +10,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question
     else
-      @answers = @question.answers.persisted
+      @answers = @question.answers
       render 'questions/show'
     end
   end

@@ -5,7 +5,7 @@ dl
   dt = t(:body)
   dd = @question.body
 
-- if user_owns_entity? @question
+- if current_user_owns? @question
   div = link_to t(:delete), question_path(@question), method: :delete, data: { confirm: t(:sure?) }
 
 ul

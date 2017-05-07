@@ -1,9 +1,4 @@
 module QuestionsMacros
-  def new_question_from_index
-    visit questions_path
-    click_link I18n.t(:create, scope: 'questions.index')
-  end
-
   def create_question_with_form(attributes = nil)
     attributes ||= { title: 'Question title', body: 'Question body' }
 
