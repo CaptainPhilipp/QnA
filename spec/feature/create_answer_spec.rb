@@ -15,11 +15,13 @@ feature 'create answer', %q(
 
     scenario 'new answer form must exist', js: true do
       visit question_path(question)
+      # save_and_open_page
       expect(page).to have_content Answer.human_attribute_name(:body)
     end
 
-    scenario 'with valid answer' do
+    scenario 'with valid answer', js: true do
       visit question_path(question)
+      # save_and_open_page
       fill_in Answer.human_attribute_name(:body), with: answer_body
       click_on I18n.t(:create, scope: 'answers.form')
       expect(page).to have_content(answer_body)

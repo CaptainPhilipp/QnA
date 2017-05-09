@@ -5,7 +5,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create :question, user: create(:user) }
   let(:answer)   { create :answer, question: question, user: user }
 
-  describe 'POST #create', js: true do
+  describe 'POST #create' do
     let(:attributes) { attributes_for(:answer) }
     let(:send_request)      { post :create, params: { question_id: question.id, answer: attributes } }
     let(:send_ajax_request) { post :create, params: { question_id: question.id, answer: attributes, format: :js } }
@@ -36,13 +36,15 @@ RSpec.describe AnswersController, type: :controller do
           let(:attributes) { attributes_for(:invalid_answer) }
 
           it 'does not save the answer' do
+            expect { send_request }.to_not change(Answer, :count)
             expect { send_ajax_request }.to_not change(Answer, :count)
           end
 
           it 'shows errors' do
             send_request
+            # save_and_open_page
             expect(page).to have_content(I18n.t :errors)
-            # TODO: что можно тестить с ajax запросом?  то нет
+            # TODO: что можно тестить с ajax запросом?
           end
         end
       end
