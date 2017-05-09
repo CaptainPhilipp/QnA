@@ -5,9 +5,9 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create :question, user: create(:user) }
   let(:answer)   { create :answer, question: question, user: user }
 
-  describe 'POST #create' do
-    let(:send_request) { post :create, params: { question_id: question.id, answer: attributes } }
+  describe 'POST #create', js: true do
     let(:attributes) { attributes_for(:answer) }
+    let(:send_request) { post :create, params: { question_id: question.id, answer: attributes, format: :js } }
 
     context 'when signed in' do
       before { login_user(user) }
@@ -24,15 +24,10 @@ RSpec.describe AnswersController, type: :controller do
         end
       end
 
-      context 'when user is owner' do
+      context 'creating answer' do
         context 'with valid attrs' do
           it 'saves new answer' do
             expect { send_request }.to change(question.answers, :count).by 1
-          end
-
-          it 'redirects to new answer' do
-            send_request
-            should redirect_to question_url(question)
           end
         end
 
@@ -43,9 +38,10 @@ RSpec.describe AnswersController, type: :controller do
             expect { send_request }.to_not change(Answer, :count)
           end
 
-          it 're-renders new view' do
-            send_request
-            should render_template 'questions/show', id: question
+          it 'shows errors' do
+            # send_request
+            # expect(page).to have_content(I18n.t :errors)
+            # TODO: и что тут тестить с ajax запросом? page то нет
           end
         end
       end
@@ -54,14 +50,14 @@ RSpec.describe AnswersController, type: :controller do
     context 'when user is not signed in' do
       it 'should redirect to sign in' do
         send_request
-        should redirect_to new_user_session_path
+        should respond_with 401
       end
     end
   end
 
   describe 'DELETE #destroy' do
     let(:answer_params) { { id: answer.id } }
-    let(:send_request) { delete :destroy, params: answer_params }
+    let(:send_request) { delete :destroy, params: answer_params, format: :js }
 
     context 'when owner' do
       before { login_user(user) }
@@ -73,7 +69,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to question' do
         send_request
-        should redirect_to question_url(answer.question)
+        should_not redirect_to question_url(answer.question)
       end
     end
 
