@@ -42,7 +42,7 @@ RSpec.describe AnswersController, type: :controller do
           it 'shows errors' do
             send_request
             expect(page).to have_content(I18n.t :errors)
-            # TODO: что можно тестить с ajax запросом? page то нет
+            # TODO: что можно тестить с ajax запросом?  то нет
           end
         end
       end

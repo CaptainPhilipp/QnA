@@ -13,7 +13,7 @@ feature 'create answer', %q(
   context 'when authorized' do
     before { log_in(user) }
 
-    scenario 'new answer form must exist' do
+    scenario 'new answer form must exist', js: true do
       visit question_path(question)
       expect(page).to have_content Answer.human_attribute_name(:body)
     end

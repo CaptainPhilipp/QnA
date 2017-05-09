@@ -30,11 +30,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq(question)
     end
 
-    it 'populates an array of answers' do
-      answers
-      expect(assigns(:answers)).to match_array(answers)
-    end
-
     it 'prepares new @answer' do
       expect(assigns(:answer)).to be_a_new Answer
     end
