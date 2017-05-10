@@ -39,13 +39,6 @@ RSpec.describe AnswersController, type: :controller do
             expect { send_request }.to_not change(Answer, :count)
             expect { send_ajax_request }.to_not change(Answer, :count)
           end
-
-          it 'shows errors' do
-            send_request
-            # save_and_open_page
-            expect(page).to have_content(I18n.t :errors)
-            # TODO: что можно тестить с ajax запросом?
-          end
         end
       end
     end

@@ -5,12 +5,12 @@ feature 'create answer', %q(
     User can ask the question
   ) do
 
-  let(:question) { create :question, user: user }
-  let(:answer_body) { attributes_for(:answer)[:body] }
   let(:user) { create :user }
+  let(:question) { create :question, user: create(:user) }
+  let(:answer_body) { attributes_for(:answer)[:body] }
 
   context 'when authorized' do
-    before { log_in(create :user) }
+    before { log_in(user) }
 
     scenario 'new answer form must exist', js: true do
       visit question_path(question)
