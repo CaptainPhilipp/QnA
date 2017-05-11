@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:user)     { create :user }
-  let(:question) { create :question, user: create(:user) }
-  let(:answer)   { create :answer, question: question, user: user }
+  let(:user)       { create :user }
+  let(:other_user) { create :user }
+  let(:question)   { create :question, user: other_user }
+  let(:answer)     { create :answer, question: question, user: user }
 
   describe 'POST #create' do
     let(:attributes) { attributes_for(:answer) }
@@ -60,6 +61,28 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    let(:old_answer_body) { answer.body }
+    let(:new_answer_body) { 'Edited answer' }
+    let(:send_request) { patch :update, params: { id: answer, body: new_answer_body, format: :js } }
+
+    context 'when user is owner' do
+      before { login_user(user) }
+
+      it "can update his answer" do
+        expect { send_request }.to change(answer, :body).from(old_answer_body).to(new_answer_body)
+      end
+    end
+
+    context 'when not owner' do
+      before { login_user(other_user) }
+
+      it "can't update answer" do
+        expect { send_request }.to_not change(answer, :body)
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let(:answer_params) { { id: answer.id } }
     let(:send_ajax_request) { delete :destroy, params: answer_params, format: :js }
@@ -79,9 +102,9 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when not owner' do
-      before { login_user(create :user) }
+      before { login_user(other_user) }
 
-      it 'deletes his question' do
+      it "can't delete question" do
         answer
         expect { send_ajax_request }.to_not change(question.answers, :count)
       end
