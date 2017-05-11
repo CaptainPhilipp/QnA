@@ -21,9 +21,7 @@ require_relative 'support/questions_macros'
 require_relative 'support/authentication_macros'
 
 RSpec.configure do |config|
-  config.include AuthenticationMacros, type: :feature
   config.include ControllerMacros, type: :controller
-  config.include QuestionsMacros, type: :feature
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Only owner can operate with his Question' do
   let(:owner_user) { create :user }

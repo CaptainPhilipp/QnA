@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'User can registrater' do
   let(:sign_up) { I18n.t(:sign_up, scope: 'devise.links') }
