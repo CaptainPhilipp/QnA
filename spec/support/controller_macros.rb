@@ -13,12 +13,12 @@ module ControllerMacros
 
   module ClassMethods
     def login_user
-      let(:user) { create :user }
+      assign_user
       before { login_user user }
     end
 
     def login_other_user
-      let(:other_user) { create :user }
+      assign_other_user
       before { login_user other_user }
     end
   end

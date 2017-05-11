@@ -5,7 +5,7 @@ feature 'Create answer', %q(
     User can answer to question
   ) do
 
-  let(:user) { create :user }
+  assign_user
   let(:question) { create :question, user: user }
   let(:answer_body) { attributes_for(:answer)[:body] }
 

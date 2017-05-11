@@ -1,10 +1,11 @@
 require 'rails_helper'
 
+require_relative '../support/feature_macros'
+
 RSpec.configure do |config|
   Capybara.javascript_driver = :webkit
 
-  config.include AuthenticationMacros, type: :feature
-  config.include QuestionsMacros, type: :feature
+  config.include FeatureMacros, type: :feature
 
   config.use_transactional_fixtures = false
 

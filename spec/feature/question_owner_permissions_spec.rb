@@ -1,9 +1,7 @@
 require_relative 'acceptance_helper'
 
 feature 'Only owner can operate with his Question' do
-  let(:user) { create :user }
-  let(:other_user)  { create :user }
-
+  assign_users
   let(:question) { create :question, user: user }
   let(:delete_link_name) { I18n.t :delete }
 

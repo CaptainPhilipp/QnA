@@ -5,8 +5,7 @@ feature 'Edit answer', %q(
     User can edit answer
   ) do
 
-  let(:user) { create :user }
-  let(:other_user) { create :user }
+  assign_users
   let(:question) { create :question, user: user }
   let(:answer) { create :answer, user: user, question: question }
   let(:old_answer_body) { answer.body }

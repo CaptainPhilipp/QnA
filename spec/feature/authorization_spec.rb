@@ -17,7 +17,7 @@ end
 
 feature 'User can sign in' do
   let(:sign_in) { I18n.t(:sign_in, scope: 'devise.links') }
-  let(:user) { create :user }
+  assign_user
 
   scenario 'with right data' do
     visit root_path
@@ -29,7 +29,7 @@ end
 
 feature 'User can log_out' do
   let(:log_out) { I18n.t(:log_out, scope: 'devise.links') }
-  let(:user) { create :user }
+  assign_user
 
   scenario 'with right data' do
     login_user(user)

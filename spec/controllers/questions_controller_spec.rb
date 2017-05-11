@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:user) { create :user }
-  let(:other_user) { create :user }
+  assign_users
   let(:question) { create :question, user: user }
 
   describe 'GET #index' do
