@@ -1,6 +1,6 @@
 - if answer.persisted?
-  li
+  div id="#{"answer_#{answer.id}"}"
     = answer.body
     - if current_user_owns? answer
       |  
-      = link_to t(:delete), answer, method: :delete
+      = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }

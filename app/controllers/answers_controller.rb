@@ -7,17 +7,18 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answers_params)
     @answer.user = current_user
-    if @answer.save
-      redirect_to @question
-    else
-      @answers = @question.answers
-      render 'questions/show'
+    respond_to do |format|
+      format.js   { render @answer.save ? 'create' : 'errors' }
+      format.html { @answer.save ? redirect_to(@question) : render('questions/show') }
     end
   end
 
   def destroy
     @answer.destroy
-    redirect_to question_url(@answer.question)
+    respond_to do |format|
+      format.js { render 'destroy' }
+      format.html { redirect_to @answer.question }
+    end
   end
 
   private

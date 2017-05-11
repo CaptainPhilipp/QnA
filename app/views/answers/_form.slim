@@ -1,6 +1,6 @@
 - if user_signed_in?
-  = render 'common/error', resource: @answer
-  = form_for [@question, @answer] do |f|
+  div#errors = render 'common/error', resource: @answer
+  = form_for [@question, @answer], remote: true do |f|
     div
       = f.label :body
       = f.text_area :body
