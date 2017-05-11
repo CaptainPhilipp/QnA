@@ -5,13 +5,11 @@ feature 'create question', %q(
     User can ask the question
   ) do
 
+
   let(:question) { { title: 'Question title', body: 'Question body' } }
 
   context 'when authorized' do
-    before do
-      visit new_user_session_path
-      fill_log_in(create :user)
-    end
+    login_user
 
     scenario 'user can open and create_question page from questions page' do
       visit questions_path

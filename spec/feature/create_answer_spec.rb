@@ -10,17 +10,10 @@ feature 'Create answer', %q(
   let(:answer_body) { attributes_for(:answer)[:body] }
 
   context 'when authorized' do
-    before { log_in user }
-
-    scenario 'new answer form must exist', js: true do
-      visit question_path(question)
-      # save_and_open_page
-      expect(page).to have_content Answer.human_attribute_name(:body)
-    end
+    login_user
 
     scenario 'with valid answer', js: true do
       visit question_path(question)
-      # save_and_open_page
       fill_in Answer.human_attribute_name(:body), with: answer_body
       click_on I18n.t(:create, scope: 'answers.form')
       expect(page).to have_content(answer_body)

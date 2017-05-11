@@ -5,12 +5,12 @@ module AuthenticationMacros
   end
 
   module InstanceMethods
-    def log_in(user)
+    def login_user(user)
       visit new_user_session_path
-      fill_log_in(user)
+      fill_login_user(user)
     end
 
-    def fill_log_in(user)
+    def fill_login_user(user)
       fill_in 'Email', with: user.email
       fill_in 'Password', with: user.password
       click_on 'Log in'
@@ -20,12 +20,12 @@ module AuthenticationMacros
   module ClassMethods
     def login_user
       let(:user) { create :user }
-      before { log_in user }
+      before { login_user(user) }
     end
 
     def login_other_user
       let(:other_user) { create :user }
-      before { log_in other_user }
+      before { login_user(other_user) }
     end
   end
 end

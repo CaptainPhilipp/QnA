@@ -14,7 +14,7 @@ feature 'Edit answer', %q(
 
 
   context 'when user is owner' do
-    before { log_in user }
+    login_user
 
     scenario "can edit his answer" do
       visit question_path(question)
@@ -29,7 +29,7 @@ feature 'Edit answer', %q(
   end
 
   context "when user is not owner" do
-    before { log_in other_user }
+    login_other_user
 
     scenario "can't see edit answer link" do
       visit question_path(question)

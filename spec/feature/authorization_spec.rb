@@ -22,7 +22,7 @@ feature 'User can sign in' do
   scenario 'with right data' do
     visit root_path
     click_link sign_in
-    fill_log_in(user)
+    fill_login_user(user)
     expect(page).to have_content I18n.t(:signed_in, scope: 'devise.sessions')
   end
 end
@@ -32,7 +32,7 @@ feature 'User can log_out' do
   let(:user) { create :user }
 
   scenario 'with right data' do
-    log_in(user)
+    login_user(user)
     click_link log_out
     expect(page).to have_content I18n.t(:signed_out, scope: 'devise.sessions')
   end
