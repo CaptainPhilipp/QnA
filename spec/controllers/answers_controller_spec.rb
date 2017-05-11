@@ -64,13 +64,16 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #update' do
     let(:old_answer_body) { answer.body }
     let(:new_answer_body) { 'Edited answer' }
-    let(:send_request) { patch :update, params: { id: answer, body: new_answer_body, format: :js } }
+    let(:send_request) { patch :update, params: {
+      id: answer.id, format: :js, answer: { body: new_answer_body }
+    } }
 
     context 'when user is owner' do
       login_user
 
       it "can update his answer" do
-        expect { send_request }.to change(answer, :body).from(old_answer_body).to(new_answer_body)
+        send_request
+        expect(answer.reload.body).to eq new_answer_body
       end
     end
 

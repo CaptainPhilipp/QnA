@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: :create
-  before_action :load_answer,   only: :destroy
+  before_action :load_answer,   only: %i(update destroy)
   before_action :check_answer_ownership!, only: :destroy
 
   def create
@@ -11,6 +11,10 @@ class AnswersController < ApplicationController
       format.js   { render @answer.save ? 'create' : 'errors' }
       format.html { @answer.save ? redirect_to(@question) : render('questions/show') }
     end
+  end
+
+  def update
+    @answer.update(answers_params)
   end
 
   def destroy
