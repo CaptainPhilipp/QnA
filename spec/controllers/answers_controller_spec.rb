@@ -12,7 +12,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:send_ajax_request) { post :create, params: { question_id: question.id, answer: attributes, format: :js } }
 
     context 'when signed in' do
-      before { login_user(user) }
+      login_user
 
       context 'builded answer' do
         before { send_ajax_request }
@@ -67,7 +67,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:send_request) { patch :update, params: { id: answer, body: new_answer_body, format: :js } }
 
     context 'when user is owner' do
-      before { login_user(user) }
+      login_user
 
       it "can update his answer" do
         expect { send_request }.to change(answer, :body).from(old_answer_body).to(new_answer_body)
@@ -75,7 +75,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when not owner' do
-      before { login_user(other_user) }
+      login_other_user
 
       it "can't update answer" do
         expect { send_request }.to_not change(answer, :body)
@@ -88,7 +88,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:send_ajax_request) { delete :destroy, params: answer_params, format: :js }
 
     context 'when owner' do
-      before { login_user(user) }
+      login_user
 
       it 'deletes his answer' do
         answer
@@ -102,7 +102,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when not owner' do
-      before { login_user(other_user) }
+      login_other_user
 
       it "can't delete question" do
         answer

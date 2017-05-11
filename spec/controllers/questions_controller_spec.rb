@@ -38,7 +38,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { login_user(user) }
+    login_user
     before { get :new }
     let(:question) { build :question }
 
@@ -76,7 +76,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    before { login_user(user) }
+    login_user
     let(:attributes) { attributes_for(:question) }
     let(:send_request) { post :create, params: { question: attributes } }
 
@@ -117,7 +117,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:question_instance) { assigns(:question) }
 
     context 'when right owner' do
-      before { login_user(user) }
+      login_user
 
       it 'assings the requested question to @question' do
         send_request
@@ -177,7 +177,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:send_request) { delete :destroy, params: question_params }
 
     context 'when owner' do
-      before { login_user(user) }
+      login_user
 
       it 'deletes his question' do
         question
@@ -191,7 +191,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when not owner' do
-      before { login_user(other_user) }
+      login_other_user
 
       it 'deletes his question' do
         question
