@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   assign_users
-  let(:question)   { create :question, user: other_user }
-  let(:answer)     { create :answer, question: question, user: user }
+  let(:question) { create :question, user: other_user }
+  let(:answer)   { create :answer, question: question, user: user }
 
   describe 'POST #create' do
     let(:attributes) { attributes_for(:answer) }
@@ -43,25 +43,25 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'when user is not signed in' do
+    context "when user isn't signed in" do
       context 'with ajax request' do
-        it 'should redirect to sign in' do
-          send_request
-          should redirect_to new_user_session_url
+        it 'should respond_with 401' do
+          send_ajax_request
+          should respond_with 401
         end
       end
 
       context 'with normal request' do
-        it 'should respond_with 401' do
-          send_ajax_request
-          should respond_with 401
+        it 'should redirect to sign in' do
+          send_request
+          should redirect_to new_user_session_url
         end
       end
     end
   end
 
   describe 'PATCH #update' do
-    let(:old_answer_body) { answer.body }
+    let(:answer_body) { answer.body }
     let(:new_answer_body) { 'Edited answer' }
     let(:send_request) { patch :update, params: {
       id: answer.id, format: :js, answer: { body: new_answer_body }

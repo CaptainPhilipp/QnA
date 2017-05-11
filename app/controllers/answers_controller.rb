@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: :create
   before_action :load_answer,   only: %i(update destroy)
-  before_action :check_answer_ownership!, only: :destroy
+  before_action :check_answer_ownership!, only: %i(update destroy)
 
   def create
     @answer = @question.answers.new(answers_params)
@@ -40,6 +40,6 @@ class AnswersController < ApplicationController
   end
 
   def check_answer_ownership!
-    redirect_to answer_path(@answer) unless current_user.owner? @answer
+    redirect_to question_path(@answer.question) unless current_user.owner? @answer
   end
 end

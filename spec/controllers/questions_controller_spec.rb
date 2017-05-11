@@ -113,22 +113,22 @@ RSpec.describe QuestionsController, type: :controller do
     let(:attributes) { attributes_for(:question) }
     let(:question_params) { { id: question, question: attributes } }
     let(:send_request) { patch :update, params: question_params }
-    let(:question_instance) { assigns(:question) }
+    let(:question_assign) { assigns(:question) }
 
     context 'when right owner' do
       login_user
 
       it 'assings the requested question to @question' do
         send_request
-        expect(question_instance).to eq question
+        expect(question_assign).to eq question
       end
 
       context 'valid attributes' do
         before { send_request }
 
         it 'changes question attributes' do
-          expect(question_instance.title).to eq attributes[:title]
-          expect(question_instance.body).to eq attributes[:body]
+          expect(question_assign.title).to eq attributes[:title]
+          expect(question_assign.body).to eq attributes[:body]
         end
 
         it 'redirects to the updated question' do
@@ -155,10 +155,8 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when not owner' do
-      before do
-        login_user(other_user)
-        send_request
-      end
+      login_other_user
+      before { send_request }
 
       it 'not changes question attributes' do
         old_title, old_body = question.title, question.body
