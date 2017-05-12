@@ -106,9 +106,9 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:attributes) { attributes_for(:question) }
+    let(:attributes)      { attributes_for(:question) }
     let(:question_params) { { id: question, question: attributes } }
-    let(:send_request) { patch :update, params: question_params }
+    let(:send_request)    { patch :update, params: question_params }
     let(:question_assign) { assigns(:question) }
 
     context 'when right owner' do

@@ -16,11 +16,11 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require_relative 'support/users_macros'
+require_relative 'support/common_macros'
 require_relative 'support/controller_macros'
 
 RSpec.configure do |config|
-  config.extend UsersMacros
+  config.include CommonMacros
   config.include ControllerMacros, type: :controller
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

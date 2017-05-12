@@ -1,10 +1,10 @@
 module ControllerMacros
   def self.included(base)
-    base.extend ClassMethods
-    base.include InstanceMethods
+    base.include ExampleMethods
+    base.extend SpecMethods
   end
 
-  module InstanceMethods
+  module ExampleMethods
     def login_user(user)
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in user
@@ -20,7 +20,7 @@ module ControllerMacros
     end
   end
 
-  module ClassMethods
+  module SpecMethods
     def login_user
       assign_user
       before { login_user user }

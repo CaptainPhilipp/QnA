@@ -1,10 +1,10 @@
 module FeatureMacros
   def self.included(base)
-    base.extend ClassMethods
-    base.include InstanceMethods
+    base.include ScenarioMethods
+    base.extend FeatureMethods
   end
 
-  module InstanceMethods
+  module ScenarioMethods
     def login_user(user)
       visit new_user_session_path
       fill_login_user(user)
@@ -25,7 +25,7 @@ module FeatureMacros
     end
   end
 
-  module ClassMethods
+  module FeatureMethods
     def login_user
       assign_user
       before { login_user(user) }

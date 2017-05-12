@@ -2,7 +2,7 @@ require_relative 'acceptance_helper'
 
 feature 'Create answer', %q(
     In order to help to community,
-    User can answer to question
+    User can answer the question
   ) do
 
   assign_user
