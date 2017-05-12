@@ -63,7 +63,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'Not owner' do
-      login_other_user
+      login_user :other_user
       before { send_request }
 
       it { should redirect_to question_path(question) }
@@ -148,7 +148,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when not owner' do
-      login_other_user
+      login_user :other_user
       before { send_request }
 
         it 'not changes question attributes' do
@@ -179,7 +179,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when not owner' do
-      login_other_user
+      login_user :other_user
 
       it 'deletes his question' do
         question

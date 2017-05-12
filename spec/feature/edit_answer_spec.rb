@@ -28,7 +28,7 @@ feature 'Edit answer', %q(
   end
 
   context "when user is not owner" do
-    login_other_user
+    login_user :other_user
 
     scenario "can't see edit answer link" do
       visit question_path(question)

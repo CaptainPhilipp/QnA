@@ -77,7 +77,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when not owner' do
-      login_other_user
+      login_user :other_user
 
       it "can't update answer" do
         expect { send_request }.to_not change(answer, :body)
@@ -104,7 +104,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when not owner' do
-      login_other_user
+      login_user :other_user
 
       it "can't delete question" do
         answer

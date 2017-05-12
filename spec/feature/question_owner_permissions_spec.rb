@@ -20,7 +20,7 @@ feature 'Only owner can operate with his Question' do
   end
 
   context 'Not owner' do
-    login_other_user
+    login_user :other_user
 
     scenario "can't see destroy link" do
       visit question_path(question)

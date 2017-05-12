@@ -5,7 +5,6 @@ feature 'Create question', %q(
     User can ask the question
   ) do
 
-
   let(:question) { { title: 'Question title', body: 'Question body' } }
 
   context 'when authorized' do
