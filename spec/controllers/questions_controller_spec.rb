@@ -39,7 +39,6 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'GET #new' do
     login_user
     before { get :new }
-    let(:question) { build :question }
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
@@ -106,25 +105,24 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:attributes)      { attributes_for(:question) }
-    let(:question_params) { { id: question, question: attributes } }
-    let(:send_request)    { patch :update, params: question_params }
-    let(:question_assign) { assigns(:question) }
+    let(:attributes)     { attributes_for(:question) }
+    let(:new_attributes) { attributes_for(:new_question) }
+    let(:send_request)   { patch :update, params: { id: question, question: new_attributes } }
 
     context 'when right owner' do
       login_user
 
       it 'assings the requested question to @question' do
         send_request
-        expect(question_assign).to eq question
+        expect(assigns(:question)).to eq question
       end
 
       context 'valid attributes' do
         before { send_request }
 
         it 'changes question attributes' do
-          expect(question_assign.title).to eq attributes[:title]
-          expect(question_assign.body).to  eq attributes[:body]
+          expect(assigns(:question).title).to eq new_attributes[:title]
+          expect(assigns(:question).body).to  eq new_attributes[:body]
         end
 
         it 'redirects to the updated question' do
@@ -133,11 +131,11 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       context 'invalid attributes' do
-        let(:attributes) { attributes_for(:invalid_question) }
+        let(:new_attributes) { attributes_for(:invalid_question) }
 
         it 'not changes question attributes' do
-          # TODO: кажется, в этом спеке что-то не так. апдейт должен быть с новыми данными. Тогда этот хелпер не понадобится
-          should_not_change(question, :title, :body) { send_request }
+          expect(assigns(:question).title).to eq attributes[:title]
+          expect(assigns(:question).body).to  eq attributes[:body]
         end
 
         it 'redirects to the updated question' do
@@ -151,9 +149,9 @@ RSpec.describe QuestionsController, type: :controller do
       login_user :other_user
       before { send_request }
 
-        it 'not changes question attributes' do
-        # TODO: кажется, в этом спеке что-то не так. апдейт должен быть с новыми данными. Тогда этот хелпер не понадобится
-        should_not_change(question, :title, :body) { send_request }
+      it 'not changes question attributes' do
+        expect(assigns(:question).title).to eq attributes[:title]
+        expect(assigns(:question).body).to  eq attributes[:body]
       end
 
       it { should redirect_to question_url(question) }

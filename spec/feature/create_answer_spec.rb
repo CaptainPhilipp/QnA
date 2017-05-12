@@ -7,16 +7,17 @@ feature 'Create answer', %q(
 
   assign_user
   let(:question) { create :question, user: user }
-  let(:answer_body) { attributes_for(:answer)[:body] }
+  let(:attributes) { attributes_for(:answer) }
 
   context 'when authorized' do
     login_user
 
     scenario 'with valid answer', js: true do
       visit question_path(question)
-      fill_in Answer.human_attribute_name(:body), with: answer_body
-      click_on I18n.t(:create, scope: 'answers.form')
-      expect(page).to have_content(answer_body)
+      # fill_in Answer.human_attribute_name(:body), with: attributes[:body]
+      # click_on I18n.t(:create, scope: 'answers.form')
+      # expect(page).to have_content attributes[:body]
+      fill_standart_form(Answer, fields: [:body])
     end
 
     # scenario 'with invalid answer'

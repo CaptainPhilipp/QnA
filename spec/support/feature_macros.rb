@@ -13,24 +13,28 @@ module FeatureMacros
     end
 
     def fill_login_user(user = :user)
-      fill_in 'Email', with: send(user).email
-      fill_in 'Password', with: send(user).password
+      user = send user
+      fill_in 'Email', with: user.email
+      fill_in 'Password', with: user.password
       click_on 'Log in'
     end
 
-    def create_question_with_form(attributes = nil)
-      attributes ||= { title: 'Question title', body: 'Question body' }
+    def fill_standart_form(model, args = { factory: nil, action: :create, fields: [] })
+      attributes = attributes_for(args[:factory])
 
-      fill_in Question.human_attribute_name(:title), with: attributes[:title]
-      fill_in Question.human_attribute_name(:body),  with: attributes[:body]
-      click_on I18n.t(:create, scope: 'questions.form')
+      args[:fields].each do |field|
+        fill_in model.human_attribute_name(field), with: attributes[field]
+      end
+
+      click_on I18n.t(action, scope: "#{model.to_s.pluralize.snakeize}.form")
+      args[:fields].each { |field| expect(page).to have_content attributes[field] }
     end
   end
 
   module FeatureMethods
     def login_user(user = :user)
       assign_user(user)
-      before { instance_login_user(user) }
+      before { instance_login_user(send user) }
     end
   end
 end

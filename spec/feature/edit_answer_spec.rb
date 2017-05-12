@@ -6,10 +6,9 @@ feature 'Edit answer', %q(
   ) do
 
   assign_users
-  let(:question) { create :question, user: user }
-  let(:answer) { create :answer, user: user, question: question }
-  let(:old_answer_body) { answer.body }
-  let(:new_answer_body) { 'Edited answer' }
+  let(:answer)   { create :answer, user: user }
+  let(:attributes)     { attributes_for :answer }
+  let(:new_attributes) { attributes_for :new_nswer }
 
 
   context 'when user is owner' do
@@ -19,10 +18,8 @@ feature 'Edit answer', %q(
       visit question_path(question)
       within '.answers' do
         click_on I18n.t :edit
-        fill_in Answer.human_attribute_name(:body), with: new_answer_body
-        click_on I18n.t :save
-        expect(page).to_not have_content old_answer_body
-        expect(page).to     have_content new_answer_body
+        fill_standart_form(Answer, factory: :new_answer, action: :save, fields: [:body])
+        expect(page).to_not have_content attributes[:body]
       end
     end
   end

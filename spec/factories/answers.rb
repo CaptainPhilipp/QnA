@@ -1,15 +1,16 @@
 FactoryGirl.define do
-  sequence(:body) do |i|
-    "Some answer #{i}"
-  end
-
   factory :answer do
+    association :user
     association :question
-    body
+    sequence(:body) { |i| "Some answer #{i}" }
 
     factory :invalid_answer do
       question nil
       body ''
+    end
+
+    factory :new_answer do
+      body 'Edited Text'
     end
   end
 end

@@ -5,7 +5,8 @@ feature 'Create question', %q(
     User can ask the question
   ) do
 
-  let(:question) { { title: 'Question title', body: 'Question body' } }
+  let(:question)   { create :question }
+  let(:attributes) { attributes_for :question }
 
   context 'when authorized' do
     login_user
@@ -18,9 +19,12 @@ feature 'Create question', %q(
 
     scenario 'after create, user can see his question' do
       visit new_question_path
-      create_question_with_form
-      expect(page).to have_content question[:title]
-      expect(page).to have_content question[:body]
+      # fill_in Question.human_attribute_name(:title), with: attributes[:title]
+      # fill_in Question.human_attribute_name(:body),  with: attributes[:body]
+      # click_on I18n.t(:create, scope: 'questions.form')
+      # expect(page).to have_content attributes[:title]
+      # expect(page).to have_content attributes[:body]
+      fill_standart_form(Question, fields: [:title, :body])
     end
   end
 
