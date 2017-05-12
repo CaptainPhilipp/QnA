@@ -29,10 +29,9 @@ end
 
 feature 'User can log_out' do
   let(:log_out) { I18n.t(:log_out, scope: 'devise.links') }
-  assign_user
+  login_user
 
   scenario 'with right data' do
-    login_user(user)
     click_link log_out
     expect(page).to have_content I18n.t(:signed_out, scope: 'devise.sessions')
   end

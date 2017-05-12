@@ -1,6 +1,6 @@
 require_relative 'acceptance_helper'
 
-feature 'create question', %q(
+feature 'Create question', %q(
     In order to get answer from community,
     User can ask the question
   ) do

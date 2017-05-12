@@ -6,10 +6,8 @@ feature 'Only owner can operate with his Question' do
   let(:delete_link_name) { I18n.t :delete }
 
   context 'Owner' do
-    before do
-      login_user(user)
-      visit question_path(question)
-    end
+    login_user
+    before { visit question_path(question) }
 
     scenario 'can see destroy link' do
       expect(page).to have_content delete_link_name
@@ -22,8 +20,9 @@ feature 'Only owner can operate with his Question' do
   end
 
   context 'Not owner' do
+    login_other_user
+
     scenario "can't see destroy link" do
-      login_user(other_user)
       visit question_path(question)
       expect(page).to_not have_content delete_link_name
     end

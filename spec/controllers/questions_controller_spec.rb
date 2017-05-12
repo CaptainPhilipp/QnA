@@ -52,10 +52,8 @@ RSpec.describe QuestionsController, type: :controller do
     let(:send_request) { get :edit, params: { id: question } }
 
     context 'Owner' do
-      before do
-        login_user(user)
-        send_request
-      end
+      login_user
+      before { send_request }
 
       it 'assigns requested question to @question' do
         expect(assigns(:question)).to eq(question)
@@ -65,10 +63,8 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'Not owner' do
-      before do
-        login_user(other_user)
-        send_request
-      end
+      login_other_user
+      before { send_request }
 
       it { should redirect_to question_path(question) }
     end
