@@ -1,0 +1,8 @@
+# <% if @answer.errors.present? %>
+#   $('#new_answer .errors').html('')
+#   $('#new_answer').prepend('<div class="errors"><%= j render "common/error", resource: @answer %></div>')
+# <% else %>
+#   $('#answer_body').val('')
+#   $('#new_answer .errors').html('')
+#   $('#answers').append('<%= j render @answer %>')
+# <% end %>

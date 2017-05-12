@@ -1,6 +1,14 @@
 - if answer.persisted?
-  div id="#{"answer_#{answer.id}"}"
-    = answer.body
-    - if current_user_owns? answer
-      |  
-      = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
+  div id="#{css_id_for answer}"
+  
+    .body
+      = answer.body
+      - if current_user_owns? answer
+        = link_to t(:edit), answer, method: :patch, remote: true
+        = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
+
+    = form_for answer, remote: true, html: { display: :none } do |f|
+      / = f.label :body
+      = f.text_area :body
+
+      = f.submit t :save
