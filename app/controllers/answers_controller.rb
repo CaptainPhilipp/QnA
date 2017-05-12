@@ -8,7 +8,7 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answers_params)
     @answer.user = current_user
     respond_to do |format|
-      format.js   { render 'create' }
+      format.js   { @answer.save; render('create') }
       format.html { @answer.save ? redirect_to(@question) : render('questions/show') }
     end
   end

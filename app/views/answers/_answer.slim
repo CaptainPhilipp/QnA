@@ -4,11 +4,14 @@
     .body
       = answer.body
       - if current_user_owns? answer
-        = link_to t(:edit), answer, method: :patch, remote: true
+        = link_to t(:edit), '', data: { answer_id: answer.id }, class: 'answer_edit_link'
         = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
+        
+    .edit-form style="display: none"
+      = form_for answer, remote: true do |f|
+        = f.text_area :body
 
-    = form_for answer, remote: true, html: { display: :none } do |f|
-      / = f.label :body
-      = f.text_area :body
-
-      = f.submit t :save
+        = f.submit t :save
+        = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'answer_cancel_edit_link'
+- else
+  = 'shit'

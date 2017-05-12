@@ -1,8 +1,7 @@
-# <% if @answer.errors.present? %>
-#   $('#new_answer .errors').html('')
-#   $('#new_answer').prepend('<div class="errors"><%= j render "common/error", resource: @answer %></div>')
-# <% else %>
-#   $('#answer_body').val('')
-#   $('#new_answer .errors').html('')
-#   $('#answers').append('<%= j render @answer %>')
-# <% end %>
+<% answer_id = "#answer_#{@answer.id}" %>
+<% if @answer.errors.present? %>
+  $('<%= answer_id %> .errors').replaceWith('')
+  $('<%= answer_id %>').prepend('<div class="errors"><%= j render "common/error", resource: @answer %></div>')
+<% else %>
+  $('<%= answer_id %>').replaceWith('<%= j render @answer %>')
+<% end %>
