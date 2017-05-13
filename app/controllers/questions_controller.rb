@@ -40,6 +40,9 @@ class QuestionsController < ApplicationController
     redirect_to questions_url
   end
 
+  def best_answer
+  end
+
   private
 
   def load_question

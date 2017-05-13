@@ -9,8 +9,10 @@ feature 'Best answer to question', '
 
   let(:question) { create :question, user: user }
   let(:answers)  { create_list :answer, 5, question: question }
+  let(:answer)   { answers.sample }
 
   let(:set_best_answer)  { question.best_answer = answers.sample }
+  let(:div_answer_id) { "#answer_#{answer.id}" }
   let(:link_set_best_answer) { I18n.t :set_best_answer, scope: 'question.show' }
 
   context 'When owner,' do
@@ -18,16 +20,21 @@ feature 'Best answer to question', '
 
     context "and when best answer isn't setted," do
       scenario do
-        expect(page).to_not have_selector '#best_answer'
+        expect(page).to_not have_selector '.best_answer'
       end
 
-      scenario 'User can set answer as best'
+      scenario 'User sets answer as best', js: true do
+        within div_answer_id do
+          click_link link_set_best_answer
+          expect(page).to have_selector '.best_answer'
+        end
+      end
     end
 
     context 'and when best answer is already setted,' do
       scenario do
         expect(question.best_answer).to_not be nil
-        expect(page).to have_selector '#best_answer'
+        expect(page).to have_selector '.best_answer'
       end
 
       scenario 'User can replace best answer flag'
@@ -43,7 +50,7 @@ feature 'Best answer to question', '
 
     scenario 'User can see best answer' do
       set_best_answer
-      expect(page).to have_selector '#best_answer'
+      expect(page).to have_selector '.best_answer'
     end
   end
 end

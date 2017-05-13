@@ -86,7 +86,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to new question' do
         send_request
-        should redirect_to question_path(assigns :question)
+        should redirect_to question_path(assigns(:question))
       end
     end
 
@@ -181,6 +181,29 @@ RSpec.describe QuestionsController, type: :controller do
       it 'deletes his question' do
         question
         expect { send_request }.to_not change(Question, :count)
+      end
+    end
+  end
+
+  describe '#best_answer' do
+    let(:answer) { create :answer }
+    let(:other_answer) { create :answer }
+    let(:send_request) { post :best_answer, params: { question_id: question.id, answer_id: answer.id } }
+
+    context 'when user is owner' do
+      it 'should change best_answer' do
+        question.update best_answer: other_answer
+        expect(question.best_answer).to eq other_answer
+        send_request
+        expect(question.reload.best_answer).to eq answer
+      end
+    end
+
+    context 'when user is not owner' do
+      it 'should not change best_answer' do
+        expect(question.best_answer).to be nil
+        send_request
+        expect(question.reload.best_answer).to eq other_answer
       end
     end
   end
