@@ -1,10 +1,6 @@
 FactoryGirl.define do
-  sequence :title do |n|
-    "Question #{n}"
-  end
-
   factory :question do
-    title
+    sequence(:title) { |i| "Question #{i}" }
     body 'MyText'
     association :user
 

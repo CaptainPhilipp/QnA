@@ -22,7 +22,7 @@ feature 'User can sign in' do
   scenario 'with right data' do
     visit root_path
     click_link sign_in
-    fill_login_user(:user)
+    fill_login_user(user)
     expect(page).to have_content I18n.t(:signed_in, scope: 'devise.sessions')
   end
 end

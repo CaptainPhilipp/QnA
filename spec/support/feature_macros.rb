@@ -5,15 +5,14 @@ module FeatureMacros
   end
 
   module ExampleMethods
-    alias instance_login_user login_user
-
     def login_user(user = :user)
       visit new_user_session_path
-      fill_login_user(user)
+      fill_login_user(send user)
     end
 
-    def fill_login_user(user = :user)
-      user = send user
+    alias instance_login_user login_user
+
+    def fill_login_user(user)
       fill_in 'Email', with: user.email
       fill_in 'Password', with: user.password
       click_on 'Log in'

@@ -134,6 +134,7 @@ RSpec.describe QuestionsController, type: :controller do
         let(:new_attributes) { attributes_for(:invalid_question) }
 
         it 'not changes question attributes' do
+          expect(assigns(:question)).to eq question
           expect(assigns(:question).title).to eq attributes[:title]
           expect(assigns(:question).body).to  eq attributes[:body]
         end

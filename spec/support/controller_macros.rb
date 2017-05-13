@@ -5,18 +5,18 @@ module ControllerMacros
   end
 
   module ExampleMethods
-    alias instance_login_user login_user
-
-    def login_user(user = :user)
+    def login_user(user)
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in user
     end
+
+    alias instance_login_user login_user
   end
 
   module SpecMethods
-    def login_user(user = :user)
-      assign_user user
-      before { instance_login_user user }
+    def login_user(user_name = :user)
+      assign_user user_name
+      before { instance_login_user send(user_name) }
     end
   end
 end
