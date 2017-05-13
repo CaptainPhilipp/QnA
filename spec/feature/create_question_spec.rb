@@ -19,12 +19,11 @@ feature 'Create question', %q(
 
     scenario 'after create, user can see his question' do
       visit new_question_path
-      # fill_in Question.human_attribute_name(:title), with: attributes[:title]
-      # fill_in Question.human_attribute_name(:body),  with: attributes[:body]
-      # click_on I18n.t(:create, scope: 'questions.form')
-      # expect(page).to have_content attributes[:title]
-      # expect(page).to have_content attributes[:body]
-      fill_standart_form(Question, fields: [:title, :body])
+      fill_in Question.human_attribute_name(:title), with: attributes[:title]
+      fill_in Question.human_attribute_name(:body),  with: attributes[:body]
+      click_on I18n.t(:create, scope: 'questions.form')
+      expect(page).to have_content attributes[:title]
+      expect(page).to have_content attributes[:body]
     end
   end
 

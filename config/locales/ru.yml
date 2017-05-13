@@ -7,4 +7,5 @@ ru:
   answers:
     form:
       create: 'Ответить'
+      save: 'Сохранить'
       authentication_required: 'Что бы написать ответ необходимо авторизоваться'

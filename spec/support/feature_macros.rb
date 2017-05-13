@@ -5,9 +5,9 @@ module FeatureMacros
   end
 
   module ExampleMethods
-    def login_user(user = :user)
+    def login_user(user)
       visit new_user_session_path
-      fill_login_user(send user)
+      fill_login_user(user)
     end
 
     alias instance_login_user login_user
@@ -18,14 +18,15 @@ module FeatureMacros
       click_on 'Log in'
     end
 
-    def fill_standart_form(model, args = { factory: nil, action: :create, fields: [] })
-      attributes = attributes_for(args[:factory])
+    def expect_standart_form(model, args = { factory: nil, link: nil, fields: [] })
+      snakecased = model.to_s.tableize.singularize
+      attributes = attributes_for(args[:factory] || snakecased)
 
       args[:fields].each do |field|
-        fill_in model.human_attribute_name(field), with: attributes[field]
+        fill_in "##{snakecased}_#{field}", with: attributes[field]
       end
 
-      click_on I18n.t(action, scope: "#{model.to_s.pluralize.snakeize}.form")
+      click_on I18n.t(args[:link])
       args[:fields].each { |field| expect(page).to have_content attributes[field] }
     end
   end

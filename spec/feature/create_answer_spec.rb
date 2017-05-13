@@ -14,10 +14,9 @@ feature 'Create answer', %q(
 
     scenario 'with valid answer', js: true do
       visit question_path(question)
-      # fill_in Answer.human_attribute_name(:body), with: attributes[:body]
-      # click_on I18n.t(:create, scope: 'answers.form')
-      # expect(page).to have_content attributes[:body]
-      fill_standart_form(Answer, fields: [:body])
+      fill_in Answer.human_attribute_name(:body), with: attributes[:body]
+      click_on I18n.t(:create, scope: 'answers.form')
+      expect(page).to have_content attributes[:body]
     end
 
     # scenario 'with invalid answer'
