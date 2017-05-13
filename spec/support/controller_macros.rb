@@ -11,6 +11,15 @@ module ControllerMacros
     end
 
     alias instance_login_user login_user
+
+    def should_not_change(entity, *fields)
+      old_values = fields.map { |field| entity.send field }
+      yield
+      entity.reload
+      fields.each_with_index do |field, i|
+        expect(entity.send field).to eq old_values[i]
+      end
+    end
   end
 
   module SpecMethods
