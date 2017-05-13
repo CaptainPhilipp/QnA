@@ -4,7 +4,7 @@ class Answer < ApplicationRecord
 
   validates :body, length: { minimum: 6 }
 
-  def best_answer?
+  def best?
     question.best_answer_id == id
   end
 end

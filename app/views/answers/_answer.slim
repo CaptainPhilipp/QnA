@@ -1,5 +1,5 @@
 - if answer.persisted?
-  div id="#{css_id_for answer}"
+  div id="#{css_id_for answer}" class="#{'best_answer' if answer.best?}"
   
     .body
       = answer.body
