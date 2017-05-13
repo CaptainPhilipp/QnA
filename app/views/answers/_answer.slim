@@ -9,10 +9,7 @@
         
     .edit-form style="display: none"
       = form_for answer, remote: true do |f|
-        = f.label :body
         = f.text_area :body
 
         = f.submit t :save
         = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'answer_cancel_edit_link'
-- else
-  = 'shit'
