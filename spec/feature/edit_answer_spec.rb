@@ -1,9 +1,9 @@
 require_relative 'acceptance_helper'
 
-feature 'Edit answer', %q(
+feature 'Edit answer', '
     In order to correct his answer,
     User can edit answer
-  ) do
+  ' do
 
   assign_users
   let(:question) { create :question }
@@ -17,7 +17,7 @@ feature 'Edit answer', %q(
   context 'when user is owner' do
     login_user
 
-    scenario "can edit his answer", js: true do
+    scenario 'can edit his answer', js: true do
       visit_question
       within "#answer_#{answer.id}" do
         click_link I18n.t :edit
@@ -31,7 +31,7 @@ feature 'Edit answer', %q(
     end
   end
 
-  context "when user is not owner" do
+  context 'when user is not owner' do
     login_user :other_user
 
     scenario "can't see edit answer link" do

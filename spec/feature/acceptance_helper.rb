@@ -14,7 +14,7 @@ RSpec.configure do |config|
   # для каждого теста, контролировать бд транзакционно
   config.before(:each)  { DatabaseCleaner.strategy = :transaction }
   # для каждого теста с js, контролировать бд обнулением
-  config.before(:each, js: true)  { DatabaseCleaner.strategy = :truncation }
+  config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
   # начать отслеживание по выбранной стратегии
   config.before(:each)  { DatabaseCleaner.start }
   # применить очищение по выбранной стратегии

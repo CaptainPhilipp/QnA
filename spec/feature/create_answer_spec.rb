@@ -1,9 +1,9 @@
 require_relative 'acceptance_helper'
 
-feature 'Create answer', %q(
+feature 'Create answer', '
     In order to help to community,
     User can answer the question
-  ) do
+  ' do
 
   assign_user
   let(:question) { create :question, user: user }
@@ -22,7 +22,7 @@ feature 'Create answer', %q(
     # scenario 'with invalid answer'
   end
 
-  context "when not authorized" do
+  context 'when not authorized' do
     scenario "can't create answer" do
       visit question_path(question)
       expect(page).to_not have_content Answer.human_attribute_name(:body)

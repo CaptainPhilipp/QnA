@@ -1,9 +1,9 @@
 require_relative 'acceptance_helper'
 
-feature 'Create question', %q(
+feature 'Create question', '
     In order to get answer from community,
     User can ask the question
-  ) do
+  ' do
 
   let(:question)   { create :question }
   let(:attributes) { attributes_for :question }
