@@ -191,6 +191,13 @@ RSpec.describe QuestionsController, type: :controller do
     let(:send_request) { post :best_answer, params: { question_id: question.id, answer_id: answer.id } }
 
     context 'when user is owner' do
+      login_user
+
+      it 'should assign @question' do
+        send_request
+        expect(assigns(:question)).to eq question
+      end
+
       it 'should change best_answer' do
         question.update best_answer: other_answer
         expect(question.best_answer).to eq other_answer
@@ -200,10 +207,12 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when user is not owner' do
+      login_user :other_user
+
       it 'should not change best_answer' do
-        expect(question.best_answer).to be nil
+        expect(question.reload.best_answer).to_not eq answer
         send_request
-        expect(question.reload.best_answer).to eq other_answer
+        expect(question.reload.best_answer).to_not eq answer
       end
     end
   end
