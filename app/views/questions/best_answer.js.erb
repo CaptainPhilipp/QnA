@@ -1,0 +1,4 @@
+$('.best_answer').removeClass('best_answer')
+var best_answer = $('#answer_<%= @question.best_answer_id %>')
+best_answer.addClass('best_answer')
+best_answer.prependTo($('#answers'))

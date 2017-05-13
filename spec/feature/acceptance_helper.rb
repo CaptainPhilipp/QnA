@@ -2,9 +2,14 @@ require 'rails_helper'
 
 require_relative '../support/feature_macros'
 
-RSpec.configure do |config|
-  Capybara.javascript_driver = :webkit
+Capybara.javascript_driver = :webkit
 
+Capybara::Webkit.configure do |config|
+  config.timeout = 5
+  config.raise_javascript_errors = true
+end
+
+RSpec.configure do |config|
   config.include FeatureMacros, type: :feature
 
   config.use_transactional_fixtures = false

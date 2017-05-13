@@ -8,36 +8,50 @@ feature 'Best answer to question', '
   assign_users :user, :other_user
 
   let(:question) { create :question, user: user }
-  let(:answers)  { create_list :answer, 5, question: question }
+  let!(:answers)  { create_list :answer, 5, question: question }
   let(:answer)   { answers.sample }
 
-  let(:set_best_answer)  { question.best_answer = answers.sample }
   let(:div_answer_id) { "#answer_#{answer.id}" }
-  let(:link_set_best_answer) { I18n.t :set_best_answer, scope: 'question.show' }
+  let(:link_set_best_answer) { Question.human_attribute_name(:best_answer) }
 
   context 'When owner,' do
     login_user
+    before { visit question_path(question) }
 
     context "and when best answer isn't setted," do
-      scenario do
+      scenario 'shound not present any best answer' do
+        expect(question.best_answer).to be nil
         expect(page).to_not have_selector '.best_answer'
       end
 
       scenario 'User sets answer as best', js: true do
         within div_answer_id do
           click_link link_set_best_answer
+          save_and_open_page
           expect(page).to have_selector '.best_answer'
+          expect(page).to have_selector "#{div_answer_id}.best_answer"
         end
       end
     end
 
     context 'and when best answer is already setted,' do
-      scenario do
-        expect(question.best_answer).to_not be nil
-        expect(page).to have_selector '.best_answer'
+      before { question.update best_answer: answer }
+
+      scenario 'it is must be present' do
+        expect(question.best_answer).to be answer
+
+        within div_answer_id do
+          expect(page).to have_selector '.best_answer'
+        end
       end
 
-      scenario 'User can replace best answer flag'
+      scenario 'User can replace best answer flag' do
+        within div_answer_id do
+          click_link link_set_best_answer
+          expect(page).to have_selector '.best_answer'
+          expect(page).to have_selector "#{div_answer_id}.best_answer"
+        end
+      end
     end
   end
 
@@ -49,7 +63,7 @@ feature 'Best answer to question', '
     end
 
     scenario 'User can see best answer' do
-      set_best_answer
+      question.update best_answer: answers.sample
       expect(page).to have_selector '.best_answer'
     end
   end

@@ -188,7 +188,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe '#best_answer' do
     let(:answer) { create :answer }
     let(:other_answer) { create :answer }
-    let(:send_request) { post :best_answer, params: { question_id: question.id, answer_id: answer.id } }
+    let(:send_request) { post :best_answer, params: { question_id: question.id, answer_id: answer.id }, format: :js }
 
     context 'when user is owner' do
       login_user
@@ -196,6 +196,11 @@ RSpec.describe QuestionsController, type: :controller do
       it 'should assign @question' do
         send_request
         expect(assigns(:question)).to eq question
+      end
+
+      it do
+        send_request
+        should render_template(:best_answer)
       end
 
       it 'should change best_answer' do

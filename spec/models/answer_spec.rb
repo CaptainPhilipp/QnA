@@ -18,15 +18,13 @@ RSpec.describe Answer, type: :model do
     end
 
     it 'should be false if other answer are best' do
-      question.best_answer = other_answer
-      question.save
-      expect(answer.best_answer?).to be false
+      question.update best_answer: other_answer
+      expect(answer.reload.best_answer?).to be false
     end
 
     it 'should be true if it is best answer' do
-      question.best_answer = answer
-      question.save
-      expect(answer.best_answer?).to be false
+      question.update best_answer: answer
+      expect(answer.reload.best_answer?).to be false
     end
   end
 end

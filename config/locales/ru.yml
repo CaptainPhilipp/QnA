@@ -4,6 +4,8 @@ ru:
       create: 'Задать вопрос'
     form:
       create: 'Задать вопрос'
+    show:
+      set_best_answer: 'Лучший ответ'
   answers:
     form:
       create: 'Ответить'
