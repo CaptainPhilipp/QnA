@@ -1,8 +1,8 @@
 <% if @answer.errors.present? %>
-  $('form#new_answer .errors').replaceWith('')
+  $('form#new_answer .errors').remove()
   $('form#new_answer').prepend('<div class="errors"><%= j render "common/error", resource: @answer %></div>')
 <% else %>
   $('#answer_body').val('')
-  $('form#new_answer .errors').replaceWith('')
+  $('form#new_answer .errors').remove()
   $('#answers').append('<%= j render @answer %>')
 <% end %>
