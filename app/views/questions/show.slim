@@ -8,6 +8,12 @@ dl
 - if current_user_owns? @question
   div = link_to t(:delete), question_path(@question), method: :delete, data: { confirm: t(:sure?) }
 
+div
+  - if @question.best_answer
+    = @question.best_answer.body
+    br
+    = '-----'
+
 div#answers
   = render @question.answers
 

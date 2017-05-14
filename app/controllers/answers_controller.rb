@@ -1,8 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: :create
-  before_action :load_answer,   only: %i(update destroy)
-  before_action :check_answer_ownership!, only: %i(update destroy)
+  before_action :load_answer,   only: %i(update destroy best)
+  before_action :check_answer_ownership!, only: %i(update destroy best)
 
   def create
     @answer = @question.answers.new(answers_params)
@@ -26,6 +26,10 @@ class AnswersController < ApplicationController
     end
   end
 
+  def best
+    @answer.best!
+  end
+
   private
 
   def load_question
@@ -33,7 +37,7 @@ class AnswersController < ApplicationController
   end
 
   def load_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.find(params[:id] || params[:answer_id])
   end
 
   def answers_params

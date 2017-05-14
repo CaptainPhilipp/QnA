@@ -40,11 +40,6 @@ class QuestionsController < ApplicationController
     redirect_to questions_url
   end
 
-  def best_answer
-    # @question.update best_answer_id: params[:answer_id]
-    Answer.find(params[:answer_id]).best!
-  end
-
   private
 
   def load_question

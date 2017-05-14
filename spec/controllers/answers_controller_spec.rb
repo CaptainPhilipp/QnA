@@ -113,4 +113,28 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'POST #best' do
+    let(:send_ajax_request) { patch :best, params: { answer_id: answer.id }, format: :js }
+
+    context 'when owner' do
+      login_user
+
+      it 'must set new best' do
+        expect(answer).to_not be_best
+        send_ajax_request
+        expect(answer.reload).to be_best
+      end
+    end
+
+    context 'when not owner' do
+      login_user :other_user
+
+      it 'must not set best' do
+        expect(answer).to_not be_best
+        send_ajax_request
+        expect(answer.reload).to_not be_best
+      end
+    end
+  end
 end
