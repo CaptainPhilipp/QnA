@@ -19,7 +19,7 @@ RSpec.describe Answer, type: :model do
 
     it 'should be true if it is best answer' do
       question.update best_answer: answer
-      expect(answer.reload).to_not be_best
+      expect(answer.reload).to be_best
     end
   end
 
@@ -32,9 +32,10 @@ RSpec.describe Answer, type: :model do
 
     it 'other answers of this question should not be best' do
       other_answer.best!
+      expect(other_answer).to be_best
       answer.best!
-      expect(other_answer).to_not be_best
       expect(answer).to be_best
+      expect(other_answer).to_not be_best
     end
   end
 end
