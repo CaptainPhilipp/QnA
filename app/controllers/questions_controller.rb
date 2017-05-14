@@ -41,7 +41,8 @@ class QuestionsController < ApplicationController
   end
 
   def best_answer
-    @question.update best_answer_id: params[:answer_id]
+    # @question.update best_answer_id: params[:answer_id]
+    Answer.find(params[:answer_id]).best!
   end
 
   private

@@ -184,40 +184,4 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
-
-  describe '#best_answer' do
-    let(:answer) { create :answer }
-    let(:other_answer) { create :answer }
-    let(:send_request) { post :best_answer, params: { question_id: question.id, answer_id: answer.id }, format: :js }
-
-    context 'when user is owner' do
-      login_user
-
-      it 'should assign @question' do
-        send_request
-        expect(assigns(:question)).to eq question
-      end
-
-      it do
-        send_request
-        should render_template(:best_answer)
-      end
-
-      it 'should change best_answer' do
-        question.update best_answer: other_answer
-        send_request
-        expect(question.reload.best_answer).to eq answer
-      end
-    end
-
-    context 'when user is not owner' do
-      login_user :other_user
-
-      it 'should not change best_answer' do
-        expect(question.reload.best_answer).to_not eq answer
-        send_request
-        expect(question.reload.best_answer).to_not eq answer
-      end
-    end
-  end
 end

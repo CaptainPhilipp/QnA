@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   it { should belong_to(:user) }
-
   it { should belong_to(:question) }
+  it { have_db_column :best }
 
   it { should validate_length_of(:body).is_at_least(6) }
 
@@ -13,12 +13,12 @@ RSpec.describe Answer, type: :model do
 
   context '#best?' do
     it 'should be false if other answer are best' do
-      question.update best_answer: other_answer
+      other_answer.best!
       expect(answer.reload).to_not be_best
     end
 
     it 'should be true if it is best answer' do
-      question.update best_answer: answer
+      answer.best!
       expect(answer.reload).to be_best
     end
   end
@@ -32,10 +32,9 @@ RSpec.describe Answer, type: :model do
 
     it 'other answers of this question should not be best' do
       other_answer.best!
-      expect(other_answer).to be_best
       answer.best!
-      expect(answer).to be_best
-      expect(other_answer).to_not be_best
+      expect(Answer.where(question: question, best: true).count).to eq 1
+      expect(other_answer.reload).to_not be_best
     end
   end
 end

@@ -37,12 +37,12 @@ feature 'Best answer to question', '
 
     context 'and when best answer is already setted,' do
       before do
-        question.update best_answer: answer
+        answer.best!
         visit_question
       end
 
       scenario 'it is must be present' do
-        expect(question.best_answer).to be answer
+        expect(question.best_answer).to eq answer
 
         within sample_answer do
           expect(page).to have_selector '.best_answer_link'
@@ -70,7 +70,7 @@ feature 'Best answer to question', '
     end
 
     scenario 'User can see best answer' do
-      question.update best_answer: answers.sample
+      answers.sample.best!
       visit_question
       expect(page).to have_selector '.best_answer'
     end

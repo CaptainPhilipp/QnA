@@ -4,11 +4,9 @@ class Answer < ApplicationRecord
 
   validates :body, length: { minimum: 6 }
 
-  def best?
-    question.best_answer_id == id
-  end
-
   def best!
-    question.update best_answer: self
+    return true if best? # без reload, следующая строка не обновляет answers
+    return false unless question.answers.where(best: true).update(best: false)
+    update best: true
   end
 end
