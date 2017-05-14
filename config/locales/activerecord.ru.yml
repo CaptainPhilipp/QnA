@@ -9,6 +9,7 @@ ru:
       question:
         title: 'Заголовок вопроса'
         body: 'Вопрос'
+        best_answer: 'Лучший ответ'
       answer:
         body: 'Ваш ответ'
     errors:

@@ -4,6 +4,6 @@ module ApplicationHelper
   end
 
   def css_id_for(entity)
-    "#{entity.class.to_s.tableize.singularize}_#{entity.id || 'new'}"
+    "#{entity.class.to_s.underscore}_#{entity.id || 'new'}"
   end
 end

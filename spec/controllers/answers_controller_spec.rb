@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  assign_users
+  assign_users :user, :other_user
   let(:question) { create :question, user: other_user }
   let(:answer)   { create :answer, question: question, user: user }
 
@@ -60,6 +60,7 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  # TODO: переделать на attributes
   describe 'PATCH #update' do
     let(:answer_body) { answer.body }
     let(:new_answer_body) { 'Edited answer' }

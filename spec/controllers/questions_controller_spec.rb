@@ -205,7 +205,6 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'should change best_answer' do
         question.update best_answer: other_answer
-        expect(question.best_answer).to eq other_answer
         send_request
         expect(question.reload.best_answer).to eq answer
       end

@@ -40,6 +40,6 @@ class AnswersController < ApplicationController
   end
 
   def check_answer_ownership!
-    redirect_to question_path(@answer.question) unless current_user.owner? @answer
+    redirect_to @answer.question unless current_user.owner? @answer
   end
 end
