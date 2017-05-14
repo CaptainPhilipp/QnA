@@ -6,17 +6,18 @@ feature 'Best answer to question', '
   ' do
 
   assign_users :user, :other_user
+  let(:visit_question) { visit question_path(question) }
 
   let(:question) { create :question, user: user }
   let!(:answers)  { create_list :answer, 5, question: question }
   let(:answer)   { answers.sample }
 
-  let(:div_answer_id) { "#answer_#{answer.id}" }
-  let(:link_set_best_answer) { Question.human_attribute_name(:best_answer) }
+  let(:sample_answer) { "#answer_#{answer.id}" }
+  let(:best_answer_link) { Question.human_attribute_name(:best_answer) }
 
   context 'When owner,' do
     login_user
-    before { visit question_path(question) }
+    before { visit_question }
 
     context "and when best answer isn't setted," do
       scenario 'shound not present any best answer' do
@@ -25,31 +26,36 @@ feature 'Best answer to question', '
       end
 
       scenario 'User sets answer as best', js: true do
-        within div_answer_id do
-          click_link link_set_best_answer
-          save_and_open_page
-          expect(page).to have_selector '.best_answer'
-          expect(page).to have_selector "#{div_answer_id}.best_answer"
+        within sample_answer do
+          expect(page).to have_selector '.best_answer_link'
+          click_link best_answer_link
+          expect(page).to_not have_selector '.best_answer_link'
         end
+        expect(page).to have_selector "#{sample_answer}.best_answer"
       end
     end
 
     context 'and when best answer is already setted,' do
-      before { question.update best_answer: answer }
+      before do
+        question.update best_answer: answer
+        visit_question
+      end
 
       scenario 'it is must be present' do
         expect(question.best_answer).to be answer
 
-        within div_answer_id do
-          expect(page).to have_selector '.best_answer'
+        within sample_answer do
+          expect(page).to have_selector '.best_answer_link'
         end
       end
 
-      scenario 'User can replace best answer flag' do
-        within div_answer_id do
-          click_link link_set_best_answer
-          expect(page).to have_selector '.best_answer'
-          expect(page).to have_selector "#{div_answer_id}.best_answer"
+      scenario 'User can replace best answer flag', js: true do
+        within sample_answer do
+          click_link best_answer_link
+        end
+
+        within "#{sample_answer}.best_answer" do # вместо expect сработает как надо
+          expect(page).to_not have_selector '.best_answer_link'
         end
       end
     end
@@ -59,11 +65,13 @@ feature 'Best answer to question', '
     login_user :other_user
 
     scenario "User can't see link" do
-      expect(page).to_not have_content link_set_best_answer
+      visit_question
+      expect(page).to_not have_content best_answer_link
     end
 
     scenario 'User can see best answer' do
       question.update best_answer: answers.sample
+      visit_question
       expect(page).to have_selector '.best_answer'
     end
   end
