@@ -22,4 +22,19 @@ RSpec.describe Answer, type: :model do
       expect(answer.reload.best?).to be true
     end
   end
+
+  context '#best!' do
+    it 'should make answer best' do
+      expect(answer).to_not be_best
+      answer.best!
+      expect(answer).to be_best
+    end
+
+    it 'other answers of this question should not be best' do
+      other_answer.best!
+      answer.best!
+      expect(other_answer).to_not be_best
+      expect(answer).to be_best
+    end
+  end
 end

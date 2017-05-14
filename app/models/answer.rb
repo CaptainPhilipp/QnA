@@ -7,4 +7,8 @@ class Answer < ApplicationRecord
   def best?
     question.best_answer_id == id
   end
+
+  def best!
+    question.update best_answer: self
+  end
 end
