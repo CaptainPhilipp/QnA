@@ -28,6 +28,8 @@ feature 'Create question', '
   end
 
   context 'when not authorized' do
+    # FAILURE: падает увидев ключевое слово в заголовке
+    # TODO: ограничить область поиска
     scenario "user can't ask a question" do
       visit new_question_path
       expect(page).to_not have_content Question.human_attribute_name(:body)

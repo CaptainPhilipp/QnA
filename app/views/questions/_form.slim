@@ -1,12 +1,12 @@
 = form_for @question do |f|
-  = render 'common/error', resource: @question
-
-  div
-    = f.label :title
-    = f.text_field :title
+  div.form-group class="#{has_errors_selector(@question, :title)}"
+    = f.label :title, class: 'control-label'
+    = errors(@question, :title)
+    = f.text_field :title, class: 'form-control'
   
-  div
-    = f.label :body
-    = f.text_area :body
+  div.form-group class="#{has_errors_selector(@question, :body)}"
+    = f.label :body, class: 'control-label'
+    = errors(@question, :body)
+    = f.text_area :body, class: 'form-control'
     
-  = f.submit t '.create'
+  = f.submit t('.create'), class: 'btn btn-default'

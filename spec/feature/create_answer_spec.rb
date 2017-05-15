@@ -17,8 +17,7 @@ feature 'Create answer', '
       fill_in Answer.human_attribute_name(:body), with: attributes[:body]
       click_button I18n.t(:create, scope: 'answers.form')
       sleep 0.05
-      created_answer_id = "#answer_#{question.answer_ids.last}"
-      within created_answer_id do
+      within "#answer_#{question.answer_ids.last}" do
         expect(page).to have_content attributes[:body]
       end
     end
