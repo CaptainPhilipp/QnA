@@ -36,7 +36,6 @@ RSpec.describe AnswersController, type: :controller do
           let(:attributes) { attributes_for(:invalid_answer) }
 
           it 'does not save the answer' do
-            # expect { send_request }.to_not change(Answer, :count)
             expect { send_ajax_request }.to_not change(Answer, :count)
           end
         end
@@ -60,12 +59,11 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  # TODO: переделать на attributes
   describe 'PATCH #update' do
-    let(:answer_body) { answer.body }
-    let(:new_answer_body) { 'Edited answer' }
+    let(:attributes) { attributes_for :answer }
+    let(:new_attributes) { attributes_for :new_answer }
     let(:send_request) { patch :update, params: {
-      id: answer.id, format: :js, answer: { body: new_answer_body }
+      id: answer, format: :js, answer: { body: new_attributes[:body] }
     } }
 
     context 'when user is owner' do
@@ -73,7 +71,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it "can update his answer" do
         send_request
-        expect(answer.reload.body).to eq new_answer_body
+        expect(answer.reload.body).to eq new_attributes[:body]
       end
     end
 
@@ -87,7 +85,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:answer_params) { { id: answer.id } }
+    let(:answer_params) { { id: answer } }
     let(:send_ajax_request) { delete :destroy, params: answer_params, format: :js }
 
     context 'when owner' do
@@ -115,7 +113,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #best' do
-    let(:send_ajax_request) { patch :best, params: { id: answer.id }, format: :js }
+    let(:send_ajax_request) { patch :best, params: { id: answer }, format: :js }
 
     context 'when owner' do
       login_user
