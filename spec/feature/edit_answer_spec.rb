@@ -17,11 +17,11 @@ feature 'Edit answer', '
   context 'when user is owner' do
     login_user
 
+    # PASS
     scenario 'can edit his answer', js: true do
       visit_question
       within "#answer_#{answer.id}" do
-        click_link I18n.t :edit
-        # save_and_open_page
+        click_link I18n.t(:edit)
         fill_in 'answer_body', with: new_attributes[:body]
         click_on I18n.t(:save)
 

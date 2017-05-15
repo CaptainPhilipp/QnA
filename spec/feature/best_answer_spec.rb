@@ -8,17 +8,11 @@ feature 'Best answer to question', '
   assign_users :user, :other_user
 
   let(:question) { create :question, user: user }
-  let!(:answers) { create_list :answer, 5, question: question }
-  let(:answer)   { answers.sample }
-  let(:other_answer) do
-    arr_ = answers.to_a
-    arr_.delete(answer)
-    arr_.sample
-  end
+  let!(:answers) { create_list :answer, 2, question: question }
+  let!(:answer)  { create :answer, question: question }
 
-  let(:other_answer_block) { "#answer_#{other_answer.id}" }
-  let(:answer_block) { "#answer_#{answer.id}" }
-  let(:best_answer_link) { Answer.human_attribute_name(:best) }
+  let(:best_answer_link_css) { '.best_answer_link' }
+  let(:best_answer_link_name) { Answer.human_attribute_name(:best) }
 
   context 'When owner,' do
     login_user
@@ -30,36 +24,44 @@ feature 'Best answer to question', '
         expect(page).to_not have_selector '.best_answer'
       end
 
+      # FAILURE
       scenario 'User sets answer as best', js: true do
-        within answer_block do
-          expect(page).to have_selector '.best_answer_link'
-          click_link best_answer_link
-          expect(page).to_not have_selector '.best_answer_link'
+        within "#answer_#{answer.id}" do
+          click_link best_answer_link_name
+          # sleep 0.5
+          # save_and_open_page
+          # после клика селектор должен исчезнуть, но клик не дает эффекта.
+          expect(page).to_not have_selector best_answer_link_css
         end
-        expect(page).to have_selector "#{answer_block}.best_answer"
+        expect(page).to have_selector "#answer_#{answer.id}.best_answer"
       end
     end
 
     context 'and when best answer is already setted,' do
+      let(:other_answer) { create :answer, question: question }
+
       before do
         other_answer.best!
         visit question_path(question)
       end
 
-      scenario 'it is must be present', js: true do
-        within "#{other_answer_block}.best_answer" do
-          expect(page).to_not have_selector '.best_answer_link'
+      # PASS
+      scenario 'best answer must be present, and must not have link', js: true do
+        within "#answer_#{other_answer.id}.best_answer" do
+          expect(page).to_not have_selector best_answer_link_css
         end
       end
 
+      # FAILURE
       scenario 'User can replace best answer flag', js: true do
-        save_and_open_page
-        within answer_block do
-          click_link best_answer_link
+        within "#answer_#{answer.id}" do
+          click_on best_answer_link_name
         end
-
-        within "#{answer_block}.best_answer" do # вместо expect сработает как надо
-          expect(page).to_not have_selector '.best_answer_link'
+        # sleep 0.5
+        # save_and_open_page
+        # падает. клик по ссылке не создаёт ожидаемый эффект - добавление класса
+        within "#answer_#{answer.id}.best_answer" do
+          expect(page).to_not have_selector best_answer_link_css
         end
       end
     end
@@ -70,7 +72,7 @@ feature 'Best answer to question', '
 
     scenario "User can't see link" do
       visit question_path(question)
-      expect(page).to_not have_content best_answer_link
+      expect(page).to_not have_content best_answer_link_name
     end
 
     scenario 'User can see best answer' do
