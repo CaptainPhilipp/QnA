@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'slim-rails'
 gem 'devise'
+gem 'twitter-bootstrap-rails'
 
 group :test do
   gem 'shoulda-matchers'
