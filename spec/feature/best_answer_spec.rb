@@ -11,7 +11,7 @@ feature 'Best answer to question', '
   let!(:answers) { create_list :answer, 2, question: question }
   let!(:answer)  { create :answer, question: question }
 
-  let(:best_answer_link_css) { '.best_answer_link' }
+  let(:answer_selector) { "#answer_#{answer.id}" }
   let(:best_answer_link) { Answer.human_attribute_name(:best) }
 
   context 'When owner,' do
@@ -25,14 +25,14 @@ feature 'Best answer to question', '
 
       # FAILURE
       scenario 'User sets answer as best', js: true do
-        within "#answer_#{answer.id}" do
+        within answer_selector do
           click_link best_answer_link
           # sleep 0.5
           # save_and_open_page
           # после клика селектор должен исчезнуть, но клик не дает эффекта.
           expect(page).to_not have_link best_answer_link
         end
-        expect(page).to have_selector "#answer_#{answer.id}.best_answer"
+        expect(page).to have_selector "#{answer_selector}.best_answer"
       end
     end
 
@@ -50,13 +50,13 @@ feature 'Best answer to question', '
 
       # FAILURE
       scenario 'User can replace best answer flag', js: true do
-        within "#answer_#{answer.id}" do
+        within answer_selector do
           click_on best_answer_link
         end
         # sleep 0.5
         # save_and_open_page
         # падает. клик по ссылке не создаёт ожидаемый эффект - добавление класса
-        within "#answer_#{answer.id}.best_answer" do
+        within "#{answer_selector}.best_answer" do
           expect(page).to_not have_link best_answer_link
         end
       end
