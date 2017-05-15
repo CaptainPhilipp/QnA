@@ -9,8 +9,10 @@
   </head>
 
   <body>
-    <%= render 'layouts/header' %>
-    <%= yield %>
-    <%= console if Rails.env.development? %>
+    <%= render 'layouts/navbar' %>
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
+  <%= console if Rails.env.development? %>
 </html>

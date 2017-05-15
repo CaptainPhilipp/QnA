@@ -1,0 +1,13 @@
+= nav_bar :brand => "Q&A" do
+    = menu_group do
+        = menu_item "Questions", root_path
+    
+    = menu_group pull: :right do
+      - if user_signed_in?
+        = drop_down current_user.email
+          = menu_item t(:log_out, scope: 'devise.links'), destroy_user_session_path, method: :delete
+      - else
+        = menu_item t(:sign_up, scope: 'devise.links'), new_user_registration_path
+        = menu_item t(:sign_in, scope: 'devise.links'), new_user_session_path
+
+div = notice
