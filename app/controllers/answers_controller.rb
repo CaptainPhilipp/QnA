@@ -8,10 +8,6 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answers_params)
     @answer.user = current_user
     @answer.save
-    # respond_to do |format|
-    #   format.js   { render 'create' }
-    #   format.html { @answer.valid? ? redirect_to(@question) : render('questions/show') }
-    # end
   end
 
   def update
@@ -37,7 +33,7 @@ class AnswersController < ApplicationController
   end
 
   def load_answer
-    @answer = Answer.find(params[:id] || params[:answer_id])
+    @answer = Answer.find(params[:id])
   end
 
   def answers_params

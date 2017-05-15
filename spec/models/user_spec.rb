@@ -10,12 +10,10 @@ RSpec.describe User, type: :model do
 
   describe '#owner?' do
     it 'must return false if other user owns entity' do
-      expect(other_user_entity.user).to_not eq user # удостовериться в правильности теста
       expect(user.owner? other_user_entity).to be false
     end
 
     it 'must return true if user owns entity' do
-      expect(users_entity.user).to eq user # удостовериться в правильности теста
       expect(user.owner? users_entity).to be true
     end
   end

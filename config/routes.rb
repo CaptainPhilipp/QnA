@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers, only: %i(new create show update destroy), shallow: true do
-      patch :best
+      patch :best, on: :member
     end
   end
 

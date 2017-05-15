@@ -12,7 +12,7 @@ feature 'Best answer to question', '
   let!(:answer)  { create :answer, question: question }
 
   let(:best_answer_link_css) { '.best_answer_link' }
-  let(:best_answer_link_name) { Answer.human_attribute_name(:best) }
+  let(:best_answer_link) { Answer.human_attribute_name(:best) }
 
   context 'When owner,' do
     login_user
@@ -20,48 +20,44 @@ feature 'Best answer to question', '
 
     context "and when best answer isn't setted," do
       scenario 'shound not present any best answer' do
-        expect(question.best_answer).to be nil
         expect(page).to_not have_selector '.best_answer'
       end
 
       # FAILURE
       scenario 'User sets answer as best', js: true do
         within "#answer_#{answer.id}" do
-          click_link best_answer_link_name
+          click_link best_answer_link
           # sleep 0.5
           # save_and_open_page
           # после клика селектор должен исчезнуть, но клик не дает эффекта.
-          expect(page).to_not have_selector best_answer_link_css
+          expect(page).to_not have_link best_answer_link
         end
         expect(page).to have_selector "#answer_#{answer.id}.best_answer"
       end
     end
 
     context 'and when best answer is already setted,' do
-      let(:other_answer) { create :answer, question: question }
+      let!(:best_answer) { create :answer, question: question, best: true }
 
-      before do
-        other_answer.best!
-        visit question_path(question)
-      end
+      before { visit question_path(question) }
 
       # PASS
       scenario 'best answer must be present, and must not have link', js: true do
-        within "#answer_#{other_answer.id}.best_answer" do
-          expect(page).to_not have_selector best_answer_link_css
+        within "#answer_#{best_answer.id}.best_answer" do
+          expect(page).to_not have_link best_answer_link
         end
       end
 
       # FAILURE
       scenario 'User can replace best answer flag', js: true do
         within "#answer_#{answer.id}" do
-          click_on best_answer_link_name
+          click_on best_answer_link
         end
         # sleep 0.5
         # save_and_open_page
         # падает. клик по ссылке не создаёт ожидаемый эффект - добавление класса
         within "#answer_#{answer.id}.best_answer" do
-          expect(page).to_not have_selector best_answer_link_css
+          expect(page).to_not have_link best_answer_link
         end
       end
     end
@@ -72,7 +68,7 @@ feature 'Best answer to question', '
 
     scenario "User can't see link" do
       visit question_path(question)
-      expect(page).to_not have_content best_answer_link_name
+      expect(page).to_not have_content best_answer_link
     end
 
     scenario 'User can see best answer' do

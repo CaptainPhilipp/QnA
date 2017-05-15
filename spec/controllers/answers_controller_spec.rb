@@ -115,7 +115,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #best' do
-    let(:send_ajax_request) { patch :best, params: { answer_id: answer.id }, format: :js }
+    let(:send_ajax_request) { patch :best, params: { id: answer.id }, format: :js }
 
     context 'when owner' do
       login_user

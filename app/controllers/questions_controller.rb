@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i(index show)
-  before_action :load_question, only: %i(show edit update destroy best_answer)
-  before_action :check_question_ownership!, only: %i(edit update destroy best_answer)
+  before_action :load_question, only: %i(show edit update destroy)
+  before_action :check_question_ownership!, only: %i(edit update destroy)
 
   def index
     @questions = Question.all
@@ -43,7 +43,7 @@ class QuestionsController < ApplicationController
   private
 
   def load_question
-    @question = Question.find(params[:id] || params[:question_id])
+    @question = Question.find(params[:id])
   end
 
   def check_question_ownership!
