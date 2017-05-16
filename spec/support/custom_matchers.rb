@@ -1,6 +1,6 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :not_change_results do |entity, *messages|
+RSpec::Matchers.define :not_change_fields do |entity, *messages|
     old_values = messages.map { |message| entity.send message }
 
     match do |actual|
@@ -9,6 +9,7 @@ RSpec::Matchers.define :not_change_results do |entity, *messages|
       messages.zip(old_values).all? do |pair|
         new_value = entity.send(pair.first)
         old_value = pair.last
+
         new_value == old_value
       end
     end
