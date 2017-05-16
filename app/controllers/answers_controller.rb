@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: :create
   before_action :load_answer,   only: %i(update destroy best)
-  before_action :check_answer_ownership!, only: %i(update destroy best)
+  before_action :check_answer_ownership!, only: %i(update destroy)
 
   def create
     @answer = @question.answers.new(answers_params)
@@ -23,7 +23,7 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @answer.best!
+    @answer.best! if current_user.owner? @answer.question
   end
 
   private

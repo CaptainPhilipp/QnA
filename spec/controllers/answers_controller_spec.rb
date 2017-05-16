@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   assign_users :user, :other_user
-  let(:question) { create :question, user: other_user }
+  let(:question) { create :question, user: user }
   let(:answer)   { create :answer, question: question, user: user }
 
   describe 'POST #create' do

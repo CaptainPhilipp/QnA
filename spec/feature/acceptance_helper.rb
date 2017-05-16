@@ -3,15 +3,7 @@ require 'capybara/poltergeist'
 
 require_relative '../support/feature_macros'
 
-# Capybara.javascript_driver = :webkit
-
-Capybara.server_port = 3030
 Capybara.javascript_driver = :poltergeist
-
-# Capybara::Webkit.configure do |config|
-#   config.timeout = 5
-#   config.raise_javascript_errors = true
-# end
 
 RSpec.configure do |config|
   config.include FeatureMacros, type: :feature
