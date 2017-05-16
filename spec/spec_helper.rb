@@ -16,6 +16,7 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require_relative 'support/custom_matchers'
 require_relative 'support/common_macros'
 require_relative 'support/controller_macros'
 
