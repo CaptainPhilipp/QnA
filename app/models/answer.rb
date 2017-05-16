@@ -6,9 +6,9 @@ class Answer < ApplicationRecord
 
   def best!
     return true if best?
-    transaction do # простой транзакции без фич вроде должно быть достаточно
-      question.answers.where(best: true).update(best: false)
+    transaction do
+      question.answers.where(best: true).each { |a| a.update!(best: false) }
+      update! best: true
     end
-    update best: true
   end
 end
