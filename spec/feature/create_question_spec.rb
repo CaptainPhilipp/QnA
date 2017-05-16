@@ -19,8 +19,10 @@ feature 'Create question', '
 
     scenario 'after create, user can see his question' do
       visit new_question_path
-      fill_in Question.human_attribute_name(:title), with: attributes[:title]
-      fill_in Question.human_attribute_name(:body),  with: attributes[:body]
+      within 'form#new_question' do
+        fill_in Question.human_attribute_name(:title), with: attributes[:title]
+        fill_in Question.human_attribute_name(:body),  with: attributes[:body]
+      end
       click_on I18n.t(:create, scope: 'questions.form')
       expect(page).to have_content attributes[:title]
       expect(page).to have_content attributes[:body]
@@ -28,11 +30,9 @@ feature 'Create question', '
   end
 
   context 'when not authorized' do
-    # FAILURE: падает увидев ключевое слово в заголовке
-    # TODO: ограничить область поиска
     scenario "user can't ask a question" do
       visit new_question_path
-      expect(page).to_not have_content Question.human_attribute_name(:body)
+      expect(page).to_not have_selector 'form#new_question'
       expect(page).to     have_content 'Log in'
     end
   end
