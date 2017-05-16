@@ -23,6 +23,7 @@ class AnswersController < ApplicationController
   end
 
   def best
+    # TODO: сделать нормальный ответ в случае отказа
     @answer.best! if current_user.owner? @answer.question
   end
 
