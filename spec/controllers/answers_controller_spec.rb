@@ -119,7 +119,6 @@ RSpec.describe AnswersController, type: :controller do
       login_user
 
       it 'must set new best' do
-        expect(answer).to_not be_best
         send_ajax_request
         expect(answer.reload).to be_best
       end
@@ -129,7 +128,6 @@ RSpec.describe AnswersController, type: :controller do
       login_user :other_user
 
       it 'must not set best' do
-        expect(answer).to_not be_best
         send_ajax_request
         expect(answer.reload).to_not be_best
       end
