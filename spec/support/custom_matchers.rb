@@ -1,15 +1,15 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :change_any_result do |entity, *fields|
-    old_values = fields.map { |field| entity.send field }
+RSpec::Matchers.define :not_change_results do |entity, *messages|
+    old_values = messages.map { |message| entity.send message }
 
     match do |actual|
       actual.call
       entity.reload
-      fields.zip(old_values).any? do |pair|
+      messages.zip(old_values).all? do |pair|
         new_value = entity.send(pair.first)
         old_value = pair.last
-        new_value != old_value
+        new_value == old_value
       end
     end
 
