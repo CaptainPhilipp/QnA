@@ -10,8 +10,8 @@ FactoryGirl.define do
     end
 
     factory :new_question do
-      title 'Edited Question'
-      body 'Edited Text'
+      title 'Edited Question title'
+      body 'Edited question Text'
     end
   end
 end

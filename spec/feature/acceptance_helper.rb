@@ -1,13 +1,9 @@
 require 'rails_helper'
+require 'capybara/poltergeist'
 
 require_relative '../support/feature_macros'
 
-Capybara.javascript_driver = :webkit
-
-Capybara::Webkit.configure do |config|
-  config.timeout = 5
-  config.raise_javascript_errors = true
-end
+Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
   config.include FeatureMacros, type: :feature

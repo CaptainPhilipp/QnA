@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   assign_users :user, :other_user
-  let(:question) { create :question, user: other_user }
+  let(:question) { create :question, user: user }
   let(:answer)   { create :answer, question: question, user: user }
 
   describe 'POST #create' do
@@ -79,7 +79,7 @@ RSpec.describe AnswersController, type: :controller do
       login_user :other_user
 
       it "can't update answer" do
-        expect { send_request }.to_not change(answer, :body)
+        expect { send_request }.to_not change(answer.reload, :body)
       end
     end
   end
@@ -112,14 +112,13 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'POST #best' do
+  describe 'PATCH #best' do
     let(:send_ajax_request) { patch :best, params: { id: answer }, format: :js }
 
     context 'when owner' do
       login_user
 
       it 'must set new best' do
-        expect(answer).to_not be_best
         send_ajax_request
         expect(answer.reload).to be_best
       end
@@ -129,7 +128,6 @@ RSpec.describe AnswersController, type: :controller do
       login_user :other_user
 
       it 'must not set best' do
-        expect(answer).to_not be_best
         send_ajax_request
         expect(answer.reload).to_not be_best
       end
