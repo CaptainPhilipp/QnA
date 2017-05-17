@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:user) { create :user }
-  let(:other_user) { create :user }
+  assign_users
   let(:question) { create :question, user: user }
 
   describe 'GET #index' do
@@ -38,9 +37,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { login_user(user) }
+    login_user
     before { get :new }
-    let(:question) { build :question }
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
@@ -53,10 +51,8 @@ RSpec.describe QuestionsController, type: :controller do
     let(:send_request) { get :edit, params: { id: question } }
 
     context 'Owner' do
-      before do
-        login_user(user)
-        send_request
-      end
+      login_user
+      before { send_request }
 
       it 'assigns requested question to @question' do
         expect(assigns(:question)).to eq(question)
@@ -66,17 +62,15 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'Not owner' do
-      before do
-        login_user(other_user)
-        send_request
-      end
+      login_user :other_user
+      before { send_request }
 
       it { should redirect_to question_path(question) }
     end
   end
 
   describe 'POST #create' do
-    before { login_user(user) }
+    login_user
     let(:attributes) { attributes_for(:question) }
     let(:send_request) { post :create, params: { question: attributes } }
 
@@ -92,7 +86,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to new question' do
         send_request
-        should redirect_to question_path(assigns :question)
+        should redirect_to question_path(assigns(:question))
       end
     end
 
@@ -111,25 +105,24 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:attributes) { attributes_for(:question) }
-    let(:question_params) { { id: question, question: attributes } }
-    let(:send_request) { patch :update, params: question_params }
-    let(:question_instance) { assigns(:question) }
+    let(:attributes)     { attributes_for(:question) }
+    let(:new_attributes) { attributes_for(:new_question) }
+    let(:send_request)   { patch :update, params: { id: question, question: new_attributes } }
 
     context 'when right owner' do
-      before { login_user(user) }
+      login_user
 
       it 'assings the requested question to @question' do
         send_request
-        expect(question_instance).to eq question
+        expect(assigns(:question).id).to eq question.id
       end
 
       context 'valid attributes' do
         before { send_request }
 
         it 'changes question attributes' do
-          expect(question_instance.title).to eq attributes[:title]
-          expect(question_instance.body).to eq attributes[:body]
+          expect(assigns(:question).title).to eq new_attributes[:title]
+          expect(assigns(:question).body).to  eq new_attributes[:body]
         end
 
         it 'redirects to the updated question' do
@@ -138,14 +131,10 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       context 'invalid attributes' do
-        let(:attributes) { attributes_for(:invalid_question) }
+        let(:new_attributes) { attributes_for(:invalid_question) }
 
         it 'not changes question attributes' do
-          old_title, old_body = question.title, question.body
-          send_request
-          question.reload
-          expect(question.title).to eq old_title
-          expect(question.body).to eq old_body
+          should_not_change(question, :title, :body) { send_request }
         end
 
         it 'redirects to the updated question' do
@@ -156,16 +145,11 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when not owner' do
-      before do
-        login_user(other_user)
-        send_request
-      end
+      login_user :other_user
+      before { send_request }
 
       it 'not changes question attributes' do
-        old_title, old_body = question.title, question.body
-        question.reload
-        expect(question.title).to eq old_title
-        expect(question.body).to eq old_body
+        expect(assigns(:question)).to eq question
       end
 
       it { should redirect_to question_url(question) }
@@ -177,7 +161,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:send_request) { delete :destroy, params: question_params }
 
     context 'when owner' do
-      before { login_user(user) }
+      login_user
 
       it 'deletes his question' do
         question
@@ -191,7 +175,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when not owner' do
-      before { login_user(other_user) }
+      login_user :other_user
 
       it 'deletes his question' do
         question

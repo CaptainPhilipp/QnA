@@ -37,13 +37,14 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'slim-rails'
 gem 'devise'
+gem 'twitter-bootstrap-rails'
 
 group :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
   gem 'capybara'
   gem 'launchy'
-  gem 'selenium-webdriver'
+  gem 'capybara-webkit'
   gem 'database_cleaner'
 end
 

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'User can registrater' do
   let(:sign_up) { I18n.t(:sign_up, scope: 'devise.links') }
@@ -17,22 +17,21 @@ end
 
 feature 'User can sign in' do
   let(:sign_in) { I18n.t(:sign_in, scope: 'devise.links') }
-  let(:user) { create :user }
+  assign_user
 
   scenario 'with right data' do
     visit root_path
     click_link sign_in
-    fill_log_in(user)
+    fill_login_user(user)
     expect(page).to have_content I18n.t(:signed_in, scope: 'devise.sessions')
   end
 end
 
 feature 'User can log_out' do
   let(:log_out) { I18n.t(:log_out, scope: 'devise.links') }
-  let(:user) { create :user }
+  login_user
 
   scenario 'with right data' do
-    log_in(user)
     click_link log_out
     expect(page).to have_content I18n.t(:signed_out, scope: 'devise.sessions')
   end

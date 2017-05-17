@@ -1,1 +1,4 @@
-p = link_to question.title, question
+blockquote
+  = link_to question.title, question
+  |  
+  = badge question.answers.count

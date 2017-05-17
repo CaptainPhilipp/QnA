@@ -1,16 +1,17 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: :create
-  before_action :load_answer,   only: :destroy
-  before_action :check_answer_ownership!, only: :destroy
+  before_action :load_answer,   only: %i(update destroy best)
+  before_action :check_answer_ownership!, only: %i(update destroy best)
 
   def create
     @answer = @question.answers.new(answers_params)
     @answer.user = current_user
-    respond_to do |format|
-      format.js   { render @answer.save ? 'create' : 'errors' }
-      format.html { @answer.save ? redirect_to(@question) : render('questions/show') }
-    end
+    @answer.save
+  end
+
+  def update
+    @answer.update(answers_params)
   end
 
   def destroy
@@ -19,6 +20,10 @@ class AnswersController < ApplicationController
       format.js { render 'destroy' }
       format.html { redirect_to @answer.question }
     end
+  end
+
+  def best
+    @answer.best!
   end
 
   private
@@ -36,6 +41,6 @@ class AnswersController < ApplicationController
   end
 
   def check_answer_ownership!
-    redirect_to answer_path(@answer) unless current_user.owner? @answer
+    redirect_to @answer.question unless current_user.owner? @answer
   end
 end

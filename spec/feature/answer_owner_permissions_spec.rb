@@ -1,12 +1,11 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Only owner can operate with his Question' do
-  let(:owner_user) { create :user }
-  let(:other_user)  { create :user }
+  assign_users
 
-  let(:question) { create :question, user: owner_user }
+  let(:question) { create :question, user: user }
 
   context 'Answer.' do
-    let(:answer) { create :answer, user: owner_user }
+    let(:answer) { create :answer, user: user }
   end
 end

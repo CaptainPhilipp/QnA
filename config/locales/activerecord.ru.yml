@@ -11,6 +11,7 @@ ru:
         body: 'Вопрос'
       answer:
         body: 'Ваш ответ'
+        best: 'Лучший ответ'
     errors:
       messages:
         blank: 'не может быть пустым'

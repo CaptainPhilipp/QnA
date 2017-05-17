@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i(index show)
   before_action :load_question, only: %i(show edit update destroy)
-  before_action :check_ownership!, only: %i(edit update destroy)
+  before_action :check_question_ownership!, only: %i(edit update destroy)
 
   def index
     @questions = Question.all
@@ -46,8 +46,8 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
   end
 
-  def check_ownership!
-    redirect_to question_path(@question) unless current_user.owner? @question
+  def check_question_ownership!
+    redirect_to @question unless current_user.owner? @question
   end
 
   def questions_params

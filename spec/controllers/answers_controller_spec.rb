@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:user)     { create :user }
-  let(:question) { create :question, user: create(:user) }
+  assign_users :user, :other_user
+  let(:question) { create :question, user: other_user }
   let(:answer)   { create :answer, question: question, user: user }
 
   describe 'POST #create' do
@@ -11,7 +11,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:send_ajax_request) { post :create, params: { question_id: question.id, answer: attributes, format: :js } }
 
     context 'when signed in' do
-      before { login_user(user) }
+      login_user
 
       context 'builded answer' do
         before { send_ajax_request }
@@ -36,36 +36,60 @@ RSpec.describe AnswersController, type: :controller do
           let(:attributes) { attributes_for(:invalid_answer) }
 
           it 'does not save the answer' do
-            expect { send_request }.to_not change(Answer, :count)
             expect { send_ajax_request }.to_not change(Answer, :count)
           end
         end
       end
     end
 
-    context 'when user is not signed in' do
+    context "when user isn't signed in" do
       context 'with ajax request' do
-        it 'should redirect to sign in' do
-          send_request
-          should redirect_to new_user_session_url
-        end
-      end
-
-      context 'with normal request' do
         it 'should respond_with 401' do
           send_ajax_request
           should respond_with 401
         end
       end
+
+      context 'with normal request' do
+        it 'should redirect to sign in' do
+          send_request
+          should redirect_to new_user_session_url
+        end
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    let(:attributes) { attributes_for :answer }
+    let(:new_attributes) { attributes_for :new_answer }
+    let(:send_request) { patch :update, params: {
+      id: answer, format: :js, answer: { body: new_attributes[:body] }
+    } }
+
+    context 'when user is owner' do
+      login_user
+
+      it "can update his answer" do
+        send_request
+        expect(answer.reload.body).to eq new_attributes[:body]
+      end
+    end
+
+    context 'when not owner' do
+      login_user :other_user
+
+      it "can't update answer" do
+        expect { send_request }.to_not change(answer, :body)
+      end
     end
   end
 
   describe 'DELETE #destroy' do
-    let(:answer_params) { { id: answer.id } }
+    let(:answer_params) { { id: answer } }
     let(:send_ajax_request) { delete :destroy, params: answer_params, format: :js }
 
     context 'when owner' do
-      before { login_user(user) }
+      login_user
 
       it 'deletes his answer' do
         answer
@@ -79,11 +103,35 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when not owner' do
-      before { login_user(create :user) }
+      login_user :other_user
 
-      it 'deletes his question' do
+      it "can't delete question" do
         answer
         expect { send_ajax_request }.to_not change(question.answers, :count)
+      end
+    end
+  end
+
+  describe 'POST #best' do
+    let(:send_ajax_request) { patch :best, params: { id: answer }, format: :js }
+
+    context 'when owner' do
+      login_user
+
+      it 'must set new best' do
+        expect(answer).to_not be_best
+        send_ajax_request
+        expect(answer.reload).to be_best
+      end
+    end
+
+    context 'when not owner' do
+      login_user :other_user
+
+      it 'must not set best' do
+        expect(answer).to_not be_best
+        send_ajax_request
+        expect(answer.reload).to_not be_best
       end
     end
   end

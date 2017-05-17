@@ -1,0 +1,8 @@
+var best_answer = $('#answer_<%= @answer.id %>')
+var link = '.best_answer .best_answer_link'
+
+$(link).show()
+$('.best_answer').removeClass('best_answer')
+best_answer.prependTo($('#answers'))
+best_answer.addClass('best_answer')
+$(link).hide()

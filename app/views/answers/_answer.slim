@@ -1,6 +1,32 @@
 - if answer.persisted?
-  div id="#{"answer_#{answer.id}"}"
-    = answer.body
-    - if current_user_owns? answer
-      |  
-      = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
+  div id="#{css_id_for answer}" class="#{'best_answer' if answer.best?}"
+    hr
+  
+    .body.col-md-12
+      .col-mb-1
+        - if current_user_owns?(answer.question)
+          = link_to Answer.human_attribute_name(:best), best_answer_path(answer),
+            method: :patch, remote: true, data: { answer_id: answer.id }, class: 'best_answer_link'
+            
+      .col-md-9.col-md-offset-1
+        = answer.body
+          
+      .col-md-2.col-md-offset-10
+        - if current_user_owns? answer
+          = link_to t(:edit), '', data: { answer_id: answer.id }, class: 'answer_edit_link'
+          = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
+          
+    .clearfix
+    
+    .edit-form
+      = form_for answer, remote: true do |f|
+        .form-group class="#{has_errors_selector(answer, :body)}"
+          = f.label :body, class: 'control-label'
+          = errors(answer, :body)
+          = f.text_area :body, class: 'form-control'
+
+        .btn-group
+          = f.submit t(:save), class: 'btn btn-default'
+          = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'cancel_answer_edit_link btn btn-default'
+        
+    

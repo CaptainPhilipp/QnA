@@ -1,0 +1,7 @@
+<% answer_id = "#answer_#{@answer.id}" %>
+<% if @answer.errors.present? %>
+  $('<%= answer_id %> .errors').remove()
+  $('<%= answer_id %>').prepend('<div class="errors"><%= j render "common/error", resource: @answer %></div>')
+<% else %>
+  $('<%= answer_id %>').replaceWith('<%= j render @answer %>')
+<% end %>
