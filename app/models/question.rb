@@ -6,6 +6,6 @@ class Question < ApplicationRecord
   validates :title, :body, length: { minimum: 6 }
 
   def best_answer
-    answers.find_by(best: true)
+    answers.best_one
   end
 end
