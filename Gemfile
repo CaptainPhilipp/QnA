@@ -38,6 +38,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'slim-rails'
 gem 'devise'
 gem 'twitter-bootstrap-rails'
+gem 'carrierwave'
+gem 'remotipart'
 
 group :test do
   gem 'shoulda-matchers'

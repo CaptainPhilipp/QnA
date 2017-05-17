@@ -44,6 +44,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
+    it 'assigns questions uploads to @question.uploads' do
+      expect(assigns(:question).attachments.first).to be_a_new Attachment
+    end
+
     it { should render_template :new }
   end
 

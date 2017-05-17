@@ -9,4 +9,9 @@
     = errors(@question, :body)
     = f.text_area :body, class: 'form-control'
     
+  div.form-group
+    = f.fields_for :attachments do |a|
+      = a.label :file
+      = a.file_field :file
+
   = f.submit t('.create'), class: 'btn btn-default'

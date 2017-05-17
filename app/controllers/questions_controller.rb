@@ -23,6 +23,7 @@ class QuestionsController < ApplicationController
 
   def new
     @question = current_user.questions.new
+    @question.attachments.new
   end
 
   def edit; end
@@ -51,6 +52,6 @@ class QuestionsController < ApplicationController
   end
 
   def questions_params
-    params.require(:question).permit %i(title body)
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file])
   end
 end
