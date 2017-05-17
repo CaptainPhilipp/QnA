@@ -19,10 +19,12 @@
 require_relative 'support/custom_matchers'
 require_relative 'support/common_macros'
 require_relative 'support/controller_macros'
+require_relative 'support/wait_for_ajax'
 
 RSpec.configure do |config|
   config.include CommonMacros
   config.include ControllerMacros, type: :controller
+  config.include WaitForAjax, type: :feature
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
