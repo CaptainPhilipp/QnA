@@ -40,6 +40,7 @@ gem 'devise'
 gem 'twitter-bootstrap-rails'
 gem 'carrierwave'
 gem 'remotipart'
+gem 'cocoon'
 
 group :test do
   gem 'shoulda-matchers'

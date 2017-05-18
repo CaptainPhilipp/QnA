@@ -19,7 +19,7 @@ feature 'Attach files to question', "
       fill_in Question.human_attribute_name(:title), with: attributes[:title]
       fill_in Question.human_attribute_name(:body),  with: attributes[:body]
 
-      attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+      attach_file 'Выбрать файл', "#{Rails.root}/spec/rails_helper.rb"
       click_on I18n.t(:create, scope: 'questions.form')
     end
 

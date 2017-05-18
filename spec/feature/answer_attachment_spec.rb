@@ -17,7 +17,7 @@ feature 'Attach files to answer', "
     within 'form#new_answer' do
       fill_in Answer.human_attribute_name(:body),  with: attributes[:body]
 
-      attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+      attach_file 'Выбрать файл', "#{Rails.root}/spec/rails_helper.rb"
       click_on I18n.t(:create, scope: 'answers.form')
     end
 

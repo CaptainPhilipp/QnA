@@ -5,7 +5,7 @@ class Question < ApplicationRecord
 
   # TODO: has_one :best_answer, -> { find_by best: true }, class_name: 'Answer'
 
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments, allow_destroy: true
 
   validates :title, :body, length: { minimum: 6 }
 
