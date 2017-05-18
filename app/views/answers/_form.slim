@@ -4,7 +4,7 @@
       = f.label :body, class: 'control-label'
       = f.text_area :body, class: 'form-control'
       
-      = render 'common/attachments_form_part', f: f
+      = render 'common/fields_for_attachments', f: f
 
     = f.submit t('.create'), class: 'btn btn-default'
 - else
