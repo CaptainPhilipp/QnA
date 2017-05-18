@@ -4,8 +4,7 @@ blockquote = @question.title
   = t(:body)
   = @question.body
   .files
-    - @question.attachments.each do |attachment|
-      = link_to attachment.file.identifier, attachment.file.url
+    = render @question.attachments
 
 - if current_user_owns? @question
   .question-control

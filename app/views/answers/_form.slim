@@ -3,6 +3,10 @@
     .form-group class="#{has_errors_selector(@answer, :body)}"
       = f.label :body, class: 'control-label'
       = f.text_area :body, class: 'form-control'
+      
+      = f.fields_for :attachments do |a|
+        = a.label :file
+        = a.file_field :file
 
     = f.submit t('.create'), class: 'btn btn-default'
 - else
