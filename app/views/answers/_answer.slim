@@ -29,9 +29,8 @@
           = f.text_area :body, class: 'form-control'
 
           = render 'common/fields_for_attachments', f: f
-
-        .btn-group
-          = f.submit t(:save), class: 'btn btn-default'
-          = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'cancel_answer_edit_link btn btn-default'
+          .btn-group
+            = f.submit t(:save), class: 'btn btn-default'
+            = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'cancel_answer_edit_link btn btn-default'
         
     

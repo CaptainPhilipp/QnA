@@ -19,12 +19,10 @@ class QuestionsController < ApplicationController
   def show
     @question = Question.find(params[:id])
     @answer   = Answer.new
-    @answer.attachments.new
   end
 
   def new
     @question = current_user.questions.new
-    @question.attachments.new
   end
 
   def edit; end
@@ -53,6 +51,6 @@ class QuestionsController < ApplicationController
   end
 
   def questions_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
   end
 end
