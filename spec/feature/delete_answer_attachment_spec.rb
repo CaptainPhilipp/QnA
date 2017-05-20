@@ -1,11 +1,6 @@
 require_relative 'acceptance_helper'
 
-feature 'Attach files to answer', "
-    In order to illustrate my answer
-    As an answer's author
-    I'd like to be able to attach files
-  " do
-
+feature 'Delete attachments from answer' do
   login_user
   let(:question)    { create :question }
   let!(:answer)     { create :answer, question: question, user: user }

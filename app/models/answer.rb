@@ -2,7 +2,7 @@ class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :user
 
-  has_many :attachments, as: :attachable
+  has_many :attachments, as: :attachable, dependent: :destroy
 
   scope :best, -> { where best: true }
 
