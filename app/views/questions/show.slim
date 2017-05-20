@@ -1,14 +1,16 @@
 blockquote = @question.title
   
-.col-mb-8.question-body
-  = t(:body)
-  = @question.body
-  .files
-    = render @question.attachments
+#question
+  .col-mb-8.question-body
+    = t(:body)
+    = @question.body
+    .files
+      = render @question.attachments
 
-- if current_user_owns? @question
-  .question-control
-    div = link_to t(:delete), question_path(@question), method: :delete, data: { confirm: t(:sure?) }
+  - if current_user_owns? @question
+    .question-control
+      div = link_to t(:delete), question_path(@question), method: :delete, data: { confirm: t(:sure?) }
+      div = link_to t(:edit), edit_question_path(@question)
 
 #answers
   = render @question.answers

@@ -1,0 +1,5 @@
+ru:
+  helpers:
+    submit:
+      create: "Создать %{model}"
+      update: "Изменить %{model}"

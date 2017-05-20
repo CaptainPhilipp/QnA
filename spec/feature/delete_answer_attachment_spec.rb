@@ -6,9 +6,6 @@ feature 'Delete attachments from answer' do
   let!(:answer)     { create :answer, question: question, user: user }
   let!(:attachment) { create :attachment, attachable: answer }
 
-  let(:file_field_name) { Attachment.human_attribute_name(:file) }
-  let(:attributes) { attributes_for :answer }
-
   background { visit question_path(question) }
 
   scenario 'User deletes attachments', js: true do

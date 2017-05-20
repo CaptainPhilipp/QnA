@@ -8,6 +8,7 @@ feature 'Attach files to question', "
 
   let(:attributes) { attributes_for :question }
   let(:file_field_name) { Attachment.human_attribute_name(:file) }
+  let(:model_name) { I18n.t(:question, scope: 'activerecord.models', count: 1) }
 
   login_user
   background { visit new_question_path }
@@ -21,7 +22,7 @@ feature 'Attach files to question', "
       within(a) { attach_file file_field_name, "#{Rails.root}/spec/upload_fixtures/#{i + 1}_test.rb" }
     end
 
-    click_button I18n.t(:create, scope: 'questions.form')
+    click_button I18n.t(:create, scope: 'helpers.submit', model: model_name)
 
     within('.question-body .files') do
       Question.last.attachments.each do |a|
