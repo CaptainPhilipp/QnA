@@ -6,24 +6,22 @@ feature 'Attach files to answer', "
     I'd like to be able to attach files
   " do
 
-  let(:attributes) { attributes_for :answer }
-  let(:question)   { create :question }
-
   let(:file_field_name) { Attachment.human_attribute_name(:file) }
+  let(:attributes)      { attributes_for :answer }
+  let(:question)        { create :question }
 
   login_user
 
-  before { visit question_path(question) }
+  background { visit question_path(question) }
 
-  scenario 'User adds file to answer', js: true do
+  scenario 'User adds attachment to answer', js: true do
     within 'form#new_answer' do
       fill_in Answer.human_attribute_name(:body),  with: attributes[:body]
 
       click_link Attachment.human_attribute_name(:add)
       wait_for_ajax
 
-      attach_file file_field_name,
-        "#{Rails.root}/spec/rails_helper.rb"
+      attach_file file_field_name, "#{Rails.root}/spec/rails_helper.rb"
       click_on I18n.t(:create, scope: 'answers.form')
     end
 
@@ -35,20 +33,20 @@ feature 'Attach files to answer', "
   scenario 'User adds a few attachments to answer', js: true do
     within 'form#new_answer' do
       fill_in Answer.human_attribute_name(:body),  with: attributes[:body]
-      (0..3).each { |i| click_link Attachment.human_attribute_name(:add) }
+      4.times { click_link Attachment.human_attribute_name(:add) }
 
-      all('form .nested-fields').each do |a|
+      all('form .nested-fields').each_with_index do |a, i|
         within a do
-          attach_file file_field_name, "#{Rails.root}/spec/uploads/#{i}_test.rb"
+          attach_file file_field_name, "#{Rails.root}/spec/uploads/#{i + 1}_test.rb"
         end
       end
 
       click_on I18n.t(:create, scope: 'answers.form')
+    end
 
-      within '#answers' do
-        Answer.last.attachments.each do |a|
-          expect(page).to have_link a.file.identifier, href: a.file.url
-        end
+    within '#answers' do
+      Answer.last.attachments.each do |a|
+        expect(page).to have_link a.file.identifier, href: a.file.url
       end
     end
   end

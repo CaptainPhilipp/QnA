@@ -15,7 +15,7 @@ ru:
       attachment:
         file: 'Файл'
         add: 'Добавить файл'
-        remove: 'Удалить файл'
+        delete: 'Удалить файл'
     errors:
       messages:
         blank: 'не может быть пустым'

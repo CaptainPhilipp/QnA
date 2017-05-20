@@ -7,22 +7,18 @@ feature 'Attach files to question', "
   " do
 
   let(:attributes) { attributes_for :question }
+  let(:file_field_name) { Attachment.human_attribute_name(:file) }
 
   login_user
-
-  background do
-    visit new_question_path
-  end
+  background { visit new_question_path }
 
   scenario 'User adds file to question', js: true do
     within 'form#new_question' do
       fill_in Question.human_attribute_name(:title), with: attributes[:title]
       fill_in Question.human_attribute_name(:body),  with: attributes[:body]
       click_link Attachment.human_attribute_name(:add)
-      wait_for_ajax
 
-      attach_file Attachment.human_attribute_name(:file),
-        "#{Rails.root}/spec/rails_helper.rb"
+      attach_file file_field_name, "#{Rails.root}/spec/rails_helper.rb"
 
       click_button I18n.t(:create, scope: 'questions.form')
     end
@@ -36,16 +32,10 @@ feature 'Attach files to question', "
   scenario 'User adds a few files to question', js: true do
     fill_in Question.human_attribute_name(:title), with: attributes[:title]
     fill_in Question.human_attribute_name(:body),  with: attributes[:body]
-
-    (0..3).each do |i|
-      click_link Attachment.human_attribute_name(:add)
-    end
+    4.times { click_link Attachment.human_attribute_name(:add) }
 
     all('form .nested-fields').each_with_index do |a, i|
-      within a do
-        attach_file Attachment.human_attribute_name(:file),
-          "#{Rails.root}/spec/uploads/#{i}_test.rb"
-      end
+      within(a) { attach_file file_field_name, "#{Rails.root}/spec/uploads/#{i + 1}_test.rb" }
     end
 
     click_button I18n.t(:create, scope: 'questions.form')
@@ -56,6 +46,4 @@ feature 'Attach files to question', "
       end
     end
   end
-
-  scenario 'User deletes a file from question', js: true
 end
