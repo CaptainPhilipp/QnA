@@ -1,11 +1,9 @@
 class Question < ApplicationRecord
-  has_many :answers, dependent: :destroy
-  belongs_to :user
-  has_many :attachments, as: :attachable, dependent: :destroy
+  include HasUser
+  include Attachable
 
   # TODO: has_one :best_answer, -> { find_by best: true }, class_name: 'Answer'
-
-  accepts_nested_attributes_for :attachments, allow_destroy: true
+  has_many :answers, dependent: :destroy
 
   validates :title, :body, length: { minimum: 6 }
 
