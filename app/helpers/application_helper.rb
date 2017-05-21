@@ -11,7 +11,7 @@ module ApplicationHelper
      'has-error' if entity.errors[field].any?
   end
 
-  def errors(entity, field)
+  def error_massages_for(entity, field)
     return if entity.errors.empty?
     entity
       .errors[field]

@@ -17,7 +17,6 @@ feature 'Edit answer', '
   context 'when user is owner' do
     login_user
 
-    # PASS
     scenario 'can edit his answer', js: true do
       visit_question
       within "#answer_#{answer.id}" do

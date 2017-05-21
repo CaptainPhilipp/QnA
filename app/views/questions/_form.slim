@@ -1,12 +1,14 @@
 = form_for @question do |f|
   div.form-group class="#{has_errors_selector(@question, :title)}"
     = f.label :title, class: 'control-label'
-    = errors(@question, :title)
+    = error_massages_for(@question, :title)
     = f.text_field :title, class: 'form-control'
   
   div.form-group class="#{has_errors_selector(@question, :body)}"
     = f.label :body, class: 'control-label'
-    = errors(@question, :body)
+    = error_massages_for(@question, :body)
     = f.text_area :body, class: 'form-control'
     
-  = f.submit t('.create'), class: 'btn btn-default'
+  = render 'common/fields_for_attachments', f: f
+
+  = f.submit class: 'btn btn-default'

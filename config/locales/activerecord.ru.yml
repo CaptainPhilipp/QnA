@@ -12,6 +12,10 @@ ru:
       answer:
         body: 'Ваш ответ'
         best: 'Лучший ответ'
+      attachment:
+        file: 'Файл'
+        add: 'Добавить файл'
+        delete: 'Удалить файл'
     errors:
       messages:
         blank: 'не может быть пустым'
