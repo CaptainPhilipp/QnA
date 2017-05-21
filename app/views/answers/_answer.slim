@@ -25,7 +25,7 @@
       = form_for answer, remote: true do |f|
         .form-group class="#{has_errors_selector(answer, :body)}"
           = f.label :body, class: 'control-label'
-          = errors(answer, :body)
+          = error_massages_for(answer, :body)
           = f.text_area :body, class: 'form-control'
 
           = render 'common/fields_for_attachments', f: f
