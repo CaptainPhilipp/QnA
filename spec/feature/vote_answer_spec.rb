@@ -28,7 +28,7 @@ feature 'User can change rating of answes', '
     context 'and when answer is not rated by user' do
       scenario 'User can rate up the answer'
       scenario 'User can rate down the answer'
-      scenario 'User can cancel his voice'
+      scenario "User don't see button for cancel voice"
     end
 
     context 'and when already rated for answer' do

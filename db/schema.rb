@@ -63,12 +63,13 @@ ActiveRecord::Schema.define(version: 20170522192602) do
   end
 
   create_table "voices", force: :cascade do |t|
-    t.integer  "user_id",     null: false
-    t.integer  "rateable_id", null: false
+    t.integer  "user_id",       null: false
+    t.string   "rateable_type"
+    t.integer  "rateable_id",   null: false
     t.integer  "value"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.index ["rateable_id"], name: "index_voices_on_rateable_id", using: :btree
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["rateable_type", "rateable_id"], name: "index_voices_on_rateable_type_and_rateable_id", using: :btree
     t.index ["user_id"], name: "index_voices_on_user_id", using: :btree
   end
 
