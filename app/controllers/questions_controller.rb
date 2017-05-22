@@ -1,7 +1,9 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: %i(index show)
-  before_action :load_question, only: %i(show edit update destroy)
-  before_action :check_question_ownership!, only: %i(edit update destroy)
+  include PublicRead
+  include HasAssignedEntity
+
+  before_action :assign_entity, only: %i(show edit update destroy)
+  before_action :check_owner!, only: %i(edit update destroy)
 
   def index
     @questions = Question.all
@@ -42,11 +44,7 @@ class QuestionsController < ApplicationController
 
   private
 
-  def load_question
-    @question = Question.find(params[:id])
-  end
-
-  def check_question_ownership!
+  def check_owner!
     redirect_to @question unless current_user.owner? @question
   end
 

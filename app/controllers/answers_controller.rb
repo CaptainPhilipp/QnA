@@ -1,8 +1,9 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!
+  include HasAssignedEntity
+
+  before_action :assign_entity, only: %i(update destroy best)
+  before_action :check_owner!, only: %i(update destroy)
   before_action :load_question, only: :create
-  before_action :load_answer,   only: %i(update destroy best)
-  before_action :check_answer_ownership!, only: %i(update destroy)
 
   def create
     @answer = @question.answers.new(answers_params)
@@ -29,19 +30,15 @@ class AnswersController < ApplicationController
 
   private
 
+  def check_owner!
+    redirect_to @answer.question unless current_user.owner? @answer
+  end
+
   def load_question
     @question = Question.find(params[:question_id])
   end
 
-  def load_answer
-    @answer = Answer.find(params[:id])
-  end
-
   def answers_params
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
-  end
-
-  def check_answer_ownership!
-    redirect_to @answer.question unless current_user.owner? @answer
   end
 end
