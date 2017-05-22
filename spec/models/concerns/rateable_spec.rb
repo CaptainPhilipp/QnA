@@ -36,41 +36,57 @@ describe 'Rateable concern' do
 
   context '#rate_up_by' do
     it 'can rate up the answer' do
-      rateable.rate_up_for(user)
+      rateable.rate_up_by(user)
       expect(rateable.rating).to eq 1
     end
 
     it "can't change rating twice" do
-      rateable.voices.create(user: create(:user), value: 1)
-      rateable.rate_up_for(user)
+      rateable.voices.create(user: user, value: 1)
+      rateable.rate_up_by(user)
       expect(rateable.rating).to eq 1
     end
   end
 
   context '#rate_down_by' do
     it 'can rate down rateable' do
-      rateable.rate_down_for(user)
+      rateable.rate_down_by(user)
       expect(rateable.rating).to eq(-1)
     end
 
     it "can rate down rateable twice" do
-      rateable.voices.create(user: create(:user), value: -1)
-      rateable.rate_down_for(user)
+      rateable.voices.create(user: user, value: -1)
+      rateable.rate_down_by(user)
       expect(rateable.rating).to eq(-1)
     end
   end
 
   context '#cancel_voice' do
-    it "cant change voices" do
+    it "cant change others voices" do
       rateable.voices.create(user: create(:user), value: 1)
-      rateable.cancel_voice
+      rateable.cancel_voice_of(user)
       expect(rateable.rating).to eq(1)
     end
 
     it "can cancel his voice" do
-      rateable.voices.create(user: create(:user), value: 1)
-      rateable.cancel_voice
+      rateable.voices.create(user: user, value: 1)
+      rateable.cancel_voice_of(user)
       expect(rateable.rating).to eq(0)
+    end
+  end
+
+  context '#rated_by?' do
+    it "should be false if user don't votes entity" do
+      expect(rateable.rated_by? user).to be false
+    end
+
+    it 'should be true if user votes for entity' do
+      rateable.voices.create(user: user, value: 1)
+      expect(rateable.reload.rated_by? user).to be true
+    end
+
+    it "should be false if user don't votes entity, but others do" do
+      rateable.voices.create(user: create(:user), value: 1)
+      expect(rateable.rated_by? user).to be false
     end
   end
 end
