@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   include PublicRead
   include HasAssignedEntity
+  include Rated
 
   before_action :assign_entity, only: %i(show edit update destroy)
   before_action :check_owner!, only: %i(edit update destroy)

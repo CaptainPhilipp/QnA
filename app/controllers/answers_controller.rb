@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   include HasAssignedEntity
+  include Rated
 
   before_action :assign_entity, only: %i(update destroy best)
   before_action :check_owner!, only: %i(update destroy)
