@@ -2,3 +2,4 @@ blockquote
   = link_to question.title, question
   |  
   = badge question.answers.count
+  = render 'common/rate', entity: question

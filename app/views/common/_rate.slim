@@ -1,0 +1,9 @@
+.rating
+  - if entity_rated?(entity)
+    .score = entity.rating
+    .cancel-voice = vote_link_for entity, 'cancel', glyph('retweet')
+    
+  - else
+    .rate-up = vote_link_for entity, '1', glyph('chevron-up')
+    .score = entity.rating
+    .rate-down = vote_link_for entity, '-1', glyph('chevron-down')
