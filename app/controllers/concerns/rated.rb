@@ -4,6 +4,9 @@ module Rated
 
   def vote
     send_method_chosen_by(params[:value])
+    respond_to do |format|
+      format.json { render json: find_entity.rating }
+    end
   end
 
   private
