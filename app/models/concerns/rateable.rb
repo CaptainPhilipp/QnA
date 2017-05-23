@@ -10,6 +10,10 @@ module Rateable
     voices.sum(:value)
   end
 
+  def rated_by?(user)
+    voice_of(user) != nil
+  end
+
   def rate_up_by(user)
     change_rate_by(user, 1)
   end
@@ -20,10 +24,6 @@ module Rateable
 
   def cancel_voice_of(user)
     (voice = voice_of(user)) && voice.destroy
-  end
-
-  def rated_by?(user)
-    voice_of(user) ? true : false
   end
 
   private
