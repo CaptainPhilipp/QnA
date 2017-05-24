@@ -26,7 +26,6 @@ describe 'Rateable concern' do
 
   context '#rating' do
     it 'should show rating of current record' do
-      expect(rateable.rating).to eq 0
       10.times { rateable.voices.create(user: create(:user), value: 1) }
       expect(rateable.rating).to eq 10
       3.times  { rateable.voices.create(user: create(:user), value: -1) }
@@ -41,7 +40,7 @@ describe 'Rateable concern' do
     end
 
     it "can't change rating twice" do
-      rateable.voices.create(user: user, value: 1)
+      rateable.rate_up_by(user)
       rateable.rate_up_by(user)
       expect(rateable.rating).to eq 1
     end
@@ -54,7 +53,7 @@ describe 'Rateable concern' do
     end
 
     it "can rate down rateable twice" do
-      rateable.voices.create(user: user, value: -1)
+      rateable.rate_down_by(user)
       rateable.rate_down_by(user)
       expect(rateable.rating).to eq(-1)
     end

@@ -5,6 +5,7 @@ shared_examples :cant_change_voice, js: true do
     within '#answers .body .rating' do
       find('i.glyphicon-chevron-down').click
       within('.score') { expect(page).to have_content '0' }
+
       find('i.glyphicon-chevron-up').click
       within('.score') { expect(page).to have_content '0' }
     end
@@ -21,9 +22,6 @@ feature 'User can change rating of answes', '
   let(:question) { create :question, user: user }
   let!(:answer)  { create :answer, question: question, user: user }
 
-  let(:answer_selector) { "#answer_#{answer.id}" }
-  let(:best_answer_link) { Answer.human_attribute_name(:best) }
-
   context 'When authenticated as not owner,' do
     login_user :other_user
     before { visit question_path(question) }
@@ -38,9 +36,11 @@ feature 'User can change rating of answes', '
       scenario 'User can rate up the answer', js: true do
         within '#answers .body .rating' do
           find('i.glyphicon-chevron-up').click
+
           within '.score' do
             expect(page).to have_content '1'
           end
+
           expect(page).to have_css '.cancel_voice a'
         end
       end
@@ -48,9 +48,11 @@ feature 'User can change rating of answes', '
       scenario 'User can rate down the answer', js: true do
         within '#answers .body .rating' do
           find('i.glyphicon-chevron-down').click
+
           within '.score' do
             expect(page).to have_content '-1'
           end
+
           expect(page).to have_css '.cancel_voice a'
         end
       end
@@ -59,7 +61,7 @@ feature 'User can change rating of answes', '
     context 'and when already rated for answer', js: true do
       before do
         answer.rate_up_by(other_user)
-        page.evaluate_script("window.location.reload()") # более красивый вариант есть?
+        page.evaluate_script("window.location.reload()")
       end
 
       scenario "User see current rating", js: true do
@@ -77,9 +79,11 @@ feature 'User can change rating of answes', '
       scenario "User can cancel his voice", js: true do
         within '#answers .body .rating' do
           find('i.glyphicon-retweet').click
+
           within '.score' do
             expect(page).to have_content '0'
           end
+
           expect(page).to_not have_css '.cancel_voice a'
         end
       end

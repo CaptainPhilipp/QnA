@@ -1,3 +1,4 @@
+# DRY for other concerns
 module FindEntityModule
   extend ActiveSupport::Concern
 
