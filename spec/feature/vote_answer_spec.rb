@@ -1,10 +1,13 @@
 require_relative 'acceptance_helper'
 
-shared_examples :sholdnt_have_voting_link do
-  scenario "shoultn't see voting link" do
-    visit question_path(question)
-    expect(page).to_not have_selector '.rate_up_link'
-    expect(page).to_not have_selector '.rate_down_link'
+shared_examples :cant_change_voice, js: true do
+  scenario "can't change voice" do
+    within '#answers .body .rating' do
+      find('i.glyphicon-chevron-down').click
+      within('.score') { expect(page).to have_content '0' }
+      find('i.glyphicon-chevron-up').click
+      within('.score') { expect(page).to have_content '0' }
+    end
   end
 end
 
@@ -16,7 +19,7 @@ feature 'User can change rating of answes', '
   assign_users :user, :other_user
 
   let(:question) { create :question, user: user }
-  let!(:answer)  { create :answer, question: question }
+  let!(:answer)  { create :answer, question: question, user: user }
 
   let(:answer_selector) { "#answer_#{answer.id}" }
   let(:best_answer_link) { Answer.human_attribute_name(:best) }
@@ -26,23 +29,77 @@ feature 'User can change rating of answes', '
     before { visit question_path(question) }
 
     context 'and when answer is not rated by user' do
-      scenario 'User can rate up the answer'
-      scenario 'User can rate down the answer'
-      scenario "User don't see button for cancel voice"
+      scenario "User don't see button for cancel voice" do
+        within '#answers .body .rating' do
+          expect(page).to_not have_css '.cancel_voice a'
+        end
+      end
+
+      scenario 'User can rate up the answer', js: true do
+        within '#answers .body .rating' do
+          find('i.glyphicon-chevron-up').click
+          within '.score' do
+            expect(page).to have_content '1'
+          end
+          expect(page).to have_css '.cancel_voice a'
+        end
+      end
+
+      scenario 'User can rate down the answer', js: true do
+        within '#answers .body .rating' do
+          find('i.glyphicon-chevron-down').click
+          within '.score' do
+            expect(page).to have_content '-1'
+          end
+          expect(page).to have_css '.cancel_voice a'
+        end
+      end
     end
 
-    context 'and when already rated for answer' do
-      scenario "User can't change rating of answer"
-      scenario "User can cancel his voice"
+    context 'and when already rated for answer', js: true do
+      before do
+        answer.rate_up_by(other_user)
+        page.evaluate_script("window.location.reload()") # более красивый вариант есть?
+      end
+
+      scenario "User see current rating", js: true do
+        within '#answers .body .rating .score' do
+          expect(page).to have_content '1'
+        end
+      end
+
+      scenario "User don't see vote links", js: true do
+        within '#answers .body .rating' do
+          expect(page).to_not have_css '.change_rate a'
+        end
+      end
+
+      scenario "User can cancel his voice", js: true do
+        within '#answers .body .rating' do
+          find('i.glyphicon-retweet').click
+          within '.score' do
+            expect(page).to have_content '0'
+          end
+          expect(page).to_not have_css '.cancel_voice a'
+        end
+      end
     end
   end
 
   context 'When authenticated as owner,' do
-    login_user
-    include_examples :sholdnt_have_voting_link
+    before do
+      login_user(user)
+      visit question_path(question)
+    end
+
+    include_examples :cant_change_voice
   end
 
   context 'When not authenticated,' do
-    include_examples :sholdnt_have_voting_link
+    before do
+      visit question_path(question)
+    end
+
+    include_examples :cant_change_voice
   end
 end
