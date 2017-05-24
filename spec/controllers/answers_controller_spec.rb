@@ -135,19 +135,5 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  # context 'Rated concern' do
-  #   context 'when value is 1' do
-  #     it_behaves_like 'should rate_up rateable entity', answer, '1'
-  #   end
-  #
-  #   context 'when value is -1' do
-  #     it_behaves_like 'should rate_down rateable entity', answer, '-1'
-  #   end
-  #
-  #   context 'when rateable already rated' do
-  #     before { answer.rate_up }
-  #     it_behaves_like 'should not change rating', answer, '1'
-  #     it_behaves_like 'should cancel voice', answer, 'cancel'
-  #   end
-  # end
+  it_behaves_like 'Rated concern'
 end

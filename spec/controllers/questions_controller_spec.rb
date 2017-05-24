@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative 'shared_examples/rated_concern_shared'
 
 RSpec.describe QuestionsController, type: :controller do
   assign_users
@@ -183,4 +184,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  it_behaves_like 'Rated concern'
 end
