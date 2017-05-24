@@ -6,7 +6,7 @@ module RatedHelper
   def vote_link_for(entity, value, text)
     link_to text,
       { action: :vote, controller: controller_for(entity), id: entity, value: value },
-      { remote: true, method: :post, format: :json }
+      { remote: true, method: :post, format: :json, data: { rateable_id: entity.id } }
   end
 
   private
