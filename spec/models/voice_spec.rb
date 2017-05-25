@@ -5,8 +5,6 @@ RSpec.describe Voice, type: :model do
   it { should belong_to(:rateable) }
   it { have_db_column :value }
   it do
-    should validate_numericality_of(:value)
-      .is_less_than_or_equal_to(1)
-      .is_greater_than_or_equal_to(-1)
+    should validate_numericality_of(:value).in?(-1..1)
   end
 end

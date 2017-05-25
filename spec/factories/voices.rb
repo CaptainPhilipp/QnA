@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :voice do
-    user nil
-    rateable nil
+    association :user
+    association :rateable, factory: :answer
   end
 end

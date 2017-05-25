@@ -3,7 +3,7 @@ module Rateable
 
   included do
     has_many :voices, as: :rateable, dependent: :destroy
-    has_many :users, through: :voices
+    has_many :voted_users, through: :voices
   end
 
   def rating

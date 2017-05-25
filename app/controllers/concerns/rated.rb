@@ -21,7 +21,7 @@ module Rated
   end
 
   def send_method_chosen_by(params_value)
-    return unless current_user && current_user != rateable_entity.user && params_value
+    return if current_user_owns?(rateable_entity) || params_value.nil?
     rateable_entity.send(method_keys[params_value], current_user)
   end
 
