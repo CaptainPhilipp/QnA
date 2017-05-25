@@ -11,7 +11,7 @@ module Rateable
   end
 
   def rated_by?(user)
-    voice_of(user) != nil
+    (voice = voice_of user) && voice.value != 0
   end
 
   def rate_up_by(user)
@@ -23,7 +23,7 @@ module Rateable
   end
 
   def cancel_voice_of(user)
-    (voice = voice_of(user)) && voice.destroy
+    (voice = voice_of(user)) && voice.update(value: 0)
   end
 
   private

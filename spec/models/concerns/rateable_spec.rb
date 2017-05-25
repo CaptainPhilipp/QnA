@@ -76,7 +76,7 @@ describe 'Rateable concern' do
 
   context '#rated_by?' do
     it "should be false if user don't votes entity" do
-      expect(rateable.rated_by? user).to be false
+      expect(rateable.rated_by? user).to be_falsy
     end
 
     it 'should be true if user votes for entity' do
@@ -86,7 +86,7 @@ describe 'Rateable concern' do
 
     it "should be false if user don't votes entity, but others do" do
       rateable.voices.create(user: create(:user), value: 1)
-      expect(rateable.rated_by? user).to be false
+      expect(rateable.rated_by? user).to be_falsy
     end
   end
 end
