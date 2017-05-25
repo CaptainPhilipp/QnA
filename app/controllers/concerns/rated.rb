@@ -1,6 +1,5 @@
 module Rated
   extend ActiveSupport::Concern
-  include FindEntityModule
 
   def vote
     respond_to do |format|
@@ -16,13 +15,17 @@ module Rated
 
   private
 
-  def rateable_entity
-    @rateable_entity ||= find_entity
-  end
-
   def send_method_chosen_by(params_value)
     return if current_user_owns?(rateable_entity) || params_value.nil?
     rateable_entity.send(method_keys[params_value], current_user)
+  end
+
+  def rateable_entity
+    @rateable_entity ||= model_klass.find(params[:id])
+  end
+
+  def model_klass
+    controller_name.classify.constantize
   end
 
   def method_keys

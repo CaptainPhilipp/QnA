@@ -7,8 +7,9 @@ describe 'Rateable concern' do
     end
 
     model do
-      include HasUser
       include Rateable
+
+      belongs_to :user
     end
   end
 

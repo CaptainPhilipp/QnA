@@ -1,10 +1,9 @@
 class QuestionsController < ApplicationController
-  include PublicRead
-  include HasAssignedEntity
   include Rated
 
-  before_action :assign_entity, only: %i(show edit update destroy)
-  before_action :check_owner!, only: %i(edit update destroy)
+  skip_before_action :authenticate_user!, only: %i(index show)
+  before_action :load_question, only: %i(show edit update destroy)
+  before_action :check_owner!,  only: %i(edit update destroy)
 
   def index
     @questions = Question.all
@@ -44,6 +43,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def load_question
+    @question = Question.find(params[:id])
+  end
 
   def check_owner!
     redirect_to @question unless current_user.owner? @question

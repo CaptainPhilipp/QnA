@@ -1,10 +1,10 @@
 class Question < ApplicationRecord
-  include HasUser
   include Attachable
   include Rateable
 
-  # TODO: has_one :best_answer, -> { find_by best: true }, class_name: 'Answer'
+  belongs_to :user
   has_many :answers, dependent: :destroy
+  # TODO: has_one :best_answer, -> { find_by best: true }, class_name: 'Answer'
 
   validates :title, :body, length: { minimum: 6 }
 

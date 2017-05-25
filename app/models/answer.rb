@@ -1,8 +1,8 @@
 class Answer < ApplicationRecord
-  include HasUser
   include Attachable
   include Rateable
 
+  belongs_to :user
   belongs_to :question
 
   scope :best, -> { where best: true }

@@ -1,10 +1,9 @@
 class AnswersController < ApplicationController
-  include HasAssignedEntity
   include Rated
 
-  before_action :assign_entity, only: %i(update destroy best)
-  before_action :check_owner!, only: %i(update destroy)
-  before_action :load_question, only: :create
+  before_action :load_answer,   only: %i(update destroy best)
+  before_action :load_question, only: %i(create)
+  before_action :check_owner!,  only: %i(update destroy)
 
   def create
     @answer = @question.answers.new(answers_params)
@@ -33,6 +32,10 @@ class AnswersController < ApplicationController
 
   def check_owner!
     redirect_to @answer.question unless current_user.owner? @answer
+  end
+
+  def load_answer
+    @answer = Answer.find(params[:id])
   end
 
   def load_question

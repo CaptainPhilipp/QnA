@@ -11,8 +11,8 @@ RSpec.describe Question, type: :model do
   it { should validate_length_of(:body).is_at_least(6) }
 
   let(:question) { create :question }
-  let(:best_answer) { create :answer, question: question, best: true}
-  let!(:answers) { create_list :answer, 5, question: question}
+  let(:best_answer) { create :answer, question: question, best: true }
+  let(:answers) { create_list :answer, 5, question: question }
 
   describe '#best_answer' do
     it 'should be nil if no one answer is marked as best' do
