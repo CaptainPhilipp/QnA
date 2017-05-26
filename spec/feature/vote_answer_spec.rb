@@ -61,7 +61,7 @@ feature 'User can change rating of answes', '
     context 'and when already rated for answer', js: true do
       before do
         answer.rate_up_by(other_user)
-        page.evaluate_script("window.location.reload()")
+        visit question_path(question)
       end
 
       scenario "User see current rating", js: true do
