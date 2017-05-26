@@ -1,12 +1,11 @@
 class Answer < ApplicationRecord
-  belongs_to :question
-  belongs_to :user
+  include Attachable
+  include Rateable
 
-  has_many :attachments, as: :attachable, dependent: :destroy
+  belongs_to :user
+  belongs_to :question
 
   scope :best, -> { where best: true }
-
-  accepts_nested_attributes_for :attachments, allow_destroy: true
 
   validates :body, length: { minimum: 6 }
 

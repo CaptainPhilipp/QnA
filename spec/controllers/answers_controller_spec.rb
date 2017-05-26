@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative 'shared_examples/rated_concern_shared'
 
 RSpec.describe AnswersController, type: :controller do
   assign_users :user, :other_user
@@ -6,7 +7,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer)   { create :answer, question: question, user: user }
 
   describe 'POST #create' do
-    let(:attributes) { attributes_for(:answer) }
+    let(:attributes)        { attributes_for(:answer) }
     let(:send_request)      { post :create, params: { question_id: question.id, answer: attributes } }
     let(:send_ajax_request) { post :create, params: { question_id: question.id, answer: attributes, format: :js } }
 
@@ -133,4 +134,6 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  it_behaves_like 'Rated concern'
 end

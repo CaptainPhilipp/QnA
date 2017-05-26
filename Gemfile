@@ -41,6 +41,7 @@ gem 'twitter-bootstrap-rails'
 gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
+gem 'with_model'
 
 group :test do
   gem 'shoulda-matchers'

@@ -1,0 +1,10 @@
+div id="rateable_#{entity.id}"  
+  .rating class="#{'rated' if entity_rated? entity}"
+    .change_rate.rate-up
+      = vote_link_for entity, '1', glyph('chevron-up')
+    .score
+      = entity.rating
+    .cancel_voice style="display: none"
+      = vote_link_for entity, 'cancel', glyph('retweet')
+    .change_rate.rate-down
+      = vote_link_for entity, '-1', glyph('chevron-down')

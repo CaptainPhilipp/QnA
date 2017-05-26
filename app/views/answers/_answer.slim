@@ -4,11 +4,14 @@
   
     .body.col-md-12
       .col-mb-1
+        = render 'common/rate', entity: answer
+    
+      .col-mb-2.col-md-offset-1
         - if current_user_owns?(answer.question)
           = link_to Answer.human_attribute_name(:best), best_answer_path(answer),
             method: :patch, remote: true, data: { answer_id: answer.id }, class: 'best_answer_link'
             
-      .col-md-9.col-md-offset-1
+      .col-md-8.col-md-offset-2
         = answer.body
           
       .col-md-2.col-md-offset-10

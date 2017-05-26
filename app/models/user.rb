@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
+  has_many :voices, dependent: :destroy
+  has_many :rateable
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
