@@ -4,6 +4,7 @@ require 'capybara/poltergeist'
 require_relative '../support/feature_macros'
 
 Capybara.javascript_driver = :poltergeist
+Capybara.server = :puma
 
 RSpec.configure do |config|
   config.include FeatureMacros, type: :feature
