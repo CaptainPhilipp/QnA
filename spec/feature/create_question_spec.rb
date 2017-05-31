@@ -32,6 +32,35 @@ feature 'Create question', '
     end
   end
 
+  context 'with multiple sessions' do
+    assign_user
+
+    scenario "question appears on another user's page" do
+      Capybara.using_session('user') do
+        login_user(user)
+        visit questions_path
+      end
+
+      Capybara.using_session('guest') do
+        visit questions_path
+      end
+
+      Capybara.using_session('user') do
+        click_link I18n.t(:create, scope: 'questions.index')
+        within 'form#new_question' do
+          fill_in Question.human_attribute_name(:title), with: attributes[:title]
+          fill_in Question.human_attribute_name(:body),  with: attributes[:body]
+        end
+        click_button I18n.t(:create, scope: 'helpers.submit', model: model_name)
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content attributes[:title]
+        expect(page).to have_content attributes[:body]
+      end
+    end
+  end
+
   context 'when not authorized' do
     scenario "user can't ask a question" do
       visit new_question_path
