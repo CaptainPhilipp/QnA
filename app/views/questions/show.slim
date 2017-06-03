@@ -1,7 +1,7 @@
 blockquote = @question.title
   
-#question
-  .col-mb-8.question-body
+#question data-question-id="#{@question.id}"
+  .question-body.col-mb-8
     = @question.body
     .files
       = render @question.attachments

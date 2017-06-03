@@ -1,0 +1,7 @@
+questionId = -> $('#question').data('questionId')
+answers    = -> $('#answers')
+
+$(document).on 'turbolinks:load', ->
+  App.answers = App.cable.subscriptions.create { channel: 'AnswersChannel', question_id: questionId() },
+    received: (data) ->
+      $('#answers').append(data)

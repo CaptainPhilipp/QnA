@@ -7,17 +7,17 @@
         = render 'common/rate', entity: answer
     
       .col-mb-2.col-md-offset-1
-        - if current_user_owns?(answer.question)
-          = link_to Answer.human_attribute_name(:best), best_answer_path(answer),
-            method: :patch, remote: true, data: { answer_id: answer.id }, class: 'best_answer_link'
+        / - if current_user_owns?(answer.question)
+        /   = link_to Answer.human_attribute_name(:best), best_answer_path(answer),
+        /     method: :patch, remote: true, data: { answer_id: answer.id }, class: 'best_answer_link'
             
       .col-md-8.col-md-offset-2
         = answer.body
           
       .col-md-2.col-md-offset-10
-        - if current_user_owns? answer
-          = link_to t(:edit), '', data: { answer_id: answer.id }, class: 'answer_edit_link'
-          = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
+        / - if current_user_owns? answer
+        /   = link_to t(:edit), '', data: { answer_id: answer.id }, class: 'answer_edit_link'
+        /   = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
           
       .col-md-12
         = render answer.attachments
