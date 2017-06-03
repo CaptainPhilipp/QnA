@@ -35,7 +35,7 @@ feature 'Create answer', '
     end
   end
 
-  fcontext 'with multiple sessions', :js do
+  context 'with multiple sessions', :js do
     assign_user
 
     scenario 'new answer appears for all users' do
