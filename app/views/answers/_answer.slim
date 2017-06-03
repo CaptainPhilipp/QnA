@@ -17,7 +17,7 @@
       .col-md-2.col-md-offset-10
         / - if current_user_owns? answer
         /   = link_to t(:edit), '', data: { answer_id: answer.id }, class: 'answer_edit_link'
-        /   = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
+        = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
           
       .col-md-12
         = render answer.attachments
