@@ -1,5 +1,5 @@
 class AnswersChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "question/#{params[:question_id]}/answers"
+    stream_for Question.find(params[:question_id])
   end
 end

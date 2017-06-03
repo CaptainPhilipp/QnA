@@ -45,8 +45,7 @@ class AnswersController < ApplicationController
 
   def broadcast_answer
     return if @answer.errors.any?
-    ActionCable.server.broadcast "question/#{@question.id}/answers", ApplicationController.render(@answer)
-    # AnswersChannel.broadcast_to @question, ApplicationController.render(@answer)
+    AnswersChannel.broadcast_to @question, ApplicationController.render(@answer)
   end
 
   def answers_params
