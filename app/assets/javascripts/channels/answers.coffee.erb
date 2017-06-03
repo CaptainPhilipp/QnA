@@ -1,7 +1,11 @@
-questionId = -> $('#question').data('questionId')
-answers    = -> $('#answers')
-
 $(document).on 'turbolinks:load', ->
-  App.answers = App.cable.subscriptions.create { channel: 'AnswersChannel', question_id: questionId() },
+  question = $('#question')
+  return if question == undefined
+  questionId = question.data('questionId')
+  return if questionId == undefined
+
+  answers = $('#answers')
+
+  App.answers = App.cable.subscriptions.create { channel: 'AnswersChannel', question_id: questionId },
     received: (data) ->
-      $('#answers').append(data)
+      answers.append(data)
