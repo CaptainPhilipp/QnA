@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522192602) do
+ActiveRecord::Schema.define(version: 20170603174537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,17 @@ ActiveRecord::Schema.define(version: 20170522192602) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable_type_and_attachable_id", using: :btree
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer  "user_id",          null: false
+    t.string   "commentable_type"
+    t.integer  "commentable_id",   null: false
+    t.string   "body",             null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
 
   create_table "questions", force: :cascade do |t|
@@ -63,18 +74,19 @@ ActiveRecord::Schema.define(version: 20170522192602) do
   end
 
   create_table "voices", force: :cascade do |t|
-    t.integer  "user_id",       null: false
+    t.integer  "user_id",                   null: false
     t.string   "rateable_type"
-    t.integer  "rateable_id",   null: false
-    t.integer  "value"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "rateable_id",               null: false
+    t.integer  "value",         default: 0, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.index ["rateable_type", "rateable_id"], name: "index_voices_on_rateable_type_and_rateable_id", using: :btree
     t.index ["user_id"], name: "index_voices_on_user_id", using: :btree
   end
 
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
+  add_foreign_key "comments", "users"
   add_foreign_key "questions", "users"
   add_foreign_key "voices", "users"
 end
