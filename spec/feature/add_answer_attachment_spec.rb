@@ -26,7 +26,7 @@ feature 'Attach files to answer', "
       end
 
       click_on I18n.t(:create, scope: 'answers.form')
-      visit question_path(question) # TODO: answer.skim attachments
+      visit question_path(question) # вынужденно из-за урезанных бродкастов TODO: answer.skim attachments
     end
 
     within '#answers' do

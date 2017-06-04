@@ -12,6 +12,7 @@ describe 'Commentable concern' do
   let(:comment) { create :comment, commentable: commentable }
 
   it 'should have #comments as Comment' do
-    expect(comment).to be_a Comment
+    comment
+    expect(commentable.comments.first).to be_a Comment
   end
 end

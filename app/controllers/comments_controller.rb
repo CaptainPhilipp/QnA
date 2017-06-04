@@ -2,15 +2,13 @@ class CommentsController < ApplicationController
   after_action :broadcast_comment, only: [:create]
 
   def create
-    @comment = Comment.new comment_params
-    @comment.user = current_user
-    @comment.save
+    @comment = Comment.create(comment_params.merge user_id: current_user.id)
   end
 
   private
 
   def broadcast_comment
-    return unless @comment.persisted?
+    return if @comment.errors.any?
     commentable = @comment.commentable
     type = commentable.class
     id   = commentable.id
