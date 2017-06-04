@@ -24,6 +24,8 @@
           
     .clearfix
     
+    = render 'comments/comments', commentable: answer
+    
     .edit-form
       = form_for answer, remote: true do |f|
         .form-group class="#{has_errors_selector(answer, :body)}"
