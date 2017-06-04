@@ -44,12 +44,10 @@ feature 'Create question', '
     assign_user
 
     scenario "new question appears on another user's page" do
+      Capybara.using_session('guest') { visit questions_path }
+
       Capybara.using_session('user') do
         login_user(user)
-        visit questions_path
-      end
-
-      Capybara.using_session('guest') do
         visit questions_path
       end
 
@@ -60,8 +58,6 @@ feature 'Create question', '
           fill_in Question.human_attribute_name(:body),  with: attributes[:body]
         end
         click_button I18n.t(:create, scope: 'helpers.submit', model: model_name)
-        visit questions_path
-        expect(page).to have_content attributes[:title]
       end
 
       Capybara.using_session('guest') do

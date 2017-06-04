@@ -1,8 +1,6 @@
 $(document).on 'turbolinks:load', ->
-  question = $('#question')
-  return if question == undefined
-  questionId = question.data('questionId')
-  return if questionId == undefined
+  questionId = $('#question')?.data('questionId')
+  return if !questionId
 
   answers = $('#answers')
 
