@@ -9,3 +9,6 @@ ru:
       create: 'Ответить'
       save: 'Сохранить'
       authentication_required: 'Что бы написать ответ необходимо авторизоваться'
+  comments:
+    form:
+      create: 'Оставить коментарий'

@@ -11,11 +11,7 @@ blockquote = @question.title
       div = link_to t(:delete), question_path(@question), method: :delete, data: { confirm: t(:sure?) }
       div = link_to t(:edit), edit_question_path(@question)
       
-  .comments
-    = render @question.comments
-
-  .comment_form
-    = render 'comments/form', commentable: @question
+  = render 'comments/comments', commentable: @question
 
 #answers
   = render @question.answers

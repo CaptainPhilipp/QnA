@@ -1,7 +1,7 @@
-= form_for [commentable, commentable.comments.build] do |f|
+= form_for [commentable, commentable.comments.build], remote: true do |f|
   = f.label :body
   = f.text_field :body
   = f.hidden_field :commentable_id
   = f.hidden_field :commentable_type
   
-  = f.submit
+  = f.submit I18n.t(:create, scope: 'comments.form')
