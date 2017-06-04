@@ -11,7 +11,10 @@ class CommentsController < ApplicationController
 
   def broadcast_comment
     return unless @comment.persisted?
-    CommentsChannel.broadcast_to @comment.commentable, ApplicationController.render(@comment)
+    commentable = @comment.commentable
+    type = commentable.class
+    id   = commentable.id
+    CommentsChannel.broadcast_to "comment/#{type}#{id}", ApplicationController.render(@comment)
   end
 
   def comment_params
