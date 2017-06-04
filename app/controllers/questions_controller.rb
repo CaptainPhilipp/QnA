@@ -55,7 +55,7 @@ class QuestionsController < ApplicationController
 
   def broadcast_question
     return if @question.errors.any?
-    ActionCable.server.broadcast 'questions', ApplicationController.render(@question)
+    ActionCable.server.broadcast 'questions', ApplicationController.render(json: @question)
   end
 
   def questions_params

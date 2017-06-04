@@ -1,0 +1,5 @@
+.body
+  blockquote
+    a href="/questions/#{@id}" = @title
+    |  
+    span.badge 0

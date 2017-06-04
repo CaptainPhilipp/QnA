@@ -3,7 +3,6 @@ div id="answer_#{@answer.id}" data-answer-id="#{@answer.id}"
 
   .body.col-md-12
     .col-mb-1
-      / = render 'common/rate', entity: answer
   
     .col-mb-2.col-md-offset-1
       - if gon.current_user_id == @question_owner_id
@@ -17,20 +16,11 @@ div id="answer_#{@answer.id}" data-answer-id="#{@answer.id}"
         a.answer_edit_link data-answer-id='#{@answer.id}' Edit
         a data-confirm="Уверены?" data-remote="true" data-method="delete" href="/answers/#{@answer.id}" Delete
         
+    .col-md-12
+      / TODO: attachments
+
   .clearfix
-  
+
   .comments
 
-/  .edit-form
-/     = form_for answer, remote: true do |f|
-/       .form-group class="#{has_errors_selector(answer, :body)}"
-/         = f.label :body, class: 'control-label'
-/         = error_massages_for(answer, :body)
-/         = f.text_area :body, class: 'form-control'
-/ 
-/         = render 'common/fields_for_attachments', f: f
-/         .btn-group
-/           = f.submit t(:save), class: 'btn btn-default'
-/           = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'cancel_answer_edit_link btn btn-default'
-/       
-/   
+  .edit-form

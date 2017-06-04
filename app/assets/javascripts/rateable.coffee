@@ -11,11 +11,11 @@ toggleControl = (context) ->
   $(context + ' .cancel_voice').toggle()
   $(context + ' .change_rate').toggle()
 
+ratingAction = (this_, xhr) ->
+  rateableSelector = getRateableId(this_)
+  response = $.parseJSON(xhr.responseText)
+  $(rateableSelector + ' .score').html(response)
+  toggleControl(rateableSelector)
+
 getRateableId = (this_) ->
   '#rateable_' + $(this_).data('rateableId')
-
-ratingAction = (this_, xhr) ->
-  id = getRateableId(this_)
-  response = $.parseJSON(xhr.responseText)
-  $(id + ' .score').html(response)
-  toggleControl(id)

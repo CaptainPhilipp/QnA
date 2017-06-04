@@ -6,4 +6,6 @@ $(document).on 'turbolinks:load', ->
 
   App.answers = App.cable.subscriptions.create { channel: 'AnswersChannel', question_id: questionId },
     received: (data) ->
-      answers.append(data)
+      data = JSON.parse(data)
+      partial = App.utils.render('answer', data)
+      answers.append(partial)

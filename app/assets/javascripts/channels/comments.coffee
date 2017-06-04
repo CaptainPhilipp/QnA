@@ -14,7 +14,7 @@ $(document).on 'turbolinks:load', ->
         commentable_type: type
       }, {
         received: (data) ->
-          data = JSON.parse(data)
-          partial = JST['templates/comment'](data)
-          commentable.find('.comments').prepend(partial)
+          comment = JSON.parse(data)
+          partial = App.utils.render('comment', comment)
+          commentable.find('.comments').append(partial)
       }
