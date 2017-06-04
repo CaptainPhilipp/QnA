@@ -14,7 +14,8 @@ class CommentsController < ApplicationController
     commentable = @comment.commentable
     type = commentable.class
     id   = commentable.id
-    CommentsChannel.broadcast_to "comment/#{type}#{id}", ApplicationController.render(@comment)
+    CommentsChannel.broadcast_to "comment/#{type}#{id}",
+      ApplicationController.render(json: @comment)
   end
 
   def comment_params

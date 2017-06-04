@@ -42,8 +42,8 @@ gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
 gem 'with_model'
-# gem 'skim'
-# gem 'gon'
+gem 'skim'
+gem 'gon'
 
 group :test do
   gem 'shoulda-matchers'
