@@ -50,6 +50,8 @@ feature 'Create answer', '
         fill_in Answer.human_attribute_name(:body), with: attributes[:body]
         click_button I18n.t(:create, scope: 'answers.form')
 
+        wait_for_ajax
+        
         within "#answer_#{question.answer_ids.last}" do
           expect(page).to have_content attributes[:body]
         end
