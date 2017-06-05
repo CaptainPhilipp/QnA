@@ -26,11 +26,6 @@ shared_examples 'Rated concern' do
         send_request
         expect(rateable.reload.rating).to eq 1
       end
-
-      it 'should respond with error' do
-        send_request
-        expect(response).to have_http_status :unprocessable_entity
-      end
     end
   end
 

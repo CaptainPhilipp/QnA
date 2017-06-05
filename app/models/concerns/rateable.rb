@@ -3,7 +3,7 @@ module Rateable
 
   included do
     has_many :voices, as: :rateable, dependent: :destroy
-    has_many :voted_voters, through: :voices
+    has_many :voters, through: :voices
   end
 
   def rating
@@ -37,7 +37,7 @@ module Rateable
   end
 
   def create_voice(value, voter)
-    voice = voice_of(voter) || voices.create(user: voter, value: 0)
+    voice = voice_of(voter) || voices.create(user: voter)
     voice.update(user: voter, value: value)
   end
 end
