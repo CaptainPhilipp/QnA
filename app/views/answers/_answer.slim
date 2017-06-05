@@ -1,5 +1,5 @@
 - if answer.persisted?
-  div id="#{css_id_for answer}" class="#{'best_answer' if answer.best?}"
+  div id="#{css_id_for answer}" data-answer-id="#{answer.id}" class="#{'best_answer' if answer.best?}"
     hr
   
     .body.col-md-12
@@ -23,6 +23,8 @@
         = render answer.attachments
           
     .clearfix
+    
+    = render 'comments/comments', commentable: answer
     
     .edit-form
       = form_for answer, remote: true do |f|

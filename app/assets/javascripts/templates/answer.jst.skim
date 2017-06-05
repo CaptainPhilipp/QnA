@@ -1,0 +1,26 @@
+div id="answer_#{@answer.id}" data-answer-id="#{@answer.id}"
+  hr
+
+  .body.col-md-12
+    .col-mb-1
+  
+    .col-mb-2.col-md-offset-1
+      - if gon.current_user_id == @question_owner_id
+        a.best_answer_link data-answer-id='#{@answer.id}' href="/answers/#{@answer.id}/best" data-remote="true" data-method="patch" Best
+          
+    .col-md-8.col-md-offset-2
+      = @answer.body
+        
+    .col-md-2.col-md-offset-10
+      - if gon.current_user_id == @answer.user_id
+        a.answer_edit_link data-answer-id='#{@answer.id}' Edit
+        a data-confirm="Уверены?" data-remote="true" data-method="delete" href="/answers/#{@answer.id}" Delete
+        
+    .col-md-12
+      / TODO: attachments
+
+  .clearfix
+
+  .comments
+
+  .edit-form

@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i(index show)
   before_action :load_question, only: %i(show edit update destroy)
   before_action :check_owner!,  only: %i(edit update destroy)
+  after_action :broadcast_question, only: [:create]
 
   def index
     @questions = Question.all
@@ -50,6 +51,11 @@ class QuestionsController < ApplicationController
 
   def check_owner!
     redirect_to @question unless current_user.owner? @question
+  end
+
+  def broadcast_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast 'questions', ApplicationController.render(json: @question)
   end
 
   def questions_params

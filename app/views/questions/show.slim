@@ -1,7 +1,7 @@
 blockquote = @question.title
   
-#question
-  .col-mb-8.question-body
+#question data-question-id="#{@question.id}"
+  .question-body.col-mb-8
     = @question.body
     .files
       = render @question.attachments
@@ -10,6 +10,8 @@ blockquote = @question.title
     .question-control
       div = link_to t(:delete), question_path(@question), method: :delete, data: { confirm: t(:sure?) }
       div = link_to t(:edit), edit_question_path(@question)
+      
+  = render 'comments/comments', commentable: @question
 
 #answers
   = render @question.answers

@@ -34,4 +34,34 @@ feature 'Create answer', '
       expect(page).to     have_content I18n.t(:authentication_required, scope: 'answers.form')
     end
   end
+
+  context 'with multiple sessions', :js do
+    assign_user
+
+    scenario 'new answer appears for all users' do
+      Capybara.using_session('user') do
+        login_user(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') { visit question_path(question) }
+
+      Capybara.using_session('user') do
+        fill_in Answer.human_attribute_name(:body), with: attributes[:body]
+        click_button I18n.t(:create, scope: 'answers.form')
+
+        wait_for_ajax
+        
+        within "#answer_#{question.answer_ids.last}" do
+          expect(page).to have_content attributes[:body]
+        end
+      end
+
+      Capybara.using_session('guest') do
+        within "#answer_#{question.answer_ids.last}" do
+          expect(page).to have_content attributes[:body]
+        end
+      end
+    end
+  end
 end

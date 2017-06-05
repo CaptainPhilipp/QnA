@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   before_action :load_answer,   only: %i(update destroy best)
   before_action :load_question, only: %i(create)
   before_action :check_owner!,  only: %i(update destroy)
+  after_action :broadcast_answer, only: [:create]
 
   def create
     @answer = @question.answers.new(answers_params)
@@ -40,6 +41,12 @@ class AnswersController < ApplicationController
 
   def load_question
     @question = Question.find(params[:question_id])
+  end
+
+  def broadcast_answer
+    return if @answer.errors.any?
+    AnswersChannel.broadcast_to @question,
+      ApplicationController.render(json: { answer: @answer, question_owner_id: @question.user_id })
   end
 
   def answers_params

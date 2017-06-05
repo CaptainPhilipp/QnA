@@ -1,0 +1,7 @@
+.comments_container [data-commentable-id="#{commentable.id}" data-commentable-type="#{commentable.class}"]
+
+  .comments
+    = render commentable.comments
+
+  .comment_form
+    = render 'comments/form', commentable: commentable

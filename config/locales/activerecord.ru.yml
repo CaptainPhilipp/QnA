@@ -16,6 +16,8 @@ ru:
         file: 'Файл'
         add: 'Добавить файл'
         delete: 'Удалить файл'
+      comment:
+        body: 'Комментарий'
     errors:
       messages:
         blank: 'не может быть пустым'
