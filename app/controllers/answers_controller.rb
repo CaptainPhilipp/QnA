@@ -6,22 +6,18 @@ class AnswersController < ApplicationController
   before_action :check_owner!,  only: %i(update destroy)
   after_action :broadcast_answer, only: [:create]
 
+  respond_to :html, :js
+
   def create
-    @answer = @question.answers.new(answers_params)
-    @answer.user = current_user
-    @answer.save
+    respond_with(@answer = @question.answers.create(answers_params.merge user: current_user))
   end
 
   def update
-    @answer.update(answers_params)
+    respond_with(@answer.update(answers_params))
   end
 
   def destroy
-    @answer.destroy
-    respond_to do |format|
-      format.js { render 'destroy' }
-      format.html { redirect_to @answer.question }
-    end
+    respond_with(@answer.destroy)
   end
 
   def best
