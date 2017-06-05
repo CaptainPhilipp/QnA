@@ -12,7 +12,7 @@ module Rateable
 
   def vote!(value, voter)
     value = value.to_i
-    value.zero? ? cancel_voice_of(voter) : change_rate_by(voter, value)
+    value.zero? ? cancel_voice_of(voter) : change_rate_by(value, voter)
   end
 
   def rated_by?(voter)
@@ -29,10 +29,15 @@ module Rateable
     voices.find_by(user: voter)
   end
 
-  def change_rate_by(voter, amount)
+  def change_rate_by(amount, voter)
     return if rated_by?(voter)
     return if voter.owner?(self)
     value = amount > 0 ? [amount, 1].min : [amount, -1].max
-    voices.create(user: voter, value: value)
+    create_voice(value, voter)
+  end
+
+  def create_voice(value, voter)
+    voice = voice_of(voter) || voices.create(user: voter, value: 0)
+    voice.update(user: voter, value: value)
   end
 end

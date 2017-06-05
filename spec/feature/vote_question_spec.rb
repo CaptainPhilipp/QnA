@@ -3,11 +3,8 @@ require_relative 'acceptance_helper'
 shared_examples :cant_change_voice, js: true do
   scenario "can't change voice" do
     within '#questions .body .rating' do
-      find('i.glyphicon-chevron-down').click
-      within('.score') { expect(page).to have_content '0' }
-
-      find('i.glyphicon-chevron-up').click
-      within('.score') { expect(page).to have_content '0' }
+      expect(page).to_not have_selector 'i.glyphicon-chevron-down'
+      expect(page).to_not have_selector 'i.glyphicon-chevron-up'
     end
   end
 end

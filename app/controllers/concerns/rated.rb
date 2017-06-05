@@ -1,20 +1,9 @@
 module Rated
   extend ActiveSupport::Concern
 
-  included do
-    respond_to :json
-  end
-
   def vote
-    respond_to do |format|
-      format.json do
-        if rateable_entity.vote!(params[:value], current_user)
-          render json: rateable_entity.rating
-        else
-          render json: '', status: :unprocessable_entity
-        end
-      end
-    end
+    rateable_entity.vote!(params[:value], current_user)
+    render json: rateable_entity.rating
   end
 
   private

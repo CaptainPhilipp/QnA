@@ -36,12 +36,12 @@ describe 'Rateable concern' do
 
   context '#vote!' do
     it "owner can't rate his rateable" do
-      rateable.vote!(1, owner_user)
+      rateable.vote!('1', owner_user)
       expect(rateable.rating).to eq(0)
     end
 
     it 'can rate down rateable' do
-      rateable.vote!(-1, user)
+      rateable.vote!('-1', user)
       expect(rateable.rating).to eq(-1)
     end
 
@@ -78,6 +78,28 @@ describe 'Rateable concern' do
       rateable.vote!('1', create(:user))
       rateable.vote!('0', user)
       expect(rateable.rating).to eq(1)
+    end
+  end
+
+  context '#rated_by?' do
+    it "should be false if user don't votes entity" do
+      expect(rateable.rated_by? user).to be_falsy
+    end
+
+    it 'should be true if user votes for entity' do
+      rateable.vote!('1', user)
+      expect(rateable.reload.rated_by? user).to be true
+    end
+
+    it "should be false if user don't votes entity, but others do" do
+      rateable.vote!('1', create(:user))
+      expect(rateable.rated_by? user).to be_falsy
+    end
+
+    it "should be false if user cancel his voice" do
+      rateable.vote!('1', create(:user))
+      rateable.vote!('0', create(:user))
+      expect(rateable.rated_by? user).to be_falsy
     end
   end
 end
