@@ -60,7 +60,7 @@ feature 'User can change rating of answes', '
 
     context 'and when already rated for answer', js: true do
       before do
-        answer.rate_up_by(other_user)
+        answer.vote!(1, other_user)
         visit question_path(question)
       end
 

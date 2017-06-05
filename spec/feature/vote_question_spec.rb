@@ -61,7 +61,7 @@ feature 'User can change rating of answes', '
 
     context 'and when already rated for question', js: true do
       before do
-        question.rate_up_by(other_user)
+        question.vote!(1, other_user)
         page.evaluate_script("window.location.reload()")
       end
 
