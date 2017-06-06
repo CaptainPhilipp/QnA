@@ -1,6 +1,6 @@
 require_relative 'acceptance_helper'
 
-shared_examples :cant_change_voice, js: true do
+shared_examples :cant_change_voice, :js do
   scenario "can't change voice" do
     within '#answers .body .rating' do
       find('i.glyphicon-chevron-down').click
@@ -60,7 +60,7 @@ feature 'User can change rating of answes', '
 
     context 'and when already rated for answer', js: true do
       before do
-        answer.rate_up_by(other_user)
+        answer.vote!(1, other_user)
         visit question_path(question)
       end
 
@@ -96,7 +96,12 @@ feature 'User can change rating of answes', '
       visit question_path(question)
     end
 
-    include_examples :cant_change_voice
+    scenario "can't see vote links" do
+      within '#answers .body .rating' do
+        expect(page).to_not have_selector 'i.glyphicon-chevron-down'
+        expect(page).to_not have_selector 'i.glyphicon-chevron-up'
+      end
+    end
   end
 
   context 'When not authenticated,' do
@@ -104,6 +109,14 @@ feature 'User can change rating of answes', '
       visit question_path(question)
     end
 
-    include_examples :cant_change_voice
+    scenario "can't use vote links" do
+      within '#answers .body .rating' do
+        find('i.glyphicon-chevron-down').click
+        within('.score') { expect(page).to have_content '0' }
+
+        find('i.glyphicon-chevron-up').click
+        within('.score') { expect(page).to have_content '0' }
+      end
+    end
   end
 end

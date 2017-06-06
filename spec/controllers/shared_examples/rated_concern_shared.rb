@@ -7,12 +7,12 @@ shared_examples 'Rated concern' do
   let(:send_request) { post :vote, params: { id: rateable, value: sending_value }, format: :json }
 
   context 'when rateable already rated' do
-    before { rateable.rate_up_by user }
-    context 'value = "cancel"' do
-      let(:sending_value) { 'cancel' }
+    before { rateable.vote! '1', user }
+    context 'value = "0"' do
+      let(:sending_value) { '0' }
 
       it 'should cancel voice', js: true do
-        expect(rateable.rated_by? user).to be true
+        expect(rateable.reload.rating).to eq 1
         send_request
         expect(rateable.reload.rating).to eq 0
       end
@@ -25,11 +25,6 @@ shared_examples 'Rated concern' do
         expect(rateable.rating).to eq 1
         send_request
         expect(rateable.reload.rating).to eq 1
-      end
-
-      it 'should respond with error' do
-        send_request
-        expect(response).to have_http_status :unprocessable_entity
       end
     end
   end

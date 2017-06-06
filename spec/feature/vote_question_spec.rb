@@ -1,17 +1,5 @@
 require_relative 'acceptance_helper'
 
-shared_examples :cant_change_voice, js: true do
-  scenario "can't change voice" do
-    within '#questions .body .rating' do
-      find('i.glyphicon-chevron-down').click
-      within('.score') { expect(page).to have_content '0' }
-
-      find('i.glyphicon-chevron-up').click
-      within('.score') { expect(page).to have_content '0' }
-    end
-  end
-end
-
 feature 'User can change rating of answes', '
     In order to rate an question,
     User can vote for question of other user
@@ -61,7 +49,7 @@ feature 'User can change rating of answes', '
 
     context 'and when already rated for question', js: true do
       before do
-        question.rate_up_by(other_user)
+        question.vote!(1, other_user)
         page.evaluate_script("window.location.reload()")
       end
 
@@ -97,7 +85,12 @@ feature 'User can change rating of answes', '
       visit questions_path
     end
 
-    include_examples :cant_change_voice
+    scenario 'User cant see vote links' do
+      within '#questions .body .rating' do
+        expect(page).to_not have_selector 'i.glyphicon-chevron-down'
+        expect(page).to_not have_selector 'i.glyphicon-chevron-up'
+      end
+    end
   end
 
   context 'When not authenticated,' do
@@ -105,6 +98,14 @@ feature 'User can change rating of answes', '
       visit questions_path
     end
 
-    include_examples :cant_change_voice
+    scenario 'user cant use vote inks' do
+      within '#questions .body .rating' do
+        find('i.glyphicon-chevron-down').click
+        within('.score') { expect(page).to have_content '0' }
+
+        find('i.glyphicon-chevron-up').click
+        within('.score') { expect(page).to have_content '0' }
+      end
+    end
   end
 end

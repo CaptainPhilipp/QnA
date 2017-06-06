@@ -6,41 +6,34 @@ class QuestionsController < ApplicationController
   before_action :check_owner!,  only: %i(edit update destroy)
   after_action :broadcast_question, only: [:create]
 
+  respond_to :html, :js
+
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def create
-    @question = current_user.questions.new(questions_params)
-    if @question.save
-      redirect_to @question
-    else
-      render :new
-    end
+    respond_with(@question = current_user.questions.create(questions_params))
   end
 
   def show
-    @question = Question.find(params[:id])
-    @answer   = Answer.new
+    @answer = Answer.new
+    respond_with(@question = Question.find(params[:id]))
   end
 
   def new
-    @question = current_user.questions.new
+    respond_with(@question = current_user.questions.new)
   end
 
   def edit; end
 
   def update
-    if @question.update(questions_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    @question.update(questions_params)
+    respond_with @question
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_url
+    respond_with @question.destroy
   end
 
   private
