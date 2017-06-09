@@ -19,10 +19,6 @@ class Answer < ApplicationRecord
     end
   end
 
-  def self.best_one
-    find_by best: true
-  end
-
   def serialize_to_broadcast
     serializable_hash.merge('question_user_id' => question.user_id)
   end
