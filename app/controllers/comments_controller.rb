@@ -14,7 +14,6 @@ class CommentsController < ApplicationController
     id   = commentable.id
     CommentsChannel.broadcast_to "comment/#{type}#{id}",
       ApplicationController.render(json: @comment)
-      ApplicationController.render(json: @comment.serialize_to_broadcast)
   end
 
   def comment_params
