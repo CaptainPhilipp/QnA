@@ -9,12 +9,9 @@ RSpec.describe OauthAuthorization, type: :model do
 
   describe '.find_or_create' do
     it 'should return OauthAuthorization' do
-      authorization = OauthAuthorization.find_or_create_by_auth_hash(auth_hash)
-      expect(authorization.class).to be OauthAuthorization
+      authorization = OauthAuthorization.find_or_create(auth_hash)
+      expect(authorization).to be_a OauthAuthorization
       expect(authorization).to be_persisted
     end
   end
-
-  describe '.find_or_create'
-  describe '.select_fields_from'
 end

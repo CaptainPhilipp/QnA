@@ -14,7 +14,7 @@ RSpec.describe OauthUserAuthorization do
 
   context 'when user exists' do
     context 'and authentication exist' do
-      let!(:authentication) { create :omniauth_authentication, provider: provider, uid: uid, user: user }
+      let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
 
       it 'should return right user'
     end

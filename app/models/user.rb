@@ -17,14 +17,16 @@ class User < ApplicationRecord
   end
 
   def self.find_for_oauth(hash)
-    select(:users, :oauth_authorizations)
-    .joins(:oauth_authorizations)
+    joins(:oauth_authorizations)
     .find_by(oauth_authorizations: OauthAuthorization.select_fields_from(hash))
   end
 
   def self.create_for_oauth(args_hash)
     info = args_hash.info || {}
-    create email: info[:email] || ""
+    pass = primitive_random_password
+    create  password: pass,
+            password_confirmation: pass,
+            email: info[:email] || ""
   end
 
   def self.find_by_any(args_hash)
@@ -34,8 +36,13 @@ class User < ApplicationRecord
 
   private
 
+  def self.primitive_random_password
+    (rand(10 ** 4).to_s + Time.now.to_s).chars.shuffle.join
+  end
+
   def self.recursive_find(field_keys, in_hash:)
-    key = field_keys.shift
-    find_by(key => in_hash[key]).or(recursive_find field_keys, in_hash: in_hash)
+    return User.limit(0) unless key = field_keys.shift
+    where(key => in_hash[key])
+      .or(recursive_find field_keys, in_hash: in_hash)
   end
 end
