@@ -7,11 +7,14 @@ RSpec.describe OauthAuthorization, type: :model do
 
   let(:auth_hash) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '12345') }
 
-  context '.find_or_create' do
+  describe '.find_or_create' do
     it 'should return OauthAuthorization' do
       authorization = OauthAuthorization.find_or_create_by_auth_hash(auth_hash)
       expect(authorization.class).to be OauthAuthorization
       expect(authorization).to be_persisted
     end
   end
+
+  describe '.find_or_create'
+  describe '.select_fields_from'
 end

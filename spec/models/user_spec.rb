@@ -20,5 +20,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#take_for_oauth'
+  describe '.find_for_oauth'
+  describe '.create_for_oauth'
+  describe '.find_by_any'
 end
