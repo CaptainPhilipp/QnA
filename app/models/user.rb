@@ -29,9 +29,9 @@ class User < ApplicationRecord
             email: info[:email] || ""
   end
 
-  def self.find_by_any(args_hash)
-    field_keys = args_hash.keys & AUTHENTICATE_FIELDS
-    recursive_find(field_keys, in_hash: args_hash) if field_keys.any?
+  def self.find_by_any(search_args)
+    field_keys = search_args.keys & AUTHENTICATE_FIELDS
+    recursive_find(field_keys, search_args) if field_keys.any?
   end
 
   private
@@ -40,9 +40,14 @@ class User < ApplicationRecord
     (rand(10 ** 4).to_s + Time.now.to_s).chars.shuffle.join
   end
 
-  def self.recursive_find(field_keys, in_hash:)
-    return User.limit(0) unless key = field_keys.shift
-    where(key => in_hash[key])
-      .or(recursive_find field_keys, in_hash: in_hash)
+  def self.recursive_find(field_keys, search_args)
+    field_key = field_keys.shift
+
+    if field_keys.empty?
+      find_by(field_key => search_args[field_key])
+    else
+      where(field_key => search_args[field_key])
+        .or(recursive_find field_keys, search_args)
+    end
   end
 end
