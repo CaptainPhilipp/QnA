@@ -1,4 +1,5 @@
 #fill_email
-  = form_tag '' do |f|
-    = f.email_field :email
+  = form_tag set_user_email_path, method: :post
+    = label_tag :email
+    = email_field_tag :email
     = submit_tag
