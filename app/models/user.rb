@@ -11,7 +11,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook]
 
-  AUTHENTICATE_FIELDS = [:email]
+  AUTHENTICATE_FIELDS   = [:email].freeze # поля, по которым можно привязать user к oauth_authentication
+  OAUTH_FILLABLE_FIELDS = [:email].freeze # поля, которые можно заполнить по информации из oauth
 
   def owner?(entity)
     id == entity.user_id
@@ -22,9 +23,10 @@ class User < ApplicationRecord
     joins(:oauth_authorizations).find_by(oauth_authorizations: oauth_arguments)
   end
 
-  def self.create_without_pass(info)
+  def self.create_without_pass(attributes_hash)
     pass = Devise.friendly_token[0, 20]
-    create({ password: pass, password_confirmation: pass }.merge info)
+    fields_hash = select_fillabe_fields(attributes_hash)
+    create({ password: pass, password_confirmation: pass }.merge attributes_hash)
   end
 
   def self.find_by_any(search_arguments)
@@ -33,6 +35,10 @@ class User < ApplicationRecord
   end
 
   private
+  
+  def self.select_fillabe_fields(fields_hash)
+    fields_hash.select { |field_name, _| OAUTH_FILLABLE_FIELDS.include?(field_name) }
+  end
 
   def self.recursive_find_any(field_keys, search_args)
     current_key   = field_keys.shift
