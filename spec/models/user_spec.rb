@@ -4,6 +4,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:voices).dependent(:destroy) }
+  it { should have_many(:oauth_authorizations).dependent(:destroy) }
 
   assign_user :other_user
   let(:user) { create :user, email: email }
@@ -55,12 +56,11 @@ RSpec.describe User, type: :model do
     before { user }
 
     it 'should find by any field' do
-      # fields = { email: email }
-      expect(User.find_by_any email: email).to eq user
+      fields = { 'email' => email }
 
-      # fields.each do |field, value|
-      #   expect(User.find_by_any field => value).to eq user
-      # end
+      fields.each do |field, value|
+        expect(User.find_by_any field => value).to eq user
+      end
     end
   end
 end

@@ -3,7 +3,7 @@ class User < ApplicationRecord
   has_many :answers, dependent: :destroy
   has_many :voices, dependent: :destroy
   has_many :rateable
-  has_many :oauth_authorizations
+  has_many :oauth_authorizations, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -11,8 +11,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook]
 
-  AUTHENTICATE_FIELDS   = [:email].freeze # поля, по которым можно привязать user к oauth_authentication
-  OAUTH_FILLABLE_FIELDS = [:email].freeze # поля, которые можно заполнить по информации из oauth
+  AUTHENTICATE_FIELDS   = ['email'].freeze # поля, по которым можно привязать user к oauth_authentication
+  OAUTH_FILLABLE_FIELDS = ['email'].freeze # поля, которые можно заполнить по информации из oauth
 
   def owner?(entity)
     id == entity.user_id
@@ -25,8 +25,9 @@ class User < ApplicationRecord
 
   def self.create_without_pass(attributes_hash)
     pass = Devise.friendly_token[0, 20]
-    fields_hash = select_fillabe_fields(attributes_hash)
-    create({ password: pass, password_confirmation: pass }.merge attributes_hash)
+    create( { password: pass,
+              password_confirmation: pass,
+              'email' => 'nomail@example.com' }.merge attributes_hash)
   end
 
   def self.find_by_any(search_arguments)
@@ -34,11 +35,11 @@ class User < ApplicationRecord
     recursive_find_any(field_keys, search_arguments) if field_keys.any?
   end
 
-  private
-  
   def self.select_fillabe_fields(fields_hash)
     fields_hash.select { |field_name, _| OAUTH_FILLABLE_FIELDS.include?(field_name) }
   end
+
+  private
 
   def self.recursive_find_any(field_keys, search_args)
     current_key   = field_keys.shift
