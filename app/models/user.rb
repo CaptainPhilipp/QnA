@@ -23,7 +23,8 @@ class User < ApplicationRecord
   end
 
   def self.create_without_pass(info)
-    create(random_pass_hash.merge info)
+    pass = Devise.friendly_token[0, 20]
+    create { password: pass, password_confirmation: pass }.merge info
   end
 
   def self.find_by_any(search_args)
@@ -32,11 +33,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def self.random_pass_hash
-    pass = Devise.friendly_token[0, 20]
-    { password: pass, password_confirmation: pass }
-  end
 
   def self.recursive_find_any(field_keys, search_args)
     field_key   = field_keys.shift
