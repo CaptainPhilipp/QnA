@@ -24,7 +24,7 @@ class User < ApplicationRecord
 
   def self.create_without_pass(info)
     pass = Devise.friendly_token[0, 20]
-    create { password: pass, password_confirmation: pass }.merge info
+    create({ password: pass, password_confirmation: pass }.merge info)
   end
 
   def self.find_by_any(search_arguments)
