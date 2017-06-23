@@ -23,7 +23,7 @@ class OauthUserAuthorization
   end
 
   def create_user_without_pass
-    info = User.select_fillabe_fields(oauth_hash.info) || {}
+    info = User.select_fillabe_fields(oauth_hash.info || {})
     User.create_without_pass(info)
   end
 
