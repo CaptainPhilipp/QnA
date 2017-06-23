@@ -9,7 +9,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, omniauth_providers: [:facebook]
+         :omniauthable, omniauth_providers: [:facebook, :twitter]
 
   AUTHENTICATE_FIELDS   = ['email'].freeze # поля, по которым можно привязать user к oauth_authentication
   OAUTH_FILLABLE_FIELDS = ['email'].freeze # поля, которые можно заполнить по информации из oauth
@@ -24,10 +24,11 @@ class User < ApplicationRecord
   end
 
   def self.create_without_pass(attributes_hash)
+    attributes_hash.reject! { |_, v| v.nil? }
     pass = Devise.friendly_token[0, 20]
-    create( { password: pass,
-              password_confirmation: pass,
-              'email' => 'nomail@example.com' }.merge attributes_hash)
+    create( { 'password' => pass,
+              'password_confirmation' => pass,
+              'email' => 'nomail@nomail.com' }.merge attributes_hash)
   end
 
   def self.find_by_any(search_arguments)
