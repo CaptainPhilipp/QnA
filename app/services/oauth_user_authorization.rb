@@ -17,7 +17,7 @@ class OauthUserAuthorization
 
   def find_or_create_user
     user = User.find_by_any(oauth_hash.info || {}) ||
-           User.create_for_oauth(oauth_hash.info || {})
+           User.create_without_pass(oauth_hash.info || {})
 
     user.oauth_authorizations << authorization_object
     user

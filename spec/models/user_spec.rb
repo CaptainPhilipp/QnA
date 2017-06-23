@@ -43,8 +43,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.create_for_oauth' do
-    before { User.create_for_oauth(auth_hash.info) }
+  describe '.create_without_pass' do
+    before { User.create_without_pass(auth_hash.info) }
 
     it 'should create user with right email' do
       expect(User.last.email).to eq email
