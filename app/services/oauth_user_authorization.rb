@@ -1,33 +1,50 @@
-# find or create Oauth authorization && user
+# find or create oauth_authorization and user OR set session
 class OauthUserAuthorization
-  def initialize(oauth_hash)
-    @oauth_hash = oauth_hash
+  def initialize(request, session)
+    args = request.env['omniauth.auth']
+    @session  = session
+    @provider = args[:provider]
+    @uid      = args[:uid]
+    @info     = args[:info] || {}
   end
 
-  def call
-    User.find_for_oauth(oauth_hash) || find_or_create_user
+  def try_get_user
+    user = quick_find_user
+    return user if user
+    user = find_or_create_user
+    user.persisted? ? find_or_create_auth.update(user: user) : save_to_session
+    user
+  end
+
+  def self.from_session(params)
+    auth = OauthAuthorization.find(session[session_key])
+    user = User.create_without_pass(params)
+    auth.update user: user
+    user
   end
 
   private
 
-  attr_reader :oauth_hash
+  attr_reader :provider, :uid, :info, :session
+
+  def quick_find_user
+    User.find_with_uid(provider: provider, uid: uid)
+  end
 
   def find_or_create_user
-    user = find_user_by_info || create_user_without_pass
-    user.oauth_authorizations << find_or_create_authorization
-    user
+    User.find_by(email: info[:email]) ||
+    User.create_without_pass(email: info[:email])
   end
 
-  def find_user_by_info
-    User.find_by_any(oauth_hash.info || {})
+  def find_or_create_auth
+    OauthAuthorization.find_or_create_by provider: provider, uid: uid
   end
 
-  def create_user_without_pass
-    info = User.select_fillabe_fields(oauth_hash.info || {})
-    User.create_without_pass(info)
+  def save_to_session
+    session[session_key] = find_or_create_auth
   end
 
-  def find_or_create_authorization
-    OauthAuthorization.find_or_create(oauth_hash)
+  def session_key
+    'devise.oauth_authorization'
   end
 end

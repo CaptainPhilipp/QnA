@@ -7,9 +7,25 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     authorize('Twitter')
   end
 
-  def authorize(kind)
-    @user = OauthUserAuthorization.new(request.env['omniauth.auth']).call
-    set_flash_message(:notice, :success, kind: kind) if is_navigational_format?
-    sign_in_and_redirect @user, event: :authorization
+  def email
+    @user = OauthUserAuthorization.from_session(auth_params)
+    @user.valid? ? sign_in_and_redirect(@user, event: :authorization) : render('email')
+  end
+
+  private
+
+  def authorize(provider)
+    @user = OauthUserAuthorization.new(request, session).try_get_user
+
+    if @user.valid?
+      set_flash_message(:notice, :success, kind: provider) if is_navigational_format?
+      sign_in_and_redirect(@user, event: :authorization)
+    else
+      render('email')
+    end
+  end
+
+  def auth_params
+    params.permit(:email)
   end
 end

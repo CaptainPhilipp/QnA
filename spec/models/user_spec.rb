@@ -28,18 +28,18 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.find_for_oauth' do
+  describe '.find_with_uid' do
     context 'when user exists' do
       let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
 
       it 'should return right user' do
-        expect(User.find_for_oauth auth_hash).to eq user
+        expect(User.find_with_uid auth_hash).to eq user
       end
     end
 
     context 'when user is not exists' do
       it 'should return nil' do
-        expect(User.find_for_oauth auth_hash).to be nil
+        expect(User.find_with_uid auth_hash).to be nil
       end
     end
   end

@@ -17,4 +17,27 @@ feature 'Login with remote provider' do
     click_link twitter_signin_link
     expect(page).to have_content('Successfully authenticated from twitter account')
   end
+
+  context 'User tries to sign with Twitter without an email' do
+    scenario 'User enters email' do
+     mock_auth_without_email
+     click_link twitter_signin_link
+
+     expect(page).to have_content 'Twitter did not provide your email, please enter it'
+     fill_in 'email', with: 'user@testemail.com'
+     click_button 'Save'
+     expect(page).to have_content 'Could not authenticate you from twitter because' \
+                                  'you need to confirm email'
+    end
+
+    scenario 'User leaves email field empty' do
+     mock_auth_without_email
+     click_link twitter_signin_link
+
+     expect(page).to have_content 'Twitter did not provide your email, please enter it'
+     fill_in 'email', with: ''
+     click_button 'Save'
+     expect(page).to have_content 'Twitter did not provide your email, please enter it'
+    end
+  end
 end
