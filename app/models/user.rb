@@ -18,8 +18,8 @@ class User < ApplicationRecord
   end
 
   def self.find_for_oauth(hash)
-    joins(:oauth_authorizations)
-    .find_by(oauth_authorizations: OauthAuthorization.auth_fields_from(hash))
+    oauth_arguments = OauthAuthorization.auth_fields_from(hash)
+    joins(:oauth_authorizations).find_by(oauth_authorizations: oauth_arguments)
   end
 
   def self.create_without_pass(info)
@@ -27,21 +27,21 @@ class User < ApplicationRecord
     create { password: pass, password_confirmation: pass }.merge info
   end
 
-  def self.find_by_any(search_args)
-    field_keys = search_args.keys & AUTHENTICATE_FIELDS
-    recursive_find_any(field_keys, search_args) if field_keys.any?
+  def self.find_by_any(search_arguments)
+    field_keys = search_arguments.keys & AUTHENTICATE_FIELDS
+    recursive_find_any(field_keys, search_arguments) if field_keys.any?
   end
 
   private
 
   def self.recursive_find_any(field_keys, search_args)
-    field_key   = field_keys.shift
-    field_value = search_args[field_key]
+    current_key   = field_keys.shift
+    current_value = search_args[field_key]
 
     if field_keys.empty?
-      find_by(field_key => field_value)
+      find_by(current_key => current_value)
     else
-      where(field_key => field_value)
+      where(current_key => current_value)
         .or(recursive_find_any field_keys, search_args)
     end
   end
