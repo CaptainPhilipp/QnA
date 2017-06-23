@@ -31,6 +31,8 @@ require 'with_model'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+OmniAuth.config.test_mode = true
+
 RSpec.configure do |config|
   config.extend WithModel
   config.include FactoryGirl::Syntax::Methods
