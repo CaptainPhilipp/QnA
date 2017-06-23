@@ -13,14 +13,20 @@ class OauthUserAuthorization
   attr_reader :oauth_hash
 
   def find_or_create_user
-    user = User.find_by_any(oauth_hash.info || {}) ||
-           User.create_without_pass(oauth_hash.info || {})
-
-    user.oauth_authorizations << authorization_object
+    user = find_user_by_info || create_user_with_info
+    user.oauth_authorizations << oauth_authorization
     user
   end
+  
+  def find_user_by_info
+    User.find_by_any(oauth_hash.info || {})
+  end
+  
+  def create_user_with_info
+    User.create_without_pass(oauth_hash.info || {})
+  end
 
-  def authorization_object
-    @authorization ||= OauthAuthorization.find_or_create(oauth_hash)
+  def oauth_authorization
+    OauthAuthorization.find_or_create(oauth_hash)
   end
 end
