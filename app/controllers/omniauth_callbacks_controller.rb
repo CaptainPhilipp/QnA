@@ -1,4 +1,4 @@
-class OmniauthCallbacksController < ApplicationController
+class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
     @user = OauthUserAuthorization.new(request.env['omniauth.auth']).call
     set_flash_message(:notice, :success, kind: 'Facebook') if is_navigational_format?

@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  get 'omniauth_callbacks/facebook'
-
-  devise_for :users, controller: { omniauth_callbacks: 'omniauth_callbacks' }
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   concern :rateable do
     post 'vote/:value', action: :vote, as: :vote, on: :member
