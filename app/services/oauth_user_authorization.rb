@@ -5,10 +5,7 @@ class OauthUserAuthorization
   end
 
   def call
-    user = User.find_for_oauth(oauth_hash)
-    return user if user
-
-    find_or_create_user
+    User.find_for_oauth(oauth_hash) || find_or_create_user
   end
 
   private
