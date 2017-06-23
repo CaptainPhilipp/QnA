@@ -5,7 +5,7 @@ class OauthAuthorization < ApplicationRecord
     find_or_create_by auth_fields_from(oauth_hash)
   end
 
-  def self.auth_fields_from(hash)
-    { provider: hash.provider, uid: hash.uid }
+  def self.auth_fields_from(oauth_hash)
+    { provider: oauth_hash.provider, uid: oauth_hash.uid }
   end
 end
