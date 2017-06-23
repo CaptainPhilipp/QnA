@@ -36,7 +36,7 @@ class User < ApplicationRecord
 
   def self.recursive_find_any(field_keys, search_args)
     current_key   = field_keys.shift
-    current_value = search_args[field_key]
+    current_value = search_args[current_key]
 
     if field_keys.empty?
       find_by(current_key => current_value)
