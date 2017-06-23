@@ -14,7 +14,7 @@ class OauthUserAuthorization
 
   def find_or_create_user
     user = find_user_by_info || create_user_with_info
-    user.oauth_authorizations << oauth_authorization
+    user.oauth_authorizations << find_or_create_authorization
     user
   end
   
@@ -26,7 +26,7 @@ class OauthUserAuthorization
     User.create_without_pass(oauth_hash.info || {})
   end
 
-  def oauth_authorization
+  def find_or_create_authorization
     OauthAuthorization.find_or_create(oauth_hash)
   end
 end
