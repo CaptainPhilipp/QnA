@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20170622160113) do
     t.string   "uid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["provider", "uid"], name: "index_oauth_authorizations_on_provider_and_uid", using: :btree
     t.index ["user_id"], name: "index_oauth_authorizations_on_user_id", using: :btree
   end
 

@@ -6,6 +6,7 @@ class CreateOauthAuthorizations < ActiveRecord::Migration[5.0]
       t.string :uid
 
       t.timestamps
+      t.index [:provider, :uid]
     end
   end
 end
