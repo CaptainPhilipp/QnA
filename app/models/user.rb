@@ -22,12 +22,8 @@ class User < ApplicationRecord
     .find_by(oauth_authorizations: OauthAuthorization.select_fields_from(hash))
   end
 
-  def self.create_for_oauth(args_hash)
-    info = args_hash.info || {}
-    pass = primitive_random_password
-    create  password: pass,
-            password_confirmation: pass,
-            email: info[:email] || ""
+  def self.create_for_oauth(info)
+    create(random_pass_hash.merge info)
   end
 
   def self.find_by_any(search_args)
@@ -37,8 +33,9 @@ class User < ApplicationRecord
 
   private
 
-  def self.primitive_random_password
-    (rand(10 ** 4).to_s + Time.now.to_s).chars.shuffle.join
+  def self.random_pass_hash
+    pass = Devise.friendly_token[0, 20]
+    { password: pass, password_confirmation: pass }
   end
 
   def self.recursive_find(field_keys, search_args)

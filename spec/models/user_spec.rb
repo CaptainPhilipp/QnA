@@ -44,7 +44,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '.create_for_oauth' do
-    before { User.create_for_oauth(auth_hash) }
+    before { User.create_for_oauth(auth_hash.info) }
 
     it 'should create user with right email' do
       expect(User.last.email).to eq email
