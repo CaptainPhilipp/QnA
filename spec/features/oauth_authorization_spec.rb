@@ -21,7 +21,7 @@ feature 'Login with remote provider' do
     expect(page).to have_content('Successfully authenticated from twitter account')
   end
 
-  context 'User tries to sign with Twitter without an email' do
+  context 'User tries to sign in without an email' do
     scenario 'User enters email' do
      mock_auth_without_email
      click_link twitter_signin_link

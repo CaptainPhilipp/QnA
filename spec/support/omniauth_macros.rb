@@ -5,7 +5,6 @@ module OmniauthMacros
       uid: '123545',
       info: {
         email: 'example@example.com',
-        name: 'Mock User'
       }
     }
   end
@@ -16,7 +15,6 @@ module OmniauthMacros
       uid: '123545',
       info: {
         email: 'example@example.com',
-        name: 'Mock User'
       }
     }
   end
@@ -25,10 +23,7 @@ module OmniauthMacros
     OmniAuth.config.mock_auth[:twitter] = {
       provider:  'twitter',
       uid: '123545',
-      info: {
-        # email: '',
-        name: 'Mock User'
-      }
+      info: {}
     }
   end
 end
