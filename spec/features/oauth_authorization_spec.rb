@@ -22,7 +22,7 @@ feature 'Login with remote provider' do
   end
 
   context 'User tries to sign with Twitter without an email' do
-    xscenario 'User enters email' do
+    scenario 'User enters email' do
      mock_auth_without_email
      click_link twitter_signin_link
 
@@ -30,11 +30,10 @@ feature 'Login with remote provider' do
      fill_in 'email', with: email
      click_button 'Save'
 
-     visit email_trigger_path
      open_email(email)
-     click_link 'Confirm my account'
+     current_email.click_link 'Confirm my account'
 
-     expect(page).to have_content 'User registered! Please, confirm email'
+     expect(page).to have_content I18n.t(:confirmed, scope: 'devise.confirmations')
     end
 
     scenario 'User leaves email field empty' do
