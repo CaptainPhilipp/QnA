@@ -6,7 +6,7 @@ class UsersController < ApplicationController
     confirmed = proc(&:confirmed?)
     email_taken = proc(&:email_taken_error?)
 
-    case @user = OauthUserService.from_session(auth_params, session)
+    case @user = OauthUserService.auth_user_from(session, auth_params)
     when valid && confirmed  then sign_in_and_redirect(user, event: :authorization)
     when valid && !confirmed then when_successful_registered
     when email_taken         then when_email_taken

@@ -8,9 +8,8 @@ RSpec.describe OauthUserService do
   let(:user)      { create :user, email: email }
   let(:auth_hash) { OmniAuth::AuthHash.new provider: provider, uid: uid }
   let(:session)   { {} }
-  let(:request)   { Struct.new(:env).new('omniauth.auth' => auth_hash) }
 
-  let(:send_get_user) { OauthUserService.new(request, session).get_user }
+  let(:send_get_user) { OauthUserService.new(auth_hash).get_user }
 
   context '#get_user' do
     context 'when user exists' do
@@ -42,14 +41,14 @@ RSpec.describe OauthUserService do
     end
   end
 
-  context '.from_session' do
+  context '.auth_user_from' do
     context '(providers respond have no email)' do
       let(:auth_hash) { OmniAuth::AuthHash.new provider: provider, uid: uid }
       let(:params) { { email: email } }
 
       it 'should create user' do
-        expect { send_get_user }.to_not change(User, :count)
-        expect { OauthUserService.from_session(params, session) }.to change(User, :count).by(1)
+        expect { OauthUserService.new(auth_hash).save_auth_to(session) }.to_not change(User, :count)
+        expect { OauthUserService.auth_user_from(session, params) }.to change(User, :count).by(1)
       end
     end
   end

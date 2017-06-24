@@ -1,8 +1,6 @@
 # find or create oauth_authorization and user OR set session
 class OauthUserService
-  def initialize(request, session)
-    args = request.env['omniauth.auth']
-    @session  = session
+  def initialize(args)
     @provider = args[:provider]
     @uid      = args[:uid]
     @info     = args[:info] || {}
@@ -11,10 +9,16 @@ class OauthUserService
   def get_user
     user = User.find_with_uid(provider: provider, uid: uid)
     return user if user
-    add_auth_to_user_or_session(find_or_create_user)
+    user = find_or_create_user
+    find_or_create_auth.update(user: user) if user.valid?
+    user
   end
 
-  def self.from_session(params, session)
+  def save_auth_to(session)
+    session[SESSION_KEY] = authentication.id
+  end
+
+  def self.auth_user_from(session, params)
     user = User.create_without_pass(params)
     return user unless user.valid?
     OauthAuthorization.find(session[SESSION_KEY]).update(user: user)
@@ -28,23 +32,13 @@ class OauthUserService
   attr_reader :provider, :uid, :info, :session
 
   def find_or_create_user
-    User.find_by(email: info[:email]) || User.create_without_pass(email: info[:email])
-  end
-
-  def add_auth_to_user_or_session(user)
-    if user.persisted?
-      find_or_create_auth.update(user: user)
-    else
-      session[SESSION_KEY] = find_or_create_auth.id
-    end
-    user
-  end
-
-  def find_or_create_user
-    User.find_by(email: info[:email]) || User.create_without_pass(email: info[:email])
+    @user ||= User.find_by(email: info[:email]) ||
+              User.create_without_pass(email: info[:email])
   end
 
   def find_or_create_auth
-    OauthAuthorization.find_or_create_by provider: provider, uid: uid
+    @auth ||= OauthAuthorization.find_or_create_by provider: provider, uid: uid
   end
+
+  alias authentication find_or_create_auth
 end
