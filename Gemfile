@@ -78,6 +78,7 @@ group :development do
   gem 'pry-rails'
   gem 'pry-byebug'
   gem 'letter_opener'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -22,6 +22,8 @@ require_relative 'support/controller_macros'
 require_relative 'support/wait_for_ajax'
 require_relative 'support/omniauth_macros'
 
+require 'capybara/email/rspec'
+
 RSpec.configure do |config|
   config.include CommonMacros
   config.include OmniauthMacros

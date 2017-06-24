@@ -15,6 +15,11 @@ class User < ApplicationRecord
     id == entity.user_id
   end
 
+  def email_taken_error?
+    email_errors = errors.details[:email]
+    email_errors.any? && email_errors.first[:error] == :taken
+  end
+
   def self.find_with_uid(args)
     oauth_arguments = { provider: args[:provider], uid: args[:uid] }
     joins(:oauth_authorizations).find_by(oauth_authorizations: oauth_arguments)

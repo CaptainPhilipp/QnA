@@ -58,6 +58,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-email (2.5.0)
+      capybara (~> 2.4)
+      mail
     carrierwave (1.1.0)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
@@ -308,6 +311,7 @@ DEPENDENCIES
   binding_of_caller
   byebug
   capybara
+  capybara-email
   carrierwave
   cocoon
   coffee-rails (~> 4.2)

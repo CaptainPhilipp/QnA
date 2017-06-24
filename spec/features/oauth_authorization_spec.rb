@@ -3,6 +3,9 @@ require_relative 'acceptance_helper'
 feature 'Login with remote provider' do
   let(:twitter_signin_link) { 'Sign in with Twitter' }
   let(:facebook_signin_link) { 'Sign in with Facebook' }
+  let(:enter_email_message) { 'Please enter your email for complete registration' }
+
+  let(:email) { 'test@example.com' }
 
   background { visit new_user_session_path }
 
@@ -19,26 +22,30 @@ feature 'Login with remote provider' do
   end
 
   context 'User tries to sign with Twitter without an email' do
-    scenario 'User enters email' do
+    xscenario 'User enters email' do
      mock_auth_without_email
      click_link twitter_signin_link
 
-     expect(page).to have_content 'Twitter did not provide your email, please enter it'
-     save_and_open_page
-     fill_in 'email', with: 'user@testemail.com'
+     expect(page).to have_content enter_email_message
+     fill_in 'email', with: email
      click_button 'Save'
-     expect(page).to have_content 'Could not authenticate you from twitter because ' \
-                                  'you need to confirm email'
+
+     visit email_trigger_path
+     open_email(email)
+     click_link 'Confirm my account'
+    #  save_and_open_page
+
+     expect(page).to have_content 'User registered! Please, confirm email'
     end
 
     scenario 'User leaves email field empty' do
      mock_auth_without_email
      click_link twitter_signin_link
 
-     expect(page).to have_content 'Twitter did not provide your email, please enter it'
+     expect(page).to have_content enter_email_message
      fill_in 'email', with: ''
      click_button 'Save'
-     expect(page).to have_content 'Twitter did not provide your email, please enter it'
+     expect(page).to have_content enter_email_message
     end
   end
 end

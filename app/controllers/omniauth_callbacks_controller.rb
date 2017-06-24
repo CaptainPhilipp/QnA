@@ -20,7 +20,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def provider
-    request.env['omniauth.auth'].provider.classify
+    @provider ||= request.env['omniauth.auth'].provider.classify
   end
 
   def auth_params

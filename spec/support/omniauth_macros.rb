@@ -22,7 +22,7 @@ module OmniauthMacros
   end
 
   def mock_auth_without_email
-    OmniAuth.config.mock_auth[:facebook] = {
+    OmniAuth.config.mock_auth[:twitter] = {
       provider:  'twitter',
       uid: '123545',
       info: {
