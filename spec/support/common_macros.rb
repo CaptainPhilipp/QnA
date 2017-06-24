@@ -9,7 +9,12 @@ module CommonMacros
   module SpecMethods
     def assign_users(*names)
       names = [:user, :other_user] if names.empty?
-      names.each { |name| let(name) { create :user } }
+      names.each do |name| let(name) do
+          user = create :user
+          user.confirm
+          user
+        end
+      end
     end
 
     def assign_user(name = :user)
