@@ -27,7 +27,7 @@ class OauthUserService
 
   attr_reader :provider, :uid, :info, :session
 
-  def save_or_create_user
+  def find_or_create_user
     User.find_by(email: info[:email]) || User.create_without_pass(email: info[:email])
   end
 
@@ -37,6 +37,11 @@ class OauthUserService
     else
       session[SESSION_KEY] = find_or_create_auth.id
     end
+    user
+  end
+
+  def find_or_create_user
+    User.find_by(email: info[:email]) || User.create_without_pass(email: info[:email])
   end
 
   def find_or_create_auth
