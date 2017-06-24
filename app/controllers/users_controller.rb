@@ -3,7 +3,11 @@ class UsersController < ApplicationController
 
   def email
     @user = OauthUserAuthorization.from_session(auth_params, session)
-    @user.valid? ? sign_in_and_redirect(user, event: :authorization) : render('email')
+    if @user.valid? && @user.confirmed?
+      sign_in_and_redirect(user, event: :authorization)
+    else
+      render('email')
+    end
   end
 
   private

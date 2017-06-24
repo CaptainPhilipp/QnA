@@ -20,6 +20,7 @@ class OauthUserAuthorization
   def self.from_session(params, session)
     user = User.create_without_pass(params)
     OauthAuthorization.find(session[SESSION_KEY]).update(user: user)
+    user.send_confirmation_instructions
     user
   end
 
