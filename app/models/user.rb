@@ -20,13 +20,14 @@ class User < ApplicationRecord
     email_errors.any? && email_errors.first[:error] == :taken
   end
 
-  def self.find_with_uid(args)
-    oauth_arguments = { provider: args[:provider], uid: args[:uid] }
+  def self.find_with_uid(provider:, uid:, **)
+    oauth_arguments = { provider: provider, uid: uid }
     joins(:oauth_authorizations).find_by(oauth_authorizations: oauth_arguments)
   end
 
   def self.create_without_pass(args)
     pass = Devise.friendly_token 64
+    # create(args.to_h.reverse_merge(password: pass, password_confirmation: pass))
     create({ password: pass, password_confirmation: pass }.merge args)
   end
 end

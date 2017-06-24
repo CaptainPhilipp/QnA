@@ -8,7 +8,7 @@ class OauthUserService
     @info     = args[:info] || {}
   end
 
-  def try_get_user
+  def get_user
     user = User.find_with_uid(provider: provider, uid: uid)
     return user if user
     add_auth_to_user_or_session(find_or_create_user)

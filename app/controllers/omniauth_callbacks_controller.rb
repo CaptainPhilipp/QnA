@@ -10,7 +10,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   private
 
   def authorize
-    @user = OauthUserService.new(request, session).try_get_user
+    @user = OauthUserService.new(request, session).get_user
     if @user.valid?
       set_flash_message(:notice, :success, kind: provider) if is_navigational_format?
       sign_in_and_redirect(@user, event: :authorization)
