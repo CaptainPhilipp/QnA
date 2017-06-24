@@ -7,46 +7,49 @@ RSpec.describe OauthUserAuthorization do
 
   let(:user)      { create :user, email: email }
   let(:auth_hash) { OmniAuth::AuthHash.new provider: provider, uid: uid }
+  let(:session)   { {} }
+  let(:request)   { Struct.new(:env).new('omniauth.auth' => auth_hash) }
 
-  it 'should return User object' do
-    expect(OauthUserAuthorization.new(auth_hash).call).to be_a User
-  end
+  let(:send_try_get_user) { OauthUserAuthorization.new(request, session).try_get_user }
 
-  context 'when user exists' do
-    before { user }
+  context '#try_get_user' do
+    context 'when user exists' do
+      before { user }
 
-    context 'and authentication exist' do
-      let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
+      context 'and authentication exist' do
+        let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
 
-      it 'should return right user' do
-        expect(OauthUserAuthorization.new(auth_hash).call).to eq user
+        it 'should find user' do
+          expect(send_try_get_user).to eq user
+        end
       end
     end
 
-    context 'but authentication is not exist' do
-      context 'and user have same email' do
+    context 'when user is not exist' do
+      context 'and providers respond have email' do
         let(:auth_hash) { OmniAuth::AuthHash.new provider: provider, uid: uid, info: { email: email } }
 
-        it 'should associate new authorization with user' do
-          expect(user.oauth_authorizations).to be_empty
-          OauthUserAuthorization.new(auth_hash).call
-          expect(user.oauth_authorizations.count).to eq 1
-          expect(user.oauth_authorizations.first.uid).to eq uid
+        it 'should create user' do
+          expect { send_try_get_user }.to change(User, :count).by(1)
+          expect(User.last.oauth_authorizations.last).to eq OauthAuthorization.last
+        end
+
+        it 'should create association' do
+          expect { send_try_get_user }.to change(OauthAuthorization, :count).by(1)
+          expect(OauthAuthorization.last.user).to eq User.last
         end
       end
     end
   end
 
-  context 'when user is not exist' do
-    context 'and authentication is not exist' do
-      it 'should create user' do
-        expect { OauthUserAuthorization.new(auth_hash).call }.to change(User, :count).by(1)
-        expect(User.last.oauth_authorizations.last).to eq OauthAuthorization.last
-      end
+  context '.from_session' do
+    context '(providers respond have no email)' do
+      let(:auth_hash) { OmniAuth::AuthHash.new provider: provider, uid: uid }
+      let(:params) { { email: email } }
 
-      it 'should create association' do
-        expect { OauthUserAuthorization.new(auth_hash).call }.to change(OauthAuthorization, :count).by(1)
-        expect(OauthAuthorization.last.user).to eq User.last
+      it 'should create user' do
+        expect { send_try_get_user }.to_not change(User, :count)
+        expect { OauthUserAuthorization.from_session(params, session) }.to change(User, :count).by(1)
       end
     end
   end

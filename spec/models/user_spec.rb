@@ -51,16 +51,4 @@ RSpec.describe User, type: :model do
       expect(User.last.email).to eq email
     end
   end
-
-  describe '.find_by_any' do
-    before { user }
-
-    it 'should find by any field' do
-      fields = { 'email' => email }
-
-      fields.each do |field, value|
-        expect(User.find_by_any field => value).to eq user
-      end
-    end
-  end
 end
