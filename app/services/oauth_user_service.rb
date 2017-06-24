@@ -11,9 +11,7 @@ class OauthUserService
   def try_get_user
     user = User.find_with_uid(provider: provider, uid: uid)
     return user if user
-    user = find_or_create_user
-    user.persisted? ? find_or_create_auth.update(user: user) : save_to_session
-    user
+    add_auth_to_user_or_session(find_or_create_user)
   end
 
   def self.from_session(params, session)
@@ -29,16 +27,19 @@ class OauthUserService
 
   attr_reader :provider, :uid, :info, :session
 
-  def find_or_create_user
-    User.find_by(email: info[:email]) ||
-    User.create_without_pass(email: info[:email])
+  def save_or_create_user
+    User.find_by(email: info[:email]) || User.create_without_pass(email: info[:email])
+  end
+
+  def add_auth_to_user_or_session(user)
+    if user.persisted?
+      find_or_create_auth.update(user: user)
+    else
+      session[SESSION_KEY] = find_or_create_auth.id
+    end
   end
 
   def find_or_create_auth
     OauthAuthorization.find_or_create_by provider: provider, uid: uid
-  end
-
-  def save_to_session
-    session[SESSION_KEY] = find_or_create_auth.id
   end
 end
