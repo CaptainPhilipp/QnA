@@ -1,6 +1,5 @@
 # find or create oauth_authorization and user OR set session
-class OauthUserAuthorization
-
+class OauthUserService
   def initialize(request, session)
     args = request.env['omniauth.auth']
     @session  = session

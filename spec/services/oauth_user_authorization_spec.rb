@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe OauthUserAuthorization do
+RSpec.describe OauthUserService do
   let(:email)     { 'example@example.com' }
   let(:provider)  { 'facebook' }
   let(:uid)       { '12341234' }
@@ -10,7 +10,7 @@ RSpec.describe OauthUserAuthorization do
   let(:session)   { {} }
   let(:request)   { Struct.new(:env).new('omniauth.auth' => auth_hash) }
 
-  let(:send_try_get_user) { OauthUserAuthorization.new(request, session).try_get_user }
+  let(:send_try_get_user) { OauthUserService.new(request, session).try_get_user }
 
   context '#try_get_user' do
     context 'when user exists' do
@@ -49,7 +49,7 @@ RSpec.describe OauthUserAuthorization do
 
       it 'should create user' do
         expect { send_try_get_user }.to_not change(User, :count)
-        expect { OauthUserAuthorization.from_session(params, session) }.to change(User, :count).by(1)
+        expect { OauthUserService.from_session(params, session) }.to change(User, :count).by(1)
       end
     end
   end
