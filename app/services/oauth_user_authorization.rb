@@ -1,5 +1,6 @@
 # find or create oauth_authorization and user OR set session
 class OauthUserAuthorization
+
   def initialize(request, session)
     args = request.env['omniauth.auth']
     @session  = session
@@ -18,11 +19,13 @@ class OauthUserAuthorization
 
   def self.from_session(params, session)
     user = User.create_without_pass(params)
-    OauthAuthorization.find(session[session_key]).update(user: user)
+    OauthAuthorization.find(session[SESSION_KEY]).update(user: user)
     user
   end
 
   private
+
+  SESSION_KEY = 'devise.oauth_authorization'
 
   attr_reader :provider, :uid, :info, :session
 
@@ -36,10 +39,6 @@ class OauthUserAuthorization
   end
 
   def save_to_session
-    session[session_key] = find_or_create_auth
-  end
-
-  def session_key
-    'devise.oauth_authorization'
+    session[SESSION_KEY] = find_or_create_auth.id
   end
 end
