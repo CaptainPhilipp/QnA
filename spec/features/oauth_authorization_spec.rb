@@ -33,7 +33,6 @@ feature 'Login with remote provider' do
      visit email_trigger_path
      open_email(email)
      click_link 'Confirm my account'
-    #  save_and_open_page
 
      expect(page).to have_content 'User registered! Please, confirm email'
     end

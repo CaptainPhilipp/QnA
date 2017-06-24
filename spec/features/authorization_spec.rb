@@ -11,7 +11,7 @@ feature 'User can registrater' do
     fill_in 'Password', with: user_attributes[:password]
     fill_in 'Password confirmation', with: user_attributes[:password_confirmation]
     click_on 'Sign up'
-    expect(page).to have_content I18n.t(:signed_up, scope: 'devise.registrations')
+    expect(page).to have_content I18n.t(:signed_up_but_unconfirmed, scope: 'devise.registrations')
   end
 end
 
