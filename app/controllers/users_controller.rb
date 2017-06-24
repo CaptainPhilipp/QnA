@@ -2,14 +2,13 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!, only: %i(email)
 
   def email
-    valid = proc(&:valid?)
-    confirmed = proc(&:confirmed?)
-    email_taken = proc(&:email_taken_error?)
+    @user  = OauthUserService.auth_user_from(session, auth_params)
+    policy = OauthUserPolicy.new(@user)
 
-    case @user = OauthUserService.auth_user_from(session, auth_params)
-    when valid && confirmed  then sign_in_and_redirect(user, event: :authorization)
-    when valid && !confirmed then when_successful_registered
-    when email_taken         then when_email_taken
+    case
+    when policy.complete?    then sign_in_and_redirect(user, event: :authorization)
+    when policy.unconfirmed? then when_successful_registered
+    when policy.email_taken? then when_email_taken
     else render('email')
     end
   end
