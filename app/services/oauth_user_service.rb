@@ -1,4 +1,3 @@
-# find or create oauth_authorization and user OR set session
 class OauthUserService
   def initialize(provider: nil, uid: nil, info: nil)
     @provider = provider

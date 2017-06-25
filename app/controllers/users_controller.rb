@@ -6,8 +6,8 @@ class UsersController < ApplicationController
     policy = OauthUserPolicy.new(@user)
 
     case
-    when policy.unconfirmed? then when_successful_registered
-    when policy.email_taken? then when_email_taken
+    when policy.just_registered? then when_successful_registered
+    when policy.email_taken?     then when_email_taken
     else render('email')
     end
   end

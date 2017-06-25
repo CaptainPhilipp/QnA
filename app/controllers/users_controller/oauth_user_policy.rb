@@ -4,12 +4,8 @@ class UsersController
       @user = user
     end
 
-    def complete?
-      user.valid? && user.confirmed?
-    end
-
-    def unconfirmed?
-      user.valid? && !user.confirmed?
+    def just_registered?
+      user.persisted? && user.valid? && !user.confirmed?
     end
 
     def email_taken?
