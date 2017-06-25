@@ -12,13 +12,13 @@ feature 'Login with remote provider' do
   scenario 'User tries to sign in with Facebook' do
     mock_auth_facebook
     click_link facebook_signin_link
-    expect(page).to have_content('Successfully authenticated from facebook account')
+    expect(page).to have_content(I18n.t :success, scope: 'devise.omniauth_callbacks', kind: 'Facebook')
   end
 
   scenario 'User tries to sign in with Twitter' do
     mock_auth_twitter
     click_link twitter_signin_link
-    expect(page).to have_content('Successfully authenticated from twitter account')
+    expect(page).to have_content(I18n.t :success, scope: 'devise.omniauth_callbacks', kind: 'Twitter')
   end
 
   context 'User tries to sign in without an email' do

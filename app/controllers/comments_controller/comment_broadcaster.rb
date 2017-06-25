@@ -17,7 +17,7 @@ class CommentsController
     end
 
     def channel_adress
-      "comment/#{commentable.class.to_s}#{commentable.id}"
+      "comment/#{commentable.class}#{commentable.id}"
     end
 
     def commentable
