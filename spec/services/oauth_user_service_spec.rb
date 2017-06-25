@@ -12,8 +12,6 @@ RSpec.describe OauthUserService do
                                        uid:      auth_hash.uid,
                                        info:     auth_hash.info }
 
-  let(:send_get_user) { service.get_user }
-
   context '#get_user' do
     context 'when user exists' do
       before { user }
@@ -22,7 +20,7 @@ RSpec.describe OauthUserService do
         let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
 
         it 'should find user' do
-          expect(send_get_user).to eq user
+          expect(service.get_user).to eq user
         end
       end
     end
@@ -32,12 +30,12 @@ RSpec.describe OauthUserService do
         let(:auth_hash) { OmniAuth::AuthHash.new provider: provider, uid: uid, info: { email: email } }
 
         it 'should create user' do
-          expect { send_get_user }.to change(User, :count).by(1)
+          expect { service.get_user }.to change(User, :count).by(1)
           expect(User.last.oauth_authorizations.last).to eq OauthAuthorization.last
         end
 
         it 'should create association' do
-          expect { send_get_user }.to change(OauthAuthorization, :count).by(1)
+          expect { service.get_user }.to change(OauthAuthorization, :count).by(1)
           expect(OauthAuthorization.last.user).to eq User.last
         end
       end
