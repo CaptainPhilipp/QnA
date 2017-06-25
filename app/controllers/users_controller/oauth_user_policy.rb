@@ -1,25 +1,23 @@
-class OauthUserPolicy
-  def initialize(user)
-    @user = user
-  end
+class UsersController
+  class OauthUserPolicy
+    def initialize(user)
+      @user = user
+    end
 
-  def complete?
-    user.valid? && user.confirmed?
-  end
+    def complete?
+      user.valid? && user.confirmed?
+    end
 
-  def unconfirmed?
-    user.valid? && !user.confirmed?
-  end
+    def unconfirmed?
+      user.valid? && !user.confirmed?
+    end
 
-  def email_taken?
-    email_errors.any? && email_errors.first[:error] == :taken
-  end
+    def email_taken?
+      user.errors.added?(:email, :taken)
+    end
 
-  private
+    private
 
-  attr_reader :user
-
-  def email_errors
-    @email_errors ||= user.errors.details[:email]
+    attr_reader :user
   end
 end

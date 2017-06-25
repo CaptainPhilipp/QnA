@@ -2,11 +2,10 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!, only: %i(email)
 
   def email
-    @user  = OauthUserService.auth_user_from(session, auth_params)
-    policy = OauthUserPolicy.new(@user)
+    @user   = OauthUserService.create_user_with(oauth_id, user_params)
+    policy  = OauthUserPolicy.new(@user)
 
     case
-    when policy.complete?    then sign_in_and_redirect(user, event: :authorization)
     when policy.unconfirmed? then when_successful_registered
     when policy.email_taken? then when_email_taken
     else render('email')
@@ -14,6 +13,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def oauth_id
+    session['devise.oauth_authorization']
+  end
 
   def when_successful_registered
     flash[:notice] = 'User registered! Please, confirm email'
@@ -25,7 +28,7 @@ class UsersController < ApplicationController
     redirect_to new_user_session_path
   end
 
-  def auth_params
+  def user_params
     params.permit(:email)
   end
 end
