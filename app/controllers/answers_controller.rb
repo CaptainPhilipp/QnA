@@ -2,7 +2,8 @@ class AnswersController < ApplicationController
   include Rated
   check_authorization
 
-  before_action :load_answer,   only: %i(update destroy best)
+  before_action :authorize_answers, only: %i(create)
+  before_action :load_and_authorize_answer, only: %i(update destroy best)
   before_action :load_question, only: %i(create)
   authorize_resource
   after_action :broadcast_answer, only: [:create]
@@ -32,8 +33,12 @@ class AnswersController < ApplicationController
 
   private
 
-  def load_answer
-    @answer = Answer.find(params[:id])
+  def authorize_answers
+    authorize Answer
+  end
+
+  def load_and_authorize_answer
+    authorize @answer = Answer.find(params[:id])
   end
 
   def load_question
