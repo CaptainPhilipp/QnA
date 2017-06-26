@@ -36,14 +36,8 @@ class QuestionsController < ApplicationController
     respond_with @question.destroy
   end
 
-  rescue_from CanCan::AccessDenied do |exception|
-    respond_to do |format|
-      format.js   { head :forbidden, content_type: 'text/html' }
-      format.json { head :forbidden, content_type: 'text/html' }
-      format.html do
-        redirect_to params[:id] ? question_url(params[:id]) : questions_url
-      end
-    end
+  rescue_from Pundit::NotAuthorizedError do |e|
+    redirect_to question_path(params[:id])
   end
 
   private
