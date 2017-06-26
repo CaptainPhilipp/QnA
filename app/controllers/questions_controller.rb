@@ -36,6 +36,10 @@ class QuestionsController < ApplicationController
     respond_with @question.destroy
   end
 
+  rescue_from Pundit::NotAuthorizedError do |e|
+    redirect_to question_path(params[:id])
+  end
+
   private
 
   def authorize_questions
