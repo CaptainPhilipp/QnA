@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
 
   skip_before_action :authenticate_user!, only: %i(index show)
   before_action :load_question, only: %i(show edit update destroy)
-  before_action :check_owner!,  only: %i(edit update destroy)
+  before_action :authorize_questions, only: %i(index new create)
   after_action :broadcast_question, only: [:create]
 
   respond_to :html, :js
@@ -38,12 +38,13 @@ class QuestionsController < ApplicationController
 
   private
 
-  def load_question
-    @question = Question.find(params[:id])
+  def authorize_questions
+    authorize Question
   end
 
-  def check_owner!
-    redirect_to @question unless current_user.owner? @question
+  def load_question
+    @question = Question.find(params[:id])
+    authorize @question
   end
 
   def broadcast_question

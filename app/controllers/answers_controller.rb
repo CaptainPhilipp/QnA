@@ -3,12 +3,12 @@ class AnswersController < ApplicationController
 
   before_action :load_answer,   only: %i(update destroy best)
   before_action :load_question, only: %i(create)
-  before_action :check_owner!,  only: %i(update destroy)
   after_action :broadcast_answer, only: [:create]
 
   respond_to :html, :js
 
   def create
+    authorize Answer
     respond_with(@answer = @question.answers.create(answers_params.merge user: current_user))
   end
 
@@ -21,17 +21,14 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @answer.best! if current_user.owner? @answer.question
+    @answer.best!
   end
 
   private
 
-  def check_owner!
-    redirect_to @answer.question unless current_user.owner? @answer
-  end
-
   def load_answer
     @answer = Answer.find(params[:id])
+    authorize @answer
   end
 
   def load_question

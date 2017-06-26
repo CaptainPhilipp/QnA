@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :gon_current_user
 
+  rescue_from Pundit::NotAuthorizedError do
+    redirect_to root_path
+  end
+
   private
 
   def gon_current_user
