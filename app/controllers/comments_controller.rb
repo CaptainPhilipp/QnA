@@ -8,12 +8,7 @@ class CommentsController < ApplicationController
   private
 
   def broadcast_comment
-    return if @comment.errors.any?
-    commentable = @comment.commentable
-    type = commentable.class
-    id   = commentable.id
-    CommentsChannel.broadcast_to "comment/#{type}#{id}",
-      ApplicationController.render(json: @comment)
+    Comments::Broadcaster.new(@comment).call
   end
 
   def comment_params

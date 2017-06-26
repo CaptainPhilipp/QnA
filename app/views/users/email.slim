@@ -1,0 +1,6 @@
+#fill_email
+  p Please enter your email for complete registration
+  = form_tag set_user_email_path, method: :post
+    = label_tag :email
+    = email_field_tag :email
+    = submit_tag

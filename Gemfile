@@ -38,6 +38,9 @@ gem 'jbuilder', '~> 2.5'
 gem 'responders'
 gem 'slim-rails'
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 gem 'twitter-bootstrap-rails'
 gem 'carrierwave'
 gem 'remotipart'
@@ -70,9 +73,12 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-byebug'
+  gem 'letter_opener'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
