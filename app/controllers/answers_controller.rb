@@ -26,12 +26,8 @@ class AnswersController < ApplicationController
     @answer.best!
   end
 
-  rescue_from CanCan::AccessDenied do |exception|
-    respond_to do |format|
-      format.js   { head :unauthorized, content_type: 'text/html' }
-      format.json { head :unauthorized, content_type: 'text/html' }
-      format.html { redirect_to new_user_session_path, notice: exception.message }
-    end
+  rescue_from Pundit::NotAuthorizedError do |e|
+    redirect_to new_user_session_path
   end
 
   private
