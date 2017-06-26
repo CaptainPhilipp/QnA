@@ -2,8 +2,8 @@ class QuestionsController < ApplicationController
   include Rated
   check_authorization
 
-  before_action :load_and_authorize_question, only: %i(show edit update destroy)
-  authorize_resource
+  before_action :load_question, only: %i(show edit update destroy)
+  before_action :authorize_questions, only: %i(index new create)
   after_action :broadcast_question, only: [:create]
 
   respond_to :html, :js
