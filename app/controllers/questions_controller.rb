@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
   include Rated
 
-  skip_before_action :authenticate_user!, only: %i(index show)
   before_action :load_question, only: %i(show edit update destroy)
   before_action :authorize_questions, only: %i(index new create)
   after_action :broadcast_question, only: [:create]

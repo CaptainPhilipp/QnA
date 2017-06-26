@@ -24,6 +24,10 @@ class AnswersController < ApplicationController
     @answer.best!
   end
 
+  rescue_from Pundit::NotAuthorizedError do |e|
+    redirect_to new_user_session_path
+  end
+
   private
 
   def load_answer

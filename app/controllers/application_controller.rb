@@ -3,12 +3,11 @@ include Pundit
 class ApplicationController < ActionController::Base
   include Pundit
   include ApplicationHelper
+  protect_from_forgery with: :exception
 
   self.responder = ApplicationResponder
   respond_to :html
 
-  protect_from_forgery with: :exception
-  before_action :authenticate_user!
   before_action :gon_current_user
 
   rescue_from Pundit::NotAuthorizedError do
