@@ -5,14 +5,16 @@ RSpec.describe Ability do
 
   assign_users
 
-  let(:question) { create :question, user: user }
-  let(:answer)   { create :answer,   user: user }
-  let(:comment)  { create :comment,  user: user }
+  let(:question) { create :question, user: records_owner }
+  let(:answer)   { create :answer,   user: records_owner }
+  let(:comment)  { create :comment,  user: records_owner }
+  let(:records)  { [question, answer, comment] }
+  let(:records_owner) { user }
 
   context 'Guest' do
     let(:user) { nil }
 
-    it { should be_able_to :read, :all }
+    it { should     be_able_to :read, :all }
     it { should_not be_able_to :manage, :all }
   end
 
@@ -22,25 +24,22 @@ RSpec.describe Ability do
     it { should be_able_to [:read, :create], Comment }
   end
 
-  context 'User can manage his records' do
-    it { should be_able_to [:edit, :destroy], question, user_id: user.id }
-    it { should be_able_to [:edit, :destroy], answer,   user_id: user.id }
-    it { should be_able_to [:edit, :destroy], comment,  user_id: user.id }
+  context 'When user is owner of record' do
+    let(:records_owner) { user }
+
+    it { should     be_able_to [:edit, :destroy], question }
+    it { should     be_able_to [:edit, :destroy], answer }
+    it { should     be_able_to [:edit, :destroy], comment }
+    it { should_not be_able_to :vote, records }
   end
 
-  context "User can't manage not his records" do
-    it { should_not be_able_to [:edit, :destroy], question, user_id: other_user.id }
-  end
+  context 'When user is not owner of record' do
+    let(:records_owner) { other_user }
 
-  context "rateable" do
-    let(:rateable) { question }
-
-    it 'User can vote for others records' do
-      should be_able_to(:vote, rateable) { |voteable| voteable.user_id != user.id }
-    end
-
-    it 'User cant vote for his records' do
-      should_not be_able_to(:vote, rateable) { |voteable| voteable.user_id == user.id }
-    end
+    it { should_not be_able_to [:edit, :destroy], question }
+    it { should_not be_able_to [:edit, :destroy], answer }
+    it { should_not be_able_to [:edit, :destroy], comment }
+    it { should     be_able_to :vote, question }
+    it { should     be_able_to :vote, answer }
   end
 end
