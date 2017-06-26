@@ -1,5 +1,5 @@
 module Users
-  class OauthUserPolicy
+  class OauthPolicy
     def initialize(user)
       @user = user
     end

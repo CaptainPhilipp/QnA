@@ -1,5 +1,5 @@
 module Comments
-  class CommentBroadcaster
+  class Broadcaster
     def initialize(comment)
       @comment = comment
     end

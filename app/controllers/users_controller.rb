@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   def email
     @user  = OauthUserService.create_user_with(oauth_id, user_params)
-    policy = OauthUserPolicy.new(@user)
+    policy = Users::OauthPolicy.new(@user)
 
     case
     when policy.just_registered? then when_successful_registered

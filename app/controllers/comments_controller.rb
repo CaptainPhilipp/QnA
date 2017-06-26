@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
   private
 
   def broadcast_comment
-    CommentBroadcaster.new(@comment).call
+    Comments::Broadcaster.new(@comment).call
   end
 
   def comment_params
