@@ -2,7 +2,6 @@ class QuestionsController < ApplicationController
   include Rated
 
   skip_before_action :authenticate_user!, only: %i(index show)
-  authorize_resource
 
   before_action :load_question, only: %i(show edit update destroy)
   before_action :check_owner!,  only: %i(edit update destroy)
