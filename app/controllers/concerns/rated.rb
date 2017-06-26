@@ -2,7 +2,6 @@ module Rated
   extend ActiveSupport::Concern
 
   def vote
-    # authorize! :vote, @rateable_entity
     rateable_entity.vote!(params[:value], current_user)
     render json: rateable_entity.rating
   end

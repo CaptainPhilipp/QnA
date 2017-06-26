@@ -1,24 +1,29 @@
 class QuestionsController < ApplicationController
   include Rated
 
+  authorize_resource except: [:update]
+
   skip_before_action :authenticate_user!, only: %i(index show)
 
   before_action :load_question, only: %i(show edit update destroy)
-  before_action :check_owner!,  only: %i(edit update destroy)
+  before_action :check_owner!,  only: %i(destroy)
   after_action :broadcast_question, only: [:create]
 
   respond_to :html, :js
 
   def index
+    # authorize! :read, Question
     respond_with(@questions = Question.all)
   end
 
   def create
+    # authorize! :create, Question
     respond_with(@question = current_user.questions.create(questions_params))
   end
 
   def show
     @answer = Answer.new
+    # authorize! :show, Question
     respond_with(@question = Question.find(params[:id]))
   end
 
