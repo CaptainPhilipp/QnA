@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   include Rated
 
-  authorize_resource except: [:update]
+  authorize_resource
 
   skip_before_action :authenticate_user!, only: %i(index show)
 
@@ -40,6 +40,10 @@ class QuestionsController < ApplicationController
 
   def destroy
     respond_with @question.destroy
+  end
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to question_path(params[:id])
   end
 
   private
