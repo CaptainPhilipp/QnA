@@ -1,4 +1,4 @@
-class UsersController
+module Users
   class OauthUserPolicy
     def initialize(user)
       @user = user

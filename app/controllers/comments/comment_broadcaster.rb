@@ -1,4 +1,4 @@
-class CommentsController
+module Comments
   class CommentBroadcaster
     def initialize(comment)
       @comment = comment
