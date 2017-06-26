@@ -9,37 +9,32 @@ RSpec.describe AnswerPolicy do
   let(:question) { create :question, user: other_user }
   let(:answer)   { create :answer, user: user, question: question }
 
-  permissions :index? do
-    it { should permit guest,Answer }
-    it { should permit user, Answer }
+  permissions :create?, :new? do
+    it { should_not permit guest, Answer }
+    it { should     permit user,  Answer }
   end
 
-  permissions :create? do
-    it { expect(subject).to_not permit guest, Answer }
-    it { expect(subject).to     permit user, answer }
+  permissions :index?, :show? do
+    it { should     permit guest,      answer }
+    it { should     permit user,       answer }
+    it { should     permit other_user, answer }
   end
 
-  permissions :show? do
-    it { expect(subject).to     permit guest, answer }
-    it { expect(subject).to     permit user, answer }
-    it { expect(subject).to     permit other_user, answer }
-  end
-
-  permissions :update?, :destroy? do
-    it { expect(subject).to_not permit guest, answer }
-    it { expect(subject).to     permit user, answer }
-    it { expect(subject).to_not permit other_user, answer }
+  permissions :update?, :edit?, :destroy? do
+    it { should_not permit guest,      answer }
+    it { should     permit user,       answer }
+    it { should_not permit other_user, answer }
   end
 
   permissions :best? do
-    it { expect(subject).to_not permit guest, answer }
-    it { expect(subject).to_not permit user, answer }
-    it { expect(subject).to     permit other_user, answer }
+    it { should_not permit guest,      answer }
+    it { should_not permit user,       answer }
+    it { should     permit other_user, answer }
   end
 
   permissions :vote? do
-    it { expect(subject).to_not permit guest, answer }
-    it { expect(subject).to_not permit user, answer }
-    it { expect(subject).to     permit other_user, answer }
+    it { should_not permit guest,      answer }
+    it { should_not permit user,       answer }
+    it { should     permit other_user, answer }
   end
 end
