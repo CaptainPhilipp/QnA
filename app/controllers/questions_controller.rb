@@ -1,9 +1,9 @@
 class QuestionsController < ApplicationController
   include Rated
 
-  before_action :load_question, only: %i(show edit update destroy)
   before_action :authorize_questions, only: %i(index new create)
-  after_action :broadcast_question, only: [:create]
+  before_action :load_and_authorize_question, only: %i(show edit update destroy)
+  after_action  :broadcast_question, only: %i(create)
 
   respond_to :html, :js
 
@@ -45,9 +45,8 @@ class QuestionsController < ApplicationController
     authorize Question
   end
 
-  def load_question
-    @question = Question.find(params[:id])
-    authorize @question
+  def load_and_authorize_question
+    authorize @question = Question.find(params[:id])
   end
 
   def broadcast_question
