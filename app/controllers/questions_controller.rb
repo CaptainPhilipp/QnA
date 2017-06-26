@@ -36,6 +36,7 @@ class QuestionsController < ApplicationController
     respond_with @question.destroy
   end
 
+  rescue_from Pundit::NotAuthorizedError do |exception|
   rescue_from Pundit::NotAuthorizedError do |e|
     respond_to do |format|
       format.js   { self.status = :unauthorized }
