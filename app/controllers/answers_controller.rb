@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   include Rated
 
+  authorize_resource
   before_action :load_answer,   only: %i(update destroy best)
   before_action :load_question, only: %i(create)
   before_action :check_owner!,  only: %i(update destroy)

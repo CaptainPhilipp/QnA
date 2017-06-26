@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 
   check_authorization
-  authorize_resource
 
   before_action :gon_current_user
 

@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  authorize_resource
   after_action :broadcast_comment, only: [:create]
 
   def create
