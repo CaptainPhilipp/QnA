@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   include Rated
   check_authorization
 
-  before_action :load_question, only: %i(show edit update destroy)
+  before_action :load_and_authorize_question, only: %i(show edit update destroy)
   authorize_resource
   after_action :broadcast_question, only: [:create]
 
@@ -36,7 +36,7 @@ class QuestionsController < ApplicationController
     respond_with @question.destroy
   end
 
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|
       format.js   { head :forbidden, content_type: 'text/html' }
       format.json { head :forbidden, content_type: 'text/html' }
@@ -48,8 +48,12 @@ class QuestionsController < ApplicationController
 
   private
 
-  def load_question
-    @question = Question.find(params[:id])
+  def authorize_questions
+    authorize Question
+  end
+
+  def load_and_authorize_question
+    authorize @question = Question.find(params[:id])
   end
 
   def broadcast_question
