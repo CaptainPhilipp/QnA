@@ -48,6 +48,7 @@ gem 'cocoon'
 gem 'with_model'
 gem 'skim'
 gem 'gon'
+gem 'pundit'
 
 group :test do
   gem 'shoulda-matchers'
