@@ -10,6 +10,8 @@ module Rated
 
   def rateable_entity
     @rateable_entity ||= model_klass.find(params[:id])
+    authorize @rateable_entity
+    @rateable_entity
   end
 
   def model_klass
