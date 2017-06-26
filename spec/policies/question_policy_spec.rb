@@ -1,28 +1,46 @@
 require 'rails_helper'
 
 RSpec.describe QuestionPolicy do
+  subject { described_class.new(user, record) }
 
-  let(:user) { User.new }
+  assign_users
 
-  subject { described_class }
+  context 'For guest' do
+    let(:user) { nil }
+    let(:record) { create :question, user: other_user }
 
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
+    it { should allow :index }
+    it { should allow :show }
+    it { should_not allow :new }
+    it { should_not allow :create }
+    it { should_not allow :edit }
+    it { should_not allow :update }
+    it { should_not allow :destroy }
   end
 
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
+  context 'For any user' do
+    let(:record) { create :question, user: other_user }
+
+    it { should allow :index }
+    it { should allow :show }
+    it { should allow :new }
+    it { should allow :create }
+    it { should_not allow :edit }
+    it { should_not allow :update }
+    it { should_not allow :destroy }
+    it { should allow :vote }
   end
 
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  context 'For owner' do
+    let(:record) { create :question, user: user }
 
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
+    it { should allow :index }
+    it { should allow :show }
+    it { should allow :new }
+    it { should allow :create }
+    it { should allow :edit }
+    it { should allow :update }
+    it { should allow :destroy }
+    it { should_not allow :vote }
   end
 end
