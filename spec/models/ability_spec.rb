@@ -29,7 +29,6 @@ RSpec.describe Ability do
   end
 
   context "User can't manage not his records" do
-    # Не понимаю что творится с проверкой id. Судя по результатам, объект всегда отличается
     it { should_not be_able_to [:edit, :destroy], question, user_id: other_user.id }
   end
 
@@ -37,7 +36,6 @@ RSpec.describe Ability do
     let(:rateable) { question }
 
     it 'User can vote for others records' do
-      # Тут то-же самое (32 строка)
       should be_able_to(:vote, rateable) { |voteable| voteable.user_id != user.id }
     end
 
