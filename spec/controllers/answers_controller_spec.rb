@@ -45,9 +45,9 @@ RSpec.describe AnswersController, type: :controller do
 
     context "when user isn't signed in" do
       context 'with ajax request' do
-        it 'should respond_with 302' do
+        it 'should respond_with 401' do
           send_ajax_request
-          should respond_with 302
+          should respond_with 401
         end
       end
 
