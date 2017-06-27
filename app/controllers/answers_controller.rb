@@ -55,8 +55,6 @@ class AnswersController < ApplicationController
 
   def user_not_authorized
     respond_to do |format|
-      format.js   { head :unauthorized, content_type: 'text/html' }
-      format.json { head :unauthorized, content_type: 'text/html' }
       format.html do
         redirect_to (current_user ? users_path : new_user_session_path),
           notice: exception.message
