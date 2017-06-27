@@ -7,8 +7,6 @@ class AnswersController < ApplicationController
   after_action :broadcast_answer, only: [:create]
   after_action :verify_authorized
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-
   respond_to :html, :js
 
   def create
@@ -51,11 +49,12 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
   end
 
-  def user_not_authorized
+  def user_not_authorized(exception)
     respond_to do |format|
+      format.js   { head :unauthorized }
+      format.json { head :unauthorized }
       format.html do
-        redirect_to (current_user ? users_path : new_user_session_path),
-          notice: exception.message
+        redirect_to current_user ? users_path : new_user_session_path, notice: exception
       end
     end
   end

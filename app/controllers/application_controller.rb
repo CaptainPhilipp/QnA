@@ -8,11 +8,12 @@ class ApplicationController < ActionController::Base
   respond_to :html, :js, :json
 
   before_action :gon_current_user
+
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   private
 
-  def user_not_authorized
+  def user_not_authorized(exception)
     respond_to do |format|
       format.js   { head :unauthorized }
       format.json { head :unauthorized }
