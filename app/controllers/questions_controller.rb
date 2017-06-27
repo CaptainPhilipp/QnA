@@ -37,7 +37,11 @@ class QuestionsController < ApplicationController
   end
 
   rescue_from Pundit::NotAuthorizedError do |e|
-    redirect_to question_path(params[:id])
+    respond_to do |format|
+      format.js   { self.status = :unauthorized }
+      format.json { self.status = :unauthorized }
+      format.html { redirect_to question_path(params[:id]) }
+    end
   end
 
   private

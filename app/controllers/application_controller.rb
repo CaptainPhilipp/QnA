@@ -5,17 +5,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   self.responder = ApplicationResponder
-  respond_to :html
+  respond_to :html, :js, :json
 
   before_action :gon_current_user
 
-  # check_authorization
-
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from Pundit::NotAuthorizedError do
     respond_to do |format|
-      format.js   { head :unauthorized, content_type: 'text/html' }
-      format.json { head :unauthorized, content_type: 'text/html' }
-      format.html { redirect_to root_url, notice: exception.message }
+      format.js   { self.status = :unauthorized }
+      format.json { self.status = :unauthorized }
+      format.html { redirect_to root_path }
     end
   end
 
