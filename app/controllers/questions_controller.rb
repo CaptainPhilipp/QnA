@@ -4,6 +4,9 @@ class QuestionsController < ApplicationController
   before_action :authorize_questions, only: %i(index new create)
   before_action :load_and_authorize_question, only: %i(show edit update destroy)
   after_action  :broadcast_question, only: %i(create)
+  after_action :verify_authorized
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   respond_to :html, :js
 
@@ -35,15 +38,6 @@ class QuestionsController < ApplicationController
     respond_with @question.destroy
   end
 
-  rescue_from Pundit::NotAuthorizedError do |exception|
-  rescue_from Pundit::NotAuthorizedError do |e|
-    respond_to do |format|
-      format.js   { self.status = :unauthorized }
-      format.json { self.status = :unauthorized }
-      format.html { redirect_to question_path(params[:id]) }
-    end
-  end
-
   private
 
   def authorize_questions
@@ -61,5 +55,15 @@ class QuestionsController < ApplicationController
 
   def questions_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
+  end
+
+  def user_not_authorized
+    respond_to do |format|
+      format.js   { head :forbidden, content_type: 'text/html' }
+      format.json { head :forbidden, content_type: 'text/html' }
+      format.html do
+        redirect_to params[:id] ? question_url(params[:id]) : questions_url
+      end
+    end
   end
 end
