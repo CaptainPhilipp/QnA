@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   include Rated
+  check_authorization
 
   before_action :load_question, only: %i(show edit update destroy)
   authorize_resource

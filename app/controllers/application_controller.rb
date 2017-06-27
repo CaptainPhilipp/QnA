@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_action :gon_current_user
 
-  check_authorization
+  # check_authorization
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
