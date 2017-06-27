@@ -1,16 +1,16 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :not_change_fields do |entity, *messages|
-    old_values = messages.map { |message| entity.send message }
+RSpec::Matchers.define :change_results do |entity, any: nil, all: nil|
+    match do |block|
+      raise ArgumentError, '`all: []` OR `any: []` required' if all && any || !all && !any
+      check, *methods = all ? [:all?, *all] : [:any?, *any]
 
-    match do |actual|
-      actual.call
-      entity.reload
-      messages.zip(old_values).all? do |pair|
-        new_value = entity.send(pair.first)
-        old_value = pair.last
+      old_results = methods.map { |method| entity.send method }
+      block.call
+      entity.try :reload
 
-        new_value == old_value
+      methods.zip(old_results).to_h.send(check) do |method, old_result|
+        old_result != entity.send(method)
       end
     end
 
@@ -18,14 +18,11 @@ RSpec::Matchers.define :not_change_fields do |entity, *messages|
 end
 
 RSpec::Matchers.define :allow do |*actions|
-
   match do |policy|
     @failed_actions = []
-
     actions.each do |action|
       failed_actions << action unless policy.public_send("#{action}?")
     end
-
     failed_actions.empty?
   end
 
@@ -45,7 +42,6 @@ RSpec::Matchers.define :allow do |*actions|
     failed_actions.map! do |action|
       "#{policy.class} does not #{text} #{action} on #{policy.record} for #{policy.user.inspect}."
     end
-
     failed_actions * "\n"
   end
 end
