@@ -5,6 +5,9 @@ class AnswersController < ApplicationController
   before_action :load_and_authorize_answer, only: %i(update destroy best)
   before_action :load_question, only: %i(create)
   after_action :broadcast_answer, only: [:create]
+  after_action :verify_authorized
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   respond_to :html, :js
 
@@ -22,17 +25,6 @@ class AnswersController < ApplicationController
 
   def best
     @answer.best!
-  end
-
-  rescue_from Pundit::NotAuthorizedError do |exception|
-    respond_to do |format|
-      format.js   { head :unauthorized, content_type: 'text/html' }
-      format.json { head :unauthorized, content_type: 'text/html' }
-      format.html do
-        redirect_to (current_user ? users_path : new_user_session_path),
-          notice: exception.message
-      end
-    end
   end
 
   private
@@ -57,5 +49,16 @@ class AnswersController < ApplicationController
 
   def answers_params
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
+  end
+
+  def user_not_authorized
+    respond_to do |format|
+      format.js   { head :unauthorized, content_type: 'text/html' }
+      format.json { head :unauthorized, content_type: 'text/html' }
+      format.html do
+        redirect_to (current_user ? users_path : new_user_session_path),
+          notice: exception.message
+      end
+    end
   end
 end

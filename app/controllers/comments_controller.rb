@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   after_action :broadcast_comment, only: [:create]
+  after_action :verify_authorized
 
   def create
     authorize Comment
