@@ -1,11 +1,11 @@
 div id="rateable_#{entity.id}"  
   .rating class="#{'rated' if entity_rated? entity}"
-    - unless current_user_owns? entity
+    - if policy(entity).vote? || current_user.nil?
       .change_rate.rate-up
         = vote_link_for entity, '1', glyph('chevron-up')
     .score
       = entity.rating
-    - unless current_user_owns? entity  
+    - if policy(entity).vote? || current_user.nil?
       .cancel_voice style="display: none"
         = vote_link_for entity, '0', glyph('retweet')
       .change_rate.rate-down
