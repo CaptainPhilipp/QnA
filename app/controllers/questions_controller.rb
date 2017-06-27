@@ -4,8 +4,7 @@ class QuestionsController < ApplicationController
   before_action :authorize_questions, only: %i(index new create)
   before_action :load_and_authorize_question, only: %i(show edit update destroy)
   after_action  :broadcast_question, only: %i(create)
-  after_action :verify_authorized
-
+  after_action  :verify_authorized
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   respond_to :html, :js
@@ -59,8 +58,6 @@ class QuestionsController < ApplicationController
 
   def user_not_authorized
     respond_to do |format|
-      format.js   { head :forbidden, content_type: 'text/html' }
-      format.json { head :forbidden, content_type: 'text/html' }
       format.html do
         redirect_to params[:id] ? question_url(params[:id]) : questions_url
       end
