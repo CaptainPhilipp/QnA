@@ -17,16 +17,35 @@ RSpec::Matchers.define :not_change_fields do |entity, *messages|
     supports_block_expectations
 end
 
-RSpec::Matchers.define :allow do |action|
+RSpec::Matchers.define :allow do |*actions|
+
   match do |policy|
-    policy.public_send("#{action}?")
+    @failed_actions = []
+
+    actions.each do |action|
+      failed_actions << action unless policy.public_send("#{action}?")
+    end
+
+    failed_actions.empty?
   end
 
-  failure_message_for_should do |policy|
-    "#{policy.class} does not permit #{action} on #{policy.record} for #{policy.user.inspect}."
+  failure_message do |policy|
+    error_messages_for('permit', policy)
   end
 
-  failure_message_for_should_not do |policy|
-    "#{policy.class} does not forbid #{action} on #{policy.record} for #{policy.user.inspect}."
+  failure_message_when_negated do |policy|
+    error_messages_for('forbid', policy)
+  end
+
+  private
+
+  attr_reader :failed_actions
+
+  def error_messages_for(text, policy)
+    failed_actions.map! do |action|
+      "#{policy.class} does not #{text} #{action} on #{policy.record} for #{policy.user.inspect}."
+    end
+
+    failed_actions * "\n"
   end
 end
