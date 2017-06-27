@@ -1,6 +1,5 @@
 class QuestionsController < ApplicationController
   include Rated
-  check_authorization
 
   before_action :authorize_questions, only: %i(index new create)
   before_action :load_and_authorize_question, only: %i(show edit update destroy)

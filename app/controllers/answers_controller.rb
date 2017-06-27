@@ -24,7 +24,7 @@ class AnswersController < ApplicationController
     @answer.best!
   end
 
-  rescue_from Pundit::NotAuthorizedError do |e|
+  rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|
       format.js   { head :unauthorized, content_type: 'text/html' }
       format.json { head :unauthorized, content_type: 'text/html' }
