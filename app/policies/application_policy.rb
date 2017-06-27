@@ -23,7 +23,7 @@ class ApplicationPolicy
   end
 
   def update?
-    user && record.user_id == user.id
+    user_owns_entity?
   end
 
   def edit?
@@ -31,7 +31,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    user && record.user_id == user.id
+    user_owns_entity?
   end
 
   def scope
@@ -49,5 +49,11 @@ class ApplicationPolicy
     def resolve
       scope
     end
+  end
+
+  protected
+
+  def user_owns_entity?
+    user && record.user_id == user.id
   end
 end
