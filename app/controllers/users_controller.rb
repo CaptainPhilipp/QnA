@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i(email)
-
   def email
     @user  = OauthUserService.create_user_with(oauth_id, user_params)
     policy = Users::OauthPolicy.new(@user)

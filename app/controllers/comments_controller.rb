@@ -1,5 +1,8 @@
 class CommentsController < ApplicationController
   after_action :broadcast_comment, only: [:create]
+  check_authorization
+
+  authorize_resource
 
   def create
     @comment = Comment.create(comment_params.merge user_id: current_user.id)

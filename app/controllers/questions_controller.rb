@@ -1,9 +1,9 @@
 class QuestionsController < ApplicationController
   include Rated
+  check_authorization
 
-  skip_before_action :authenticate_user!, only: %i(index show)
   before_action :load_question, only: %i(show edit update destroy)
-  before_action :check_owner!,  only: %i(edit update destroy)
+  authorize_resource
   after_action :broadcast_question, only: [:create]
 
   respond_to :html, :js
@@ -36,14 +36,20 @@ class QuestionsController < ApplicationController
     respond_with @question.destroy
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.js   { head :forbidden, content_type: 'text/html' }
+      format.json { head :forbidden, content_type: 'text/html' }
+      format.html do
+        redirect_to params[:id] ? question_url(params[:id]) : questions_url
+      end
+    end
+  end
+
   private
 
   def load_question
     @question = Question.find(params[:id])
-  end
-
-  def check_owner!
-    redirect_to @question unless current_user.owner? @question
   end
 
   def broadcast_question

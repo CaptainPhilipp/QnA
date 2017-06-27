@@ -36,7 +36,7 @@ feature 'Create question', '
     scenario "user can't ask a question" do
       visit new_question_path
       expect(page).to_not have_selector 'form#new_question'
-      expect(page).to     have_content 'Log in'
+      expect(page).to     have_content  'Войти'
     end
   end
 
