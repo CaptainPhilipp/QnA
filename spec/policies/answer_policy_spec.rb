@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe AnswerPolicy do
-
-  let(:user) { User.new }
-
   subject { described_class }
+
+  assign_users
+  let(:guest) { nil }
+
+  let(:question) { create :question, user: other_user }
+  let(:answer)   { create :answer, user: user, question: question }
 
   permissions :create?, :new? do
     it { should_not permit guest, Answer }

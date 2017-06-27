@@ -11,6 +11,14 @@ class ApplicationController < ActionController::Base
 
   before_action :gon_current_user
 
+  rescue_from Pundit::NotAuthorizedError do
+    respond_to do |format|
+      format.js   { self.status = :unauthorized }
+      format.json { self.status = :unauthorized }
+      format.html { redirect_to root_path }
+    end
+  end
+
   private
 
   def user_not_authorized

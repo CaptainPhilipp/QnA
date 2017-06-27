@@ -4,7 +4,6 @@ class AnswersController < ApplicationController
   before_action :authorize_answers, only: %i(create)
   before_action :load_and_authorize_answer, only: %i(update destroy best)
   before_action :load_question, only: %i(create)
-  authorize_resource
   after_action :broadcast_answer, only: [:create]
 
   respond_to :html, :js
@@ -22,7 +21,6 @@ class AnswersController < ApplicationController
   end
 
   def best
-    authorize! :best, @answer
     @answer.best!
   end
 
