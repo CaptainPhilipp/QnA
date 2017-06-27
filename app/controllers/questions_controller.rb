@@ -1,10 +1,10 @@
 class QuestionsController < ApplicationController
   include Rated
-  check_authorization
 
-  before_action :load_question, only: %i(show edit update destroy)
-  authorize_resource
-  after_action :broadcast_question, only: [:create]
+  before_action :authorize_questions, only: %i(index new create)
+  before_action :load_and_authorize_question, only: %i(show edit update destroy)
+  after_action  :broadcast_question, only: %i(create)
+  after_action  :verify_authorized
 
   respond_to :html, :js
 
@@ -36,20 +36,14 @@ class QuestionsController < ApplicationController
     respond_with @question.destroy
   end
 
-  rescue_from CanCan::AccessDenied do |exception|
-    respond_to do |format|
-      format.js   { head :forbidden, content_type: 'text/html' }
-      format.json { head :forbidden, content_type: 'text/html' }
-      format.html do
-        redirect_to params[:id] ? question_url(params[:id]) : questions_url
-      end
-    end
-  end
-
   private
 
-  def load_question
-    @question = Question.find(params[:id])
+  def authorize_questions
+    authorize Question
+  end
+
+  def load_and_authorize_question
+    authorize @question = Question.find(params[:id])
   end
 
   def broadcast_question
@@ -59,5 +53,13 @@ class QuestionsController < ApplicationController
 
   def questions_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
+  end
+
+  def unauthorized_respond_to(format, exception)
+    format.html do
+      redirect_to params[:id] ? question_url(params[:id]) : questions_url, notice: exception
+    end
+
+    super
   end
 end

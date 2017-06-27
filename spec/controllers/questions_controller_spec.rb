@@ -135,7 +135,7 @@ RSpec.describe QuestionsController, type: :controller do
         let(:new_attributes) { attributes_for(:invalid_question) }
 
         it 'not changes question attributes' do
-          expect { send_request }.to not_change_fields(question, :title, :body)
+          expect { send_request }.to_not change_results(question, any: [:title, :body])
         end
 
         it 'redirects to the updated question' do

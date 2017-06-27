@@ -1,25 +1,27 @@
 require "application_responder"
-
 class ApplicationController < ActionController::Base
+  include Pundit
   include ApplicationHelper
   protect_from_forgery with: :exception
 
   self.responder = ApplicationResponder
-  respond_to :html
+  respond_to :html, :js, :json
 
   before_action :gon_current_user
 
-  # check_authorization
-
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|
-      format.js   { head :unauthorized, content_type: 'text/html' }
-      format.json { head :unauthorized, content_type: 'text/html' }
-      format.html { redirect_to root_url, notice: exception.message }
+      unauthorized_respond_to(format, exception)
     end
   end
 
   private
+
+  def unauthorized_respond_to(format, exception)
+    format.js   { head :unauthorized }
+    format.json { head :unauthorized }
+    format.html { redirect_to root_url, notice: exception.message }
+  end
 
   def gon_current_user
     gon.current_user_id = current_user.id if current_user

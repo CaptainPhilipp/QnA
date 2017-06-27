@@ -1,11 +1,11 @@
 class AnswersController < ApplicationController
   include Rated
-  check_authorization
 
-  before_action :load_answer,   only: %i(update destroy best)
+  before_action :authorize_answers, only: %i(create)
+  before_action :load_and_authorize_answer, only: %i(update destroy best)
   before_action :load_question, only: %i(create)
-  authorize_resource
   after_action :broadcast_answer, only: [:create]
+  after_action :verify_authorized
 
   respond_to :html, :js
 
@@ -22,22 +22,17 @@ class AnswersController < ApplicationController
   end
 
   def best
-    authorize! :best, @answer
     @answer.best!
-  end
-
-  rescue_from CanCan::AccessDenied do |exception|
-    respond_to do |format|
-      format.js   { head :unauthorized, content_type: 'text/html' }
-      format.json { head :unauthorized, content_type: 'text/html' }
-      format.html { redirect_to new_user_session_path, notice: exception.message }
-    end
   end
 
   private
 
-  def load_answer
-    @answer = Answer.find(params[:id])
+  def authorize_answers
+    authorize Answer
+  end
+
+  def load_and_authorize_answer
+    authorize @answer = Answer.find(params[:id])
   end
 
   def load_question
@@ -52,5 +47,13 @@ class AnswersController < ApplicationController
 
   def answers_params
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
+  end
+
+  def unauthorized_respond_to(format, exception)
+    format.html do
+      redirect_to current_user ? users_path : new_user_session_path, notice: exception
+    end
+
+    super
   end
 end
