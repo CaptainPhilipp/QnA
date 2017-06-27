@@ -1,6 +1,5 @@
 class AnswersController < ApplicationController
   include Rated
-  check_authorization
 
   before_action :authorize_answers, only: %i(create)
   before_action :load_and_authorize_answer, only: %i(update destroy best)
@@ -29,9 +28,12 @@ class AnswersController < ApplicationController
 
   rescue_from Pundit::NotAuthorizedError do |e|
     respond_to do |format|
-      format.js   { self.status = :unauthorized }
-      format.json { self.status = :unauthorized }
-      format.html { redirect_to new_user_session_path }
+      format.js   { head :unauthorized, content_type: 'text/html' }
+      format.json { head :unauthorized, content_type: 'text/html' }
+      format.html do
+        redirect_to (current_user ? users_path : new_user_session_path),
+          notice: exception.message
+      end
     end
   end
 
