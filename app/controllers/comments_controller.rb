@@ -3,8 +3,7 @@ class CommentsController < ApplicationController
   after_action :verify_authorized
 
   def create
-    authorize Comment
-    @comment = Comment.create(comment_params.merge user_id: current_user.id)
+    authorize @comment = Comment.create(comment_params.merge user_id: current_user.id)
   end
 
   private

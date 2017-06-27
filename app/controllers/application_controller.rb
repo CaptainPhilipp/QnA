@@ -9,16 +9,18 @@ class ApplicationController < ActionController::Base
 
   before_action :gon_current_user
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    respond_to do |format|
+      unauthorized_respond_to(format, exception)
+    end
+  end
 
   private
 
-  def user_not_authorized(exception)
-    respond_to do |format|
-      format.js   { head :unauthorized }
-      format.json { head :unauthorized }
-      format.html { redirect_to root_url, notice: exception.message }
-    end
+  def unauthorized_respond_to(format, exception)
+    format.js   { head :unauthorized }
+    format.json { head :unauthorized }
+    format.html { redirect_to root_url, notice: exception.message }
   end
 
   def gon_current_user

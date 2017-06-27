@@ -49,13 +49,11 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
   end
 
-  def user_not_authorized(exception)
-    respond_to do |format|
-      format.js   { head :unauthorized }
-      format.json { head :unauthorized }
-      format.html do
-        redirect_to current_user ? users_path : new_user_session_path, notice: exception
-      end
+  def unauthorized_respond_to(format, exception)
+    format.html do
+      redirect_to current_user ? users_path : new_user_session_path, notice: exception
     end
+
+    super
   end
 end
