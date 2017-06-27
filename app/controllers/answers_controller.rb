@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
 
   before_action :load_answer,   only: %i(update destroy best)
   before_action :load_question, only: %i(create)
-  before_action :check_owner!,  only: %i(update destroy)
+  authorize_resource
   after_action :broadcast_answer, only: [:create]
 
   respond_to :html, :js
@@ -21,14 +21,19 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @answer.best! if current_user.owner? @answer.question
+    authorize! :best, @answer
+    @answer.best!
+  end
+
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.js   { head :unauthorized, content_type: 'text/html' }
+      format.json { head :unauthorized, content_type: 'text/html' }
+      format.html { redirect_to new_user_session_path, notice: exception.message }
+    end
   end
 
   private
-
-  def check_owner!
-    redirect_to @answer.question unless current_user.owner? @answer
-  end
 
   def load_answer
     @answer = Answer.find(params[:id])

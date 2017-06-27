@@ -8,10 +8,11 @@ class Ability
 
     if user.persisted?
       can :create, managable_models
-      can [:edit, :destroy], managable_models, user_id: user.id
-      can :vote, [Question, Answer] do |rateable|
-        rateable.user_id != user.id
+      can [:update, :destroy], managable_models, user_id: user.id
+      can :vote, [Question, Answer] do |record|
+        record.user_id != user.id
       end
+      can :best, Answer, question: { user_id: user.id }
     end
   end
 
