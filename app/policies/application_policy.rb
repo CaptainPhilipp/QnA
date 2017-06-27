@@ -6,33 +6,13 @@ class ApplicationPolicy
     @record = record
   end
 
-  def index?
-    true
-  end
-
-  def show?
-    true
-  end
-
-  def create?
-    user && user.confirmed?
-  end
-
-  def new?
-    create?
-  end
-
-  def update?
-    user_owns_entity?
-  end
-
-  def edit?
-    update?
-  end
-
-  def destroy?
-    user_owns_entity?
-  end
+  def index?    ; true                end
+  def show?     ; true                end
+  def create?   ; user_confirmed?     end
+  def new?      ; create?             end
+  def update?   ; user_owns_entity?   end
+  def edit?     ; update?             end
+  def destroy?  ; user_owns_entity?   end
 
   def scope
     Pundit.policy_scope!(user, record.class)
@@ -55,5 +35,9 @@ class ApplicationPolicy
 
   def user_owns_entity?
     user && record.user_id == user.id
+  end
+  
+  def user_confirmed?
+    user && user.confirmed?
   end
 end
