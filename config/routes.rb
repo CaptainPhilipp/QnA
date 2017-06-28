@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'users/email'
+  use_doorkeeper
 
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 

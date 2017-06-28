@@ -49,6 +49,8 @@ gem 'with_model'
 gem 'skim'
 gem 'gon'
 gem 'pundit'
+gem 'doorkeeper'
+gem 'json_spec'
 
 group :test do
   gem 'shoulda-matchers'
