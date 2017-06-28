@@ -6,7 +6,7 @@ module Api
       respond_with current_resource_owner
     end
 
-    def users
+    def index
       respond_with other_users_list
     end
 

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::ProfilesController, type: :controller do
   describe 'Profile API' do
     context 'Unauthorized' do
-      %i(me users).each do |action|
+      %i(me index).each do |action|
         describe "GET /#{action}" do
           it 'returns 401 if have no access_token' do
             get action, format: :json
@@ -48,7 +48,7 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
         let!(:other_users) { create_list :user, 3 }
 
         before do
-          get :users, params: { access_token: access_token }, format: :json
+          get :index, params: { access_token: access_token }, format: :json
         end
 
         it { expect(response).to be_success }
