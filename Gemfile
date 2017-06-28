@@ -50,7 +50,6 @@ gem 'skim'
 gem 'gon'
 gem 'pundit'
 gem 'doorkeeper'
-gem 'json_spec'
 
 group :test do
   gem 'shoulda-matchers'
@@ -59,6 +58,7 @@ group :test do
   gem 'launchy'
   gem 'poltergeist'
   gem 'database_cleaner'
+  gem 'json_spec'
 end
 
 group :development, :test do
