@@ -23,10 +23,9 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
     end
 
     context 'Authorized' do
+      let(:user) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
       describe 'GET /me' do
-        let(:user) { create(:user) }
-        let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
-
         before do
           get :me, params: { access_token: access_token }, format: :json
         end
@@ -43,6 +42,24 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
           it "does not contains #{field}" do
             expect(response.body).to_not have_json_path(field)
           end
+        end
+      end
+
+      describe 'GET /users' do
+        let!(:other_users) { create_list :user, 7 }
+
+        before do
+          get :users, params: { access_token: access_token }, format: :json
+        end
+
+        it { expect(response).to be_success }
+
+        it 'contains users list with right length' do
+          expect(response.body).to have_json_size(other_users.size)
+        end
+
+        it 'does not contains current resource owner' do
+          expect(response.body).to_not include_json(user.to_json)
         end
       end
     end
