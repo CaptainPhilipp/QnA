@@ -61,6 +61,18 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
         it 'does not contains current resource owner' do
           expect(response.body).to_not include_json(user.to_json)
         end
+
+        %w(id email created_at updated_at).each do |field|
+          it "records contains #{field}" do
+            expect(response.body).to have_json_path("0/#{field}")
+          end
+        end
+
+        %w(password password_confirmation).each do |field|
+          it "records does not contains #{field}" do
+            expect(response.body).to_not have_json_path("0/#{field}")
+          end
+        end
       end
     end
   end
