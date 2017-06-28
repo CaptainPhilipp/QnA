@@ -3,8 +3,6 @@ require 'rails_helper'
 RSpec.describe Api::V1::ProfilesController, type: :controller do
   describe 'Profile API' do
     context 'Unauthorized' do
-      let(:controller) { 'api/v1/profiles' }
-
       %i(me users).each do |action|
         describe "GET /#{action}" do
           it 'returns 401 if have no access_token' do
@@ -23,7 +21,8 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
     end
 
     context 'Authorized' do
-      let(:user) { create(:user) }
+      assign_user
+
       let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
       describe 'GET /me' do
         before do
@@ -46,7 +45,7 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
       end
 
       describe 'GET /users' do
-        let!(:other_users) { create_list :user, 7 }
+        let!(:other_users) { create_list :user, 3 }
 
         before do
           get :users, params: { access_token: access_token }, format: :json
@@ -70,7 +69,9 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
 
         %w(password password_confirmation).each do |field|
           it "records does not contains #{field}" do
-            expect(response.body).to_not have_json_path("0/#{field}")
+            other_users.size.times do |i|
+              expect(response.body).to_not have_json_path("#{i}/#{field}")
+            end
           end
         end
       end
