@@ -1,7 +1,5 @@
-module Api
-  class V1::ProfilesController < ApplicationController
-    before_action :doorkeeper_authorize!
-
+module Api::V1
+  class ProfilesController < BaseController
     def me
       respond_with current_resource_owner
     end
@@ -11,11 +9,6 @@ module Api
     end
 
     private
-
-    def current_resource_owner
-      return if doorkeeper_token.nil?
-      @current_resource_owner ||= User.find(doorkeeper_token.resource_owner_id)
-    end
 
     def other_users_list
       return if current_resource_owner.nil?
