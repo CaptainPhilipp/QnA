@@ -49,6 +49,7 @@ gem 'with_model'
 gem 'skim'
 gem 'gon'
 gem 'pundit'
+gem 'doorkeeper'
 
 group :test do
   gem 'shoulda-matchers'
@@ -57,6 +58,7 @@ group :test do
   gem 'launchy'
   gem 'poltergeist'
   gem 'database_cleaner'
+  gem 'json_spec'
 end
 
 group :development, :test do

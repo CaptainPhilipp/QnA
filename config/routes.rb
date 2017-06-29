@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'users/email'
+  use_doorkeeper
 
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
@@ -23,6 +23,14 @@ Rails.application.routes.draw do
       } do
           patch :best, on: :member
         end
+  end
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: [:index] do
+        get :me, on: :collection
+      end
+    end
   end
 
   root 'questions#index'
