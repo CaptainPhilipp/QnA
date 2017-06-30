@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::QuestionsController, type: :controller do
   let(:questions) { create_list :question, 3 }
-  let!(:question) { questions.first }
-  let!(:answers)  { create_list :answer, 3, question: question }
+  let(:question)  { questions.first }
+  let!(:answers)      { create_list :answer, 3, question: question }
+  let!(:comments)     { create_list :comment, 3, commentable: question }
 
   describe 'Questions API' do
     context 'Unauthorized' do
@@ -27,7 +28,6 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
     end
 
     context 'Authorized' do
-
       assign_user
       let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
 
@@ -44,8 +44,10 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
           end
         end
 
-        it 'should contains answers' do
-          expect(response.body).to_not have_json_path('0/answers')
+        %w(answers comments attachments).each do |association|
+          it "should not contain #{association}" do
+            expect(response.body).to_not have_json_path("0/association")
+          end
         end
       end
 
@@ -58,9 +60,13 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
           end
         end
 
-        it 'should contains answers' do
-          expect(response.body).to have_json_size(3).at_path('answers')
+        %w(answers comments attachments).each do |association|
+          it "should contains #{association}" do
+            expect(response.body).to have_json_size(3).at_path(association)
+          end
         end
+
+        it 'should have data in associated collections'
       end
     end
   end
