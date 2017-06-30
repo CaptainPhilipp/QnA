@@ -1,15 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::QuestionsController, type: :controller do
-  let(:questions) { create_list :question, 3 }
-  let(:question)  { questions.first }
-  let!(:answers)      { create_list :answer, 3, question: question }
-  let!(:comments)     { create_list :comment, 3, commentable: question }
-  # let!(:attachments)  { create_list :attachment, 3, attacheble: question }
-
+RSpec.describe Api::V1::AnswersController, type: :controller do
   describe 'Questions API' do
     context 'Unauthorized' do
-      %i(index show create).each do |action|
+      %i(show create).each do |action|
         describe "GET /#{action}" do
           let!(:question) { create :question }
 
