@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   end
 
   concern :commentable do
-    resources :comments, only: [:create]
+    resources :comments, only: %i(create)
   end
 
   resources :questions, concerns: %i(rateable commentable) do
@@ -27,7 +27,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :profiles, only: [:index] do
+      resources :questions, only: %i(show index)
+      resources :profiles, only: %i(index) do
         get :me, on: :collection
       end
     end

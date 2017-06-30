@@ -24,6 +24,7 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
       assign_user
 
       let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
+
       describe 'GET /me' do
         before do
           get :me, params: { access_token: access_token }, format: :json
