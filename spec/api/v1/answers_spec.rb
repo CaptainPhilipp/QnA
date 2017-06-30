@@ -34,8 +34,8 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
       let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
 
       describe 'GET /show' do
-        let!(:comments)  { create_list :comment, 3, commentable: answer }
-        # let!(:attachments)  { create_list :attachment, 3, attacheble: answer }
+        let!(:comments)    { create_list :comment, 3, commentable: answer }
+        # let!(:attachments) { create_list :attachment, 3, attachable: answer }
 
         before { get :show, params: { id: answer.id, access_token: access_token }, format: :json }
 
@@ -46,7 +46,7 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
         end
 
         %w(comments).each do |association|
-          it "should contains #{association}" do
+          it "should contains #{association} association" do
             expect(response.body).to have_json_size(3).at_path(association)
           end
         end

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::QuestionsController, type: :controller do
-  let(:questions) { create_list :question, 3 }
+  let(:count) { 3 }
+  let(:questions) { create_list :question, count }
   let(:question)  { questions.first }
-  let!(:answers)      { create_list :answer, 3, question: question }
-  let!(:comments)     { create_list :comment, 3, commentable: question }
-  # let!(:attachments)  { create_list :attachment, 3, attacheble: question }
+  # let!(:attachments)  { create_list :attachment, count, attacheble: question }
+
   let(:params) { attributes_for :question }
 
   describe 'Questions API' do
@@ -37,11 +37,14 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
       assign_user
       let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
 
+      let!(:answers)      { create_list :answer, count, question: question }
+      let!(:comments)     { create_list :comment, count, commentable: question }
+
       describe 'GET /index' do
         before { get :index, params: { access_token: access_token }, format: :json }
 
         it 'should contains questions' do
-          expect(response.body).to have_json_size(3)
+          expect(response.body).to have_json_size(count)
         end
 
         %w(id title body created_at updated_at).each do |field|
@@ -68,12 +71,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
 
         %w(answers comments).each do |association|
           it "should contains #{association}" do
-            expect(response.body).to have_json_size(3).at_path(association)
-          end
-
-          it "#{association} associations should contains body" do
-            expect(response.body).to be_json_eql(send(association).first.body.to_json)
-              .at_path "#{association}/0/body"
+            expect(response.body).to have_json_size(count).at_path(association)
           end
         end
       end
