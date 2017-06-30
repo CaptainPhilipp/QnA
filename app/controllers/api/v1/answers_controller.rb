@@ -3,16 +3,18 @@ module Api::V1
     before_action :load_question, only: [:create]
 
     def show
-      @answer = Answer.find(params[:id])
-      respond_with @answer
+      respond_with @answer = Answer.find(params[:id])
     end
 
     def create
-      @answer = Answer.create(answer_params.merge question: @question, user: current_resource_owner)
-      respond_with @answer
+      respond_with @answer = @question.answers.create(personalized_answer_params)
     end
 
     private
+
+    def personalized_answer_params
+      answer_params.merge user: current_resource_owner
+    end
 
     def answer_params
       params.permit(:body)

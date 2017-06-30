@@ -15,11 +15,6 @@ class User < ApplicationRecord
     id == entity.user_id
   end
 
-  # просто чтоб не создавать колонку в таблице
-  def admin?
-    true
-  end
-
   def self.find_with_uid(provider:, uid:)
     oauth_arguments = { provider: provider, uid: uid }
     joins(:oauth_authorizations).find_by(oauth_authorizations: oauth_arguments)
