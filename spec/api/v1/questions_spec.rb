@@ -6,10 +6,11 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
   let!(:answers)      { create_list :answer, 3, question: question }
   let!(:comments)     { create_list :comment, 3, commentable: question }
   # let!(:attachments)  { create_list :attachment, 3, attacheble: question }
+  let(:params) { attributes_for :question }
 
   describe 'Questions API' do
     context 'Unauthorized' do
-      %i(index show create).each do |action|
+      %i(index show).each do |action|
         describe "GET /#{action}" do
           let!(:question) { create :question }
 
@@ -24,6 +25,20 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
 
             expect(response.status).to eq 401
           end
+        end
+      end
+
+      describe "POST /create" do
+        it 'returns 401 if have no access_token' do
+          post :create, params: params, format: :json
+
+          expect(response.status).to eq 401
+        end
+
+        it 'returns 401 if access_token is invalid' do
+          get :create, params: params.merge(access_token: '12342'), format: :json
+
+          expect(response.status).to eq 401
         end
       end
     end
@@ -70,6 +85,17 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
         it 'should have data in associated collections'
 
         it 'should not have associations in associated collections'
+      end
+
+      describe 'POST /create' do
+        let(:params) { attributes_for :question }
+        before { post :create, params: params.merge(access_token: access_token) , format: :json }
+
+        %w(body title).each do |field|
+          it "should create an answer with right #{field}" do
+            expect(response.body).to be_json_eql(params[field.to_sym].to_json).at_path(field)
+          end
+        end
       end
     end
   end
