@@ -10,35 +10,25 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
 
   describe 'Questions API' do
     context 'Unauthorized' do
-      %i(index show).each do |action|
-        describe "GET /#{action}" do
-          let!(:question) { create :question }
+      { get: %i(index show), post: %i(create) }.each do |http_method, actions|
+        actions.each do |action|
 
-          it 'returns 401 if have no access_token' do
-            get action, params: { id: question.id }, format: :json
+          describe "#{http_method.upcase} /#{action}" do
+            let!(:question) { create :question }
 
-            expect(response.status).to eq 401
+            it 'returns 401 if have no access_token' do
+              send http_method, action, params: { id: question.id }, format: :json
+
+              expect(response.status).to eq 401
+            end
+
+            it 'returns 401 if access_token is invalid' do
+              send http_method, action, params: { id: question.id, access_token: '12342' }, format: :json
+
+              expect(response.status).to eq 401
+            end
           end
 
-          it 'returns 401 if access_token is invalid' do
-            get action, params: { id: question.id, access_token: '12342' }, format: :json
-
-            expect(response.status).to eq 401
-          end
-        end
-      end
-
-      describe "POST /create" do
-        it 'returns 401 if have no access_token' do
-          post :create, params: params, format: :json
-
-          expect(response.status).to eq 401
-        end
-
-        it 'returns 401 if access_token is invalid' do
-          get :create, params: params.merge(access_token: '12342'), format: :json
-
-          expect(response.status).to eq 401
         end
       end
     end
@@ -60,7 +50,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
           end
         end
 
-        %w(answers comments attachments).each do |association|
+        %w(answers comments).each do |association|
           it "should not contain #{association}" do
             expect(response.body).to_not have_json_path("0/association")
           end
@@ -72,19 +62,20 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
 
         %w(id title body created_at updated_at).each do |field|
           it "questions should contain #{field}" do
-            expect(response.body).to be_json_eql(question.send(field).to_json).at_path("#{field}")
+            expect(response.body).to be_json_eql(question.send(field).to_json).at_path(field)
           end
         end
 
-        %w(answers comments attachments).each do |association|
+        %w(answers comments).each do |association|
           it "should contains #{association}" do
             expect(response.body).to have_json_size(3).at_path(association)
           end
+
+          it "#{association} associations should contains body" do
+            expect(response.body).to be_json_eql(send(association).first.body.to_json)
+              .at_path "#{association}/0/body"
+          end
         end
-
-        it 'should have data in associated collections'
-
-        it 'should not have associations in associated collections'
       end
 
       describe 'POST /create' do

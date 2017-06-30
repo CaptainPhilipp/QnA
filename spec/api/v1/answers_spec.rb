@@ -8,31 +8,23 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
 
   describe 'Questions API' do
     context 'Unauthorized' do
-      describe "GET /show" do
-        it 'returns 401 if have no access_token' do
-          get :show, params: { id: answer.id }, format: :json
+      { get: %i(show), post: %i(create) }.each do |http_method, actions|
+        actions.each do |action|
 
-          expect(response.status).to eq 401
-        end
+          describe "#{http_method.upcase} /#{action}" do
+            it 'returns 401 if have no access_token' do
+              send http_method, action, params: { id: answer.id, question_id: question.id  }, format: :json
 
-        it 'returns 401 if access_token is invalid' do
-          get :show, params: { id: answer.id, access_token: '12342' }, format: :json
+              expect(response.status).to eq 401
+            end
 
-          expect(response.status).to eq 401
-        end
-      end
+            it 'returns 401 if access_token is invalid' do
+              send http_method, action, params: { id: answer.id, question_id: question.id, access_token: '12342' }, format: :json
 
-      describe "POST /create" do
-        it 'returns 401 if have no access_token' do
-          post :create, params: { id: answer.id, question_id: question.id }, format: :json
+              expect(response.status).to eq 401
+            end
+          end
 
-          expect(response.status).to eq 401
-        end
-
-        it 'returns 401 if access_token is invalid' do
-          get :create, params: { question_id: question.id, access_token: '12342' }, format: :json
-
-          expect(response.status).to eq 401
         end
       end
     end
@@ -53,20 +45,18 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
           end
         end
 
-        %w(comments attachments).each do |association|
+        %w(comments).each do |association|
           it "should contains #{association}" do
             expect(response.body).to have_json_size(3).at_path(association)
           end
         end
-
-        it 'should have data in associated collections'
       end
 
       describe 'POST /create' do
         before { post :create, params: params.merge(access_token: access_token) , format: :json }
 
         it 'should create an answer with right body' do
-          expect(response.body).to be_json_eql(params[:body].to_json).at_path('body/')
+          expect(response.body).to be_json_eql(params[:body].to_json).at_path('body')
         end
       end
     end
