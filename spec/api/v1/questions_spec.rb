@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::QuestionsController, type: :controller do
+  let(:questions) { create_list :question, 3 }
+  let!(:question) { questions.first }
+  let!(:answers)  { create_list :answer, 3, question: question }
+
   describe 'Questions API' do
     context 'Unauthorized' do
       %i(index show).each do |action|
@@ -28,9 +32,6 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
       let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
 
       describe 'GET /index' do
-        let(:questions) { create_list :question, 3 }
-        let!(:question) { questions.first }
-
         before { get :index, params: { access_token: access_token }, format: :json }
 
         it 'should contains questions' do
@@ -42,17 +43,23 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
             expect(response.body).to be_json_eql(question.send(field).to_json).at_path("0/#{field}")
           end
         end
+
+        it 'should contains answers' do
+          expect(response.body).to_not have_json_path('0/answers')
+        end
       end
 
       describe 'GET /show' do
-        let!(:question) { create :question }
-
         before { get :show, params: { id: question.id, access_token: access_token }, format: :json }
 
         %w(id title body created_at updated_at).each do |field|
           it "questions should contain #{field}" do
-            expect(response.body).to be_json_eql(question.send(field).to_json).at_path(field)
+            expect(response.body).to be_json_eql(question.send(field).to_json).at_path("#{field}")
           end
+        end
+
+        it 'should contains answers' do
+          expect(response.body).to have_json_size(3).at_path('answers')
         end
       end
     end

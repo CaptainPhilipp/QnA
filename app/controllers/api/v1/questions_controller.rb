@@ -1,7 +1,8 @@
 module Api::V1
   class QuestionsController < BaseController
     def index
-      respond_with @questions = Question.all
+      @questions = Question.all
+      respond_with @questions, each_serializer: QuestionsSerializer
     end
 
     def show
