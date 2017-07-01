@@ -50,7 +50,7 @@ gem 'skim'
 gem 'gon'
 gem 'pundit'
 gem 'doorkeeper'
-gem 'active_model_serializers'
+gem 'active_model_serializers', '= 0.9'
 
 group :test do
   gem 'shoulda-matchers'
