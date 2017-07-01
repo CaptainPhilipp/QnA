@@ -36,6 +36,7 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
       describe 'GET /show' do
         let!(:comments)    { create_list :comment, 3, commentable: answer }
         let!(:attachments) { create_list :attachment, 3, attachable: answer }
+        let!(:answer)      { create :answer }
 
         before { get :show, params: { id: answer.id, access_token: access_token }, format: :json }
 

@@ -26,4 +26,16 @@ class ApplicationController < ActionController::Base
   def gon_current_user
     gon.current_user_id = current_user.id if current_user
   end
+
+  def renderer_with_serializer
+    @renderer_with_serializer ||= get_renderer_with_serializer(current_user)
+  end
+
+  def get_renderer_with_serializer(user)
+    ActionController::Renderer::RACK_KEY_TRANSLATION['warden'] ||= 'warden'
+    proxy = Warden::Proxy.new({}, Warden::Manager.new({})).tap do |i|
+      i.set_user(user, scope: :user)
+    end
+    self.class.renderer.new('warden' => proxy)
+  end
 end
