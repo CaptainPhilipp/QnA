@@ -1,8 +1,7 @@
 module Comments
   class Broadcaster
-    def initialize(comment, renderer: nil)
+    def initialize(comment)
       @comment = comment
-      @renderer = renderer
     end
 
     def call
@@ -26,11 +25,7 @@ module Comments
     end
 
     def data
-      renderer.render json: comment
-    end
-
-    def renderer
-      @renderer ||= ActionController::Base
+      CommentsSerializer.new(comment).to_json
     end
   end
 end

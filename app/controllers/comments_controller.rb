@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
   private
 
   def broadcast_comment
-    Comments::Broadcaster.new(@comment, renderer: renderer_with_serializer).call
+    Comments::Broadcaster.new(@comment).call
   end
 
   def comment_params

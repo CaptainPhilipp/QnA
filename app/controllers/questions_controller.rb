@@ -48,7 +48,7 @@ class QuestionsController < ApplicationController
 
   def broadcast_question
     return if @question.errors.any?
-    ActionCable.server.broadcast 'questions', renderer_with_serializer.render(json: @question)
+    ActionCable.server.broadcast 'questions', QuestionsSerializer.new(@question).to_json
   end
 
   def questions_params

@@ -41,7 +41,7 @@ class AnswersController < ApplicationController
 
   def broadcast_answer
     return if @answer.errors.any?
-    AnswersChannel.broadcast_to @question, renderer_with_serializer.render(json: @answer)
+    AnswersChannel.broadcast_to @question, AnswersSerializer.new(@answer).to_json
   end
 
   def answers_params
