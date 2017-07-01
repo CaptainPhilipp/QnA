@@ -4,7 +4,6 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
   let(:count) { 3 }
   let(:questions) { create_list :question, count }
   let(:question)  { questions.first }
-  # let!(:attachments)  { create_list :attachment, count, attacheble: question }
 
   let(:params) { attributes_for :question }
 
@@ -39,6 +38,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
 
       let!(:answers)      { create_list :answer, count, question: question }
       let!(:comments)     { create_list :comment, count, commentable: question }
+      let!(:attachments)  { create_list :attachment, count, attachable: question }
 
       describe 'GET /index' do
         before { get :index, params: { access_token: access_token }, format: :json }
@@ -53,7 +53,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
           end
         end
 
-        %w(answers comments).each do |association|
+        %w(answers comments attachments).each do |association|
           it "should not contain #{association}" do
             expect(response.body).to_not have_json_path("0/association")
           end
@@ -69,7 +69,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
           end
         end
 
-        %w(answers comments).each do |association|
+        %w(answers comments attachments).each do |association|
           it "should contains #{association}" do
             expect(response.body).to have_json_size(count).at_path(association)
           end
