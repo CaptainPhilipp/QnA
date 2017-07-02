@@ -41,13 +41,13 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
         before { get :show, params: { id: answer.id, access_token: access_token }, format: :json }
 
         %w(id body created_at updated_at).each do |field|
-          it "answer should contain #{field}" do
+          it "answer contains #{field}" do
             expect(response.body).to be_json_eql(answer.send(field).to_json).at_path(field)
           end
         end
 
         %w(comments attachments).each do |association|
-          it "should contains #{association} association" do
+          it "answer contains #{association} association" do
             expect(response.body).to have_json_size(3).at_path(association)
           end
         end
@@ -56,7 +56,7 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
       describe 'POST /create' do
         before { post :create, params: params.merge(access_token: access_token) , format: :json }
 
-        it 'should create an answer with right body' do
+        it 'creates an answer with right body' do
           expect(response.body).to be_json_eql(params[:body].to_json).at_path('body')
         end
       end

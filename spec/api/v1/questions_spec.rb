@@ -43,18 +43,18 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
       describe 'GET /index' do
         before { get :index, params: { access_token: access_token }, format: :json }
 
-        it 'should contains questions' do
+        it 'contains questions' do
           expect(response.body).to have_json_size(count)
         end
 
         %w(id title body created_at updated_at).each do |field|
-          it "questions should contain #{field}" do
+          it "questions contains #{field}" do
             expect(response.body).to be_json_eql(question.send(field).to_json).at_path("0/#{field}")
           end
         end
 
         %w(answers comments attachments).each do |association|
-          it "should not contain #{association}" do
+          it "does not contains #{association}" do
             expect(response.body).to_not have_json_path("0/association")
           end
         end
@@ -64,13 +64,13 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
         before { get :show, params: { id: question.id, access_token: access_token }, format: :json }
 
         %w(id title body created_at updated_at).each do |field|
-          it "questions should contain #{field}" do
+          it "question contains #{field} field" do
             expect(response.body).to be_json_eql(question.send(field).to_json).at_path(field)
           end
         end
 
         %w(answers comments attachments).each do |association|
-          it "should contains #{association}" do
+          it "question contains #{association}" do
             expect(response.body).to have_json_size(count).at_path(association)
           end
         end
@@ -81,7 +81,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
         before { post :create, params: params.merge(access_token: access_token) , format: :json }
 
         %w(body title).each do |field|
-          it "should create an answer with right #{field}" do
+          it "creates an answer with right #{field}" do
             expect(response.body).to be_json_eql(params[field.to_sym].to_json).at_path(field)
           end
         end

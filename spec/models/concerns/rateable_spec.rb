@@ -17,16 +17,16 @@ describe 'Rateable concern' do
 
   let(:rateable) { RateableDouble.create user: owner_user }
 
-  it '#voices instance should be a new Voice' do
+  it '#voices instance has class Voice' do
     expect(rateable.voices.build).to be_a_new Voice
   end
 
-  it '#users instance should be a new User' do
+  it '#users instance has class User' do
     expect(rateable.user).to be_a User
   end
 
   context '#rating' do
-    it 'should show rating of current record' do
+    it 'shows rating of current record' do
       10.times { rateable.voices.create(user: create(:user), value: 1) }
       expect(rateable.rating).to eq 10
       3.times  { rateable.voices.create(user: create(:user), value: -1) }
@@ -82,21 +82,21 @@ describe 'Rateable concern' do
   end
 
   context '#rated_by?' do
-    it "should be false if user don't votes entity" do
+    it "returns false if user don't votes entity" do
       expect(rateable.rated_by? user).to be_falsy
     end
 
-    it 'should be true if user votes for entity' do
+    it 'returns true if user votes for entity' do
       rateable.vote!('1', user)
       expect(rateable.reload.rated_by? user).to be true
     end
 
-    it "should be false if user don't votes entity, but others do" do
+    it "returns false if user don't votes entity, but others do" do
       rateable.vote!('1', create(:user))
       expect(rateable.rated_by? user).to be_falsy
     end
 
-    it "should be false if user cancel his voice" do
+    it "returns false if user cancel his voice" do
       rateable.vote!('1', create(:user))
       rateable.vote!('0', create(:user))
       expect(rateable.rated_by? user).to be_falsy
