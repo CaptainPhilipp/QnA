@@ -51,6 +51,10 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
             expect(response.body).to have_json_size(3).at_path(association)
           end
         end
+
+        it "comments association contains body" do
+          expect(response.body).to be_json_eql(comments.last.body.to_json).at_path("comments/0/body")
+        end
       end
 
       describe 'POST /create' do

@@ -74,6 +74,13 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
             expect(response.body).to have_json_size(count).at_path(association)
           end
         end
+
+        %w(answers comments).each do |association|
+          it "#{association} association contains body" do
+            expect(response.body).to be_json_eql(send(association).last.body.to_json)
+              .at_path("#{association}/0/body")
+          end
+        end
       end
 
       describe 'POST /create' do
