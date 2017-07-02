@@ -3,10 +3,12 @@ module Api::V1
     before_action :load_question, only: [:create]
 
     def show
-      respond_with @answer = Answer.find(params[:id])
+      authorize @answer = Answer.find(params[:id])
+      respond_with @answer
     end
 
     def create
+      authorize Answer
       respond_with @answer = @question.answers.create(personalized_answer_params)
     end
 

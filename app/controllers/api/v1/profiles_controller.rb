@@ -1,10 +1,12 @@
 module Api::V1
   class ProfilesController < BaseController
     def me
+      authorize current_resource_owner
       respond_with current_resource_owner
     end
 
     def index
+      authorize User
       respond_with other_users_list
     end
 
