@@ -55,7 +55,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
 
         %w(answers comments attachments).each do |association|
           it "does not contains #{association}" do
-            expect(response.body).to_not have_json_path("0/association")
+            expect(response.body).to_not have_json_path("0/#{association}")
           end
         end
       end
