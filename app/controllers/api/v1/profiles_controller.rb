@@ -13,7 +13,6 @@ module Api::V1
     private
 
     def other_users_list
-      return if current_resource_owner.nil?
       User.select(:id, :email, :created_at, :updated_at)
           .where.not(id: current_resource_owner.id)
     end
