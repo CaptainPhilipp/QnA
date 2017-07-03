@@ -15,11 +15,11 @@ RSpec.describe Question, type: :model do
   let(:answers) { create_list :answer, 5, question: question }
 
   describe '#best_answer' do
-    it 'should be nil if no one answer is marked as best' do
+    it 'returns nil if no one answer is marked as best' do
       expect(question.best_answer).to be_nil
     end
 
-    it 'should return best answer' do
+    it 'returns best answer' do
       best_answer
       expect(question.best_answer).to eq best_answer
     end

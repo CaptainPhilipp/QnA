@@ -19,11 +19,11 @@ RSpec.describe User, type: :model do
   let(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
 
   describe '#owner?' do
-    it 'must return false if other user owns entity' do
+    it 'returns false if other user owns entity' do
       expect(user.owner? other_user_entity).to be false
     end
 
-    it 'must return true if user owns entity' do
+    it 'returns true if user owns entity' do
       expect(user.owner? users_entity).to be true
     end
   end
@@ -32,13 +32,13 @@ RSpec.describe User, type: :model do
     context 'when user exists' do
       let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
 
-      it 'should return right user' do
+      it 'returns right user' do
         expect(User.find_with_uid provider: auth_hash.provider, uid: auth_hash.uid).to eq user
       end
     end
 
     context 'when user is not exists' do
-      it 'should return nil' do
+      it 'returns nil' do
         expect(User.find_with_uid provider: auth_hash.provider, uid: auth_hash.uid).to be nil
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe User, type: :model do
   describe '.create_without_pass' do
     before { User.create_without_pass(auth_hash.info) }
 
-    it 'should create user with right email' do
+    it 'creates user with right email' do
       expect(User.last.email).to eq email
     end
   end

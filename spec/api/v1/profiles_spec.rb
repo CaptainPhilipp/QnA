@@ -1,18 +1,22 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::ProfilesController, type: :controller do
+RSpec.describe Api::V1::ProfilesController, type: :request do
   describe 'Profile API' do
+    let(:path) { "/api/v1/profiles/#{action}" }
+
     context 'Unauthorized' do
-      %i(me index).each do |action|
+      ['me', ''].each do |action|
+        let(:action) { action } # crutch: without it, other `let` cant see this local variable
+
         describe "GET /#{action}" do
           it 'returns 401 if have no access_token' do
-            get action, format: :json
+            get path, format: :json
 
             expect(response.status).to eq 401
           end
 
           it 'returns 401 if access_token is invalid' do
-            get action, params: { access_token: '12342' }, format: :json
+            get path, params: { access_token: '12342', format: :json }
 
             expect(response.status).to eq 401
           end
@@ -24,10 +28,11 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
       assign_user
 
       let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
+
       describe 'GET /me' do
-        before do
-          get :me, params: { access_token: access_token }, format: :json
-        end
+        let(:action) { 'me' }
+
+        before { get path, params: { access_token: access_token, format: :json } }
 
         it { expect(response).to be_success }
 
@@ -44,12 +49,11 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
         end
       end
 
-      describe 'GET /users' do
+      describe 'GET /' do
+        let(:action) { '' }
         let!(:other_users) { create_list :user, 3 }
 
-        before do
-          get :index, params: { access_token: access_token }, format: :json
-        end
+        before { get path, params: { access_token: access_token, format: :json } }
 
         it { expect(response).to be_success }
 

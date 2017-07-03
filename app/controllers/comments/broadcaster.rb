@@ -25,7 +25,7 @@ module Comments
     end
 
     def data
-      ApplicationController.render json: comment
+      CommentsSerializer.new(comment).to_json
     end
   end
 end
