@@ -2,6 +2,8 @@ module Api::V1
   class AnswersController < BaseController
     before_action :load_question, only: [:create]
 
+    respond_to :json
+
     def show
       authorize @answer = Answer.find(params[:id])
       respond_with @answer

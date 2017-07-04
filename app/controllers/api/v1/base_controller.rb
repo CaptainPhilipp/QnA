@@ -3,6 +3,8 @@ module Api::V1
     before_action :doorkeeper_authorize!
     after_action :verify_authorized
 
+    respond_to :json
+
     private
 
     def current_resource_owner
