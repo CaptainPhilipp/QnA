@@ -31,12 +31,7 @@ RSpec.describe Api::V1::QuestionsController, type: :request do
         expect(response.body).to have_json_size(count)
       end
 
-      %w[id title body created_at updated_at].each do |field|
-        it "questions contains #{field}" do
-          expect(response.body).to be_json_eql(question.send(field).to_json)
-            .at_path("0/#{field}")
-        end
-      end
+      it_behaves_like('Contains fields', :question, %w[id title body created_at updated_at], '0/')
 
       %w[answers comments attachments].each do |association|
         it "does not contains #{association}" do
@@ -49,24 +44,9 @@ RSpec.describe Api::V1::QuestionsController, type: :request do
       let(:subpath) { question.id }
       before { get path, params: params }
 
-      %w[id title body created_at updated_at].each do |field|
-        it "question contains #{field} field" do
-          expect(response.body).to be_json_eql(question.send(field).to_json).at_path(field)
-        end
-      end
-
-      %w[answers comments attachments].each do |association|
-        it "question contains #{association}" do
-          expect(response.body).to have_json_size(count).at_path(association)
-        end
-      end
-
-      %w[answers comments].each do |association|
-        it "#{association} association contains body" do
-          expect(response.body).to be_json_eql(send(association).last.body.to_json)
-            .at_path("#{association}/0/body")
-        end
-      end
+      it_behaves_like('Contains fields', :question, %w[id title body created_at updated_at])
+      it_behaves_like('Contains associations', %w[answers comments attachments])
+      it_behaves_like('Associations contains field', comments: :body, answers: :body)
     end
 
     describe 'POST /create' do
@@ -76,7 +56,7 @@ RSpec.describe Api::V1::QuestionsController, type: :request do
       before { post path, params: extended_params }
 
       %w[body title].each do |field|
-        it "creates an answer with right #{field}" do
+        it "creates a question with right #{field}" do
           expect(response.body).to be_json_eql(extended_params[field.to_sym].to_json)
             .at_path(field)
         end

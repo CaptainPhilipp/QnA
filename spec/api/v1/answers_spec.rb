@@ -9,6 +9,7 @@ RSpec.describe Api::V1::AnswersController, type: :request do
 
   let!(:answer)   { create :answer, id: 1, question: question }
   let!(:question) { create :question, id: 1 }
+  let(:count)     { 3 }
   let(:params)    { attributes_for :answer, question_id: question.id }
   let(:path)      { "/api/v1/#{subpath}" }
 
@@ -17,8 +18,8 @@ RSpec.describe Api::V1::AnswersController, type: :request do
     let(:access_token) { create(:access_token, resource_owner_id: user.id).token }
 
     describe 'GET /show' do
-      let!(:comments)    { create_list :comment, 3, commentable: answer }
-      let!(:attachments) { create_list :attachment, 3, attachable: answer }
+      let!(:comments)    { create_list :comment, count, commentable: answer }
+      let!(:attachments) { create_list :attachment, count, attachable: answer }
       let!(:answer)      { create :answer }
 
       let(:subpath) { "answers/#{answer.id}" }
@@ -27,22 +28,9 @@ RSpec.describe Api::V1::AnswersController, type: :request do
         get path, params: { access_token: access_token, format: :json }
       end
 
-      %w[id body created_at updated_at].each do |field|
-        it "answer contains #{field}" do
-          expect(response.body).to be_json_eql(answer.send(field).to_json).at_path(field)
-        end
-      end
-
-      %w[comments attachments].each do |association|
-        it "answer contains #{association} association" do
-          expect(response.body).to have_json_size(3).at_path(association)
-        end
-      end
-
-      it 'comments association contains body' do
-        expect(response.body).to be_json_eql(comments.last.body.to_json)
-          .at_path('comments/0/body')
-      end
+      it_behaves_like('Contains fields', :answer, %w[id body created_at updated_at])
+      it_behaves_like('Contains associations', %w[comments attachments])
+      it_behaves_like('Associations contains field', comments: :body, attachments: :file)
     end
 
     describe 'POST /create' do

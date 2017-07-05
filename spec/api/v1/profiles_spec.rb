@@ -16,22 +16,10 @@ RSpec.describe Api::V1::ProfilesController, type: :request do
 
     describe 'GET /me' do
       let(:action) { 'me' }
-
       before { get path, params: { access_token: access_token, format: :json } }
 
       it { expect(response).to be_success }
-
-      %w(id email created_at updated_at).each do |field|
-        it "contains #{field}" do
-          expect(response.body).to be_json_eql(user.send(field).to_json).at_path(field)
-        end
-      end
-
-      %w(password password_confirmation).each do |field|
-        it "does not contains #{field}" do
-          expect(response.body).to_not have_json_path(field)
-        end
-      end
+      it_behaves_like('Contains fields', :user, %w[id email created_at updated_at])
     end
 
     describe 'GET /' do
