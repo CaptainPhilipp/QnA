@@ -4,8 +4,6 @@ require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
-# Rails.root.join("spec/support/").each_child { |f| require f if f.basename.to_s =~ /\.rb\z/ }
-
 require 'spec_helper'
 require 'rspec/rails'
 require 'with_model'
@@ -26,7 +24,7 @@ require "pundit/rspec"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -38,6 +36,12 @@ RSpec.configure do |config|
   config.extend WithModel
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::Test::ControllerHelpers, type: :controller
+
+  config.include CommonMacros
+  config.include OmniauthMacros
+  config.include ControllerMacros, type: :controller
+  config.include WaitForAjax, type: :feature
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
