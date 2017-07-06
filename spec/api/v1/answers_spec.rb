@@ -7,8 +7,8 @@ RSpec.describe Api::V1::AnswersController, type: :request do
 
   it_behaves_like 'Api authenticateable'
 
-  let!(:answer)   { create :answer, id: 1, question: question }
-  let!(:question) { create :question, id: 1 }
+  let!(:answer)   { create :answer, question: question }
+  let!(:question) { create :question }
   let(:count)     { 3 }
   let(:params)    { attributes_for :answer, question_id: question.id }
   let(:path)      { "/api/v1/#{subpath}" }
