@@ -1,0 +1,4 @@
+:shedule:
+  digest_worker:
+    cron: '* * * * * *'
+    class: DigestWorker
