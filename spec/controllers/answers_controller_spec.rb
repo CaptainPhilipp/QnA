@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative 'shared_examples/rated_concern_shared'
 
 RSpec.describe AnswersController, type: :controller do
   assign_users :user, :other_user

@@ -1,96 +1,64 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::QuestionsController, type: :controller do
+RSpec.describe Api::V1::QuestionsController, type: :request do
+  def self.request_list
+    { get: ['questions/', 'questions/1'], post: 'questions/' }
+  end
+
+  it_behaves_like 'Api authenticateable'
+
+  let(:path) { "/api/v1/questions/#{subpath}" }
   let(:count) { 3 }
   let(:questions) { create_list :question, count }
   let(:question)  { questions.first }
-
   let(:params) { attributes_for :question }
 
-  describe 'Questions API' do
-    context 'Unauthorized' do
-      { get: %i(index show), post: %i(create) }.each do |http_method, actions|
-        actions.each do |action|
+  context 'Authorized' do
+    assign_user
+    let(:access_token) { create(:access_token, resource_owner_id: user.id).token }
 
-          describe "#{http_method.upcase} /#{action}" do
-            let!(:question) { create :question }
+    let!(:answers)      { create_list :answer, count, question: question }
+    let!(:comments)     { create_list :comment, count, commentable: question }
+    let!(:attachments)  { create_list :attachment, count, attachable: question }
 
-            it 'returns 401 if have no access_token' do
-              send http_method, action, params: { id: question.id }, format: :json
+    let(:params) { { access_token: access_token, format: :json } }
 
-              expect(response.status).to eq 401
-            end
+    describe 'GET /index' do
+      let(:subpath) { '' }
+      before { get path, params: params }
 
-            it 'returns 401 if access_token is invalid' do
-              send http_method, action, params: { id: question.id, access_token: '12342' }, format: :json
+      it 'contains questions' do
+        expect(response.body).to have_json_size(count)
+      end
 
-              expect(response.status).to eq 401
-            end
-          end
+      it_behaves_like('Contains fields', :question, %w[id title body created_at updated_at], '0/')
 
+      %w[answers comments attachments].each do |association|
+        it "does not contains #{association}" do
+          expect(response.body).to_not have_json_path("0/#{association}")
         end
       end
     end
 
-    context 'Authorized' do
-      assign_user
-      let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
+    describe 'GET /show' do
+      let(:subpath) { question.id }
+      before { get path, params: params }
 
-      let!(:answers)      { create_list :answer, count, question: question }
-      let!(:comments)     { create_list :comment, count, commentable: question }
-      let!(:attachments)  { create_list :attachment, count, attachable: question }
+      it_behaves_like('Contains fields', :question, %w[id title body created_at updated_at])
+      it_behaves_like('Contains associations', %w[answers comments attachments])
+      it_behaves_like('Associations contains field', comments: :body, answers: :body)
+    end
 
-      describe 'GET /index' do
-        before { get :index, params: { access_token: access_token }, format: :json }
+    describe 'POST /create' do
+      let(:extended_params) { params.merge attributes_for(:question) }
+      let(:subpath) { '' }
 
-        it 'contains questions' do
-          expect(response.body).to have_json_size(count)
-        end
+      before { post path, params: extended_params }
 
-        %w(id title body created_at updated_at).each do |field|
-          it "questions contains #{field}" do
-            expect(response.body).to be_json_eql(question.send(field).to_json).at_path("0/#{field}")
-          end
-        end
-
-        %w(answers comments attachments).each do |association|
-          it "does not contains #{association}" do
-            expect(response.body).to_not have_json_path("0/#{association}")
-          end
-        end
-      end
-
-      describe 'GET /show' do
-        before { get :show, params: { id: question.id, access_token: access_token }, format: :json }
-
-        %w(id title body created_at updated_at).each do |field|
-          it "question contains #{field} field" do
-            expect(response.body).to be_json_eql(question.send(field).to_json).at_path(field)
-          end
-        end
-
-        %w(answers comments attachments).each do |association|
-          it "question contains #{association}" do
-            expect(response.body).to have_json_size(count).at_path(association)
-          end
-        end
-
-        %w(answers comments).each do |association|
-          it "#{association} association contains body" do
-            expect(response.body).to be_json_eql(send(association).last.body.to_json)
-              .at_path("#{association}/0/body")
-          end
-        end
-      end
-
-      describe 'POST /create' do
-        let(:params) { attributes_for :question }
-        before { post :create, params: params.merge(access_token: access_token) , format: :json }
-
-        %w(body title).each do |field|
-          it "creates an answer with right #{field}" do
-            expect(response.body).to be_json_eql(params[field.to_sym].to_json).at_path(field)
-          end
+      %w[body title].each do |field|
+        it "creates a question with right #{field}" do
+          expect(response.body).to be_json_eql(extended_params[field.to_sym].to_json)
+            .at_path(field)
         end
       end
     end
