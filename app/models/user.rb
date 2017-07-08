@@ -25,4 +25,9 @@ class User < ApplicationRecord
     # create(args.to_h.reverse_merge(password: pass, password_confirmation: pass))
     create({ password: pass, password_confirmation: pass }.merge args)
   end
+
+  def self.send_daily_digest
+    questions = Question.all
+    find_each { |user| DailyMailer.digest(user, questions).deliver }
+  end
 end

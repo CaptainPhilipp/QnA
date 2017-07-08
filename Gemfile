@@ -52,7 +52,8 @@ gem 'pundit'
 gem 'doorkeeper'
 gem 'active_model_serializers'
 gem 'sidekiq'
-gem 'sidekiq-scheduler'
+gem 'whenever', :require => false
+# gem 'sidekiq-scheduler'
 
 group :test do
   gem 'shoulda-matchers'
