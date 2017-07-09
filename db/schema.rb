@@ -105,12 +105,10 @@ ActiveRecord::Schema.define(version: 20170709151140) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.integer  "question_id",                null: false
-    t.integer  "user_id",                    null: false
-    t.boolean  "instant",     default: true, null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.index ["instant"], name: "index_subscriptions_on_instant", using: :btree
+    t.integer  "question_id", null: false
+    t.integer  "user_id",     null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["question_id"], name: "index_subscriptions_on_question_id", using: :btree
     t.index ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
   end
