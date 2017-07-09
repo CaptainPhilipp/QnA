@@ -23,12 +23,10 @@
 # require_relative 'support/omniauth_macros'
 
 require 'capybara/email/rspec'
+require 'sidekiq/testing'
 
 RSpec.configure do |config|
-  # config.include CommonMacros
-  # config.include OmniauthMacros
-  # config.include ControllerMacros, type: :controller
-  # config.include WaitForAjax, type: :feature
+  Sidekiq::Testing.inline!
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

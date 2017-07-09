@@ -28,6 +28,6 @@ class User < ApplicationRecord
 
   def self.send_daily_digest
     questions = Question.all
-    find_each { |user| DailyMailer.digest(user, questions).deliver }
+    find_each { |user| DailyMailer.delay.digest(user, questions) }
   end
 end
