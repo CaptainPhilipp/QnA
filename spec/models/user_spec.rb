@@ -58,7 +58,7 @@ RSpec.describe User, type: :model do
 
     it 'sends mail with digest to each user' do
       User.find_each do |user|
-        expect(DailyMailer).to receive(:digest).with(user, questions).and_call_original
+        expect(DailyMailer).to receive(:digest).with(user).and_call_original
       end
 
       User.send_daily_digest

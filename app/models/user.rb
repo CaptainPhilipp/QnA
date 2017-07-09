@@ -27,7 +27,6 @@ class User < ApplicationRecord
   end
 
   def self.send_daily_digest
-    questions = Question.all
-    find_each { |user| DailyMailer.delay.digest(user, questions) }
+    find_each { |user| DailyMailer.delay.digest(user) }
   end
 end
