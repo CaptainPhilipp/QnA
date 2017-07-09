@@ -89,7 +89,7 @@ RSpec.describe QuestionsController, type: :controller do
         should redirect_to question_path(assigns(:question))
       end
 
-      fit 'creates subscription for author' do
+      it 'creates subscription for author' do
         send_request
         expect(Question.last.subscriptions.first.user_id).to eq user.id
       end

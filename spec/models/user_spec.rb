@@ -28,6 +28,20 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#subscribe_to(question)' do
+    let(:question) { create :question }
+
+    it 'creates subscription for user to question' do
+      expect { user.subscribe_to(question) }.to change(Subscription, :count).by(1)
+    end
+
+    it 'created subscription have right user and question' do
+      user.subscribe_to(question)
+      expect(Subscription.last.user).to eq user
+      expect(Subscription.last.question).to eq question
+    end
+  end
+
   describe '.find_with_uid' do
     context 'when user exists' do
       let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
