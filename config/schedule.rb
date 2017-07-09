@@ -6,12 +6,16 @@
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"
-#
-every 1.day do
-  runner 'UserMailer.daily_digest'
-  # command "/usr/bin/some_great_command"
-  # rake "some:great:rake:task"
+
+every :day, at: '7:00 pm' do
+  runner 'User.send_daily_digest'
 end
+
+# every 1.day do
+#   runner 'Model.method'
+#   command "/usr/bin/some_great_command"
+#   rake "some:great:rake:task"
+# end
 #
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
