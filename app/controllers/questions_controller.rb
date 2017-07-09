@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   before_action :authorize_questions, only: %i(index new create)
   before_action :load_and_authorize_question, only: %i(show edit update destroy)
   after_action  :broadcast_question, only: %i(create)
+  after_action  :subscribe_author, only: %i[create]
   after_action  :verify_authorized
 
   respond_to :html, :js
@@ -49,6 +50,10 @@ class QuestionsController < ApplicationController
   def broadcast_question
     return if @question.errors.any?
     ActionCable.server.broadcast 'questions', QuestionsSerializer.new(@question).to_json
+  end
+
+  def subscribe_author
+    Subscription.subscribe_author(@question)
   end
 
   def questions_params

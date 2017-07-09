@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :subscription do
-    question nil
-    instant false
+    association :user
+    association :question
   end
 end

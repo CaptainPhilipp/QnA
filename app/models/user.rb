@@ -15,6 +15,10 @@ class User < ApplicationRecord
     id == entity.user_id
   end
 
+  def subscribe_to(question)
+    subscriptions.create question: question
+  end
+
   def self.find_with_uid(provider:, uid:)
     oauth_arguments = { provider: provider, uid: uid }
     joins(:oauth_authorizations).find_by(oauth_authorizations: oauth_arguments)
