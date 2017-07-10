@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe SubscriptionPolicy do
+RSpec.describe SubscriptionPolicy do
   subject { described_class.new(user, record) }
 
   assign_users
