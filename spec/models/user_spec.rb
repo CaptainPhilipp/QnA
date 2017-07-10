@@ -5,6 +5,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:voices).dependent(:destroy) }
   it { should have_many(:oauth_authorizations).dependent(:destroy) }
+  it { should have_many(:subscriptions).dependent(:destroy) }
 
   assign_user :other_user
   let(:user) { create :user, email: email }
@@ -31,7 +32,7 @@ RSpec.describe User, type: :model do
   describe '#subscribe_to(question)' do
     let(:question) { create :question }
 
-    it 'creates subscription for user to question' do
+    it 'creates subscription' do
       expect { user.subscribe_to(question) }.to change(Subscription, :count).by(1)
     end
 

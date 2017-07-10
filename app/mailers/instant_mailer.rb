@@ -8,7 +8,6 @@ class InstantMailer < ApplicationMailer
   def notify_about_answer(answer)
     @answer   = answer
     @question = answer.question
-    @subscription = answer.question
     emails = @question.subscriptions.emails
 
     mail to: emails, subject: 'New answer to your question' if emails.any?

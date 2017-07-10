@@ -16,6 +16,7 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
         within '#question' do
           click_link subscribe_link
         end
+
         expect(page).to have_link unsubscribe_link
         expect(page).to_not have_link subscribe_link
       end
