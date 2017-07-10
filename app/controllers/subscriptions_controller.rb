@@ -19,14 +19,10 @@ class SubscriptionsController < ApplicationController
   end
 
   def subscription_arguments
-    { question_id: question_id, user: user }
+    { question_id: question_id, user: current_user }
   end
 
   def question_id
     params[:question_id]
-  end
-
-  def user
-    current_user.admin? ? params[:user_id] || current_user : current_user
   end
 end
