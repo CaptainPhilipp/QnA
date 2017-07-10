@@ -17,7 +17,7 @@ class User < ApplicationRecord
   end
 
   def subscribe_to(question)
-    subscriptions.create question: question
+    subscriptions.find_or_create_by question: question
   end
 
   def self.find_with_uid(provider:, uid:)

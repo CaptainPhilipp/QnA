@@ -53,6 +53,7 @@ class QuestionsController < ApplicationController
   end
 
   def subscribe_author
+    return if @question.errors.any?
     Subscription.subscribe_author(@question)
   end
 

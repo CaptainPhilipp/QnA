@@ -23,6 +23,11 @@ Rails.application.routes.draw do
       } do
           patch :best, on: :member
         end
+
+    resources :subscriptions, only: [:create] do
+      delete :destroy, on: :collection
+      get    :destroy, on: :collection # for mailer
+    end
   end
 
   namespace :api do

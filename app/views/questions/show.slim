@@ -5,6 +5,12 @@ blockquote = @question.title
     = @question.body
     .files
       = render @question.attachments
+  
+  .subscription
+    - if subscribed?
+      = link_to 'Unsubscribe from new answers', question_subscriptions_path(@question), method: :delete
+    - else
+      = link_to 'Subscribe to new answers', question_subscriptions_path(@question), method: :post
 
   - if policy(@question).edit? || policy(@question).destroy?
     .question-control

@@ -25,5 +25,9 @@ RSpec.describe InstantMailer, type: :mailer do
     it 'mail have question title' do
       expect(mail.body.encoded).to have_content(question.title)
     end
+
+    it 'mail have unsubscribe link' do
+      expect(mail.body.encoded).to have_link('Unsubscribe from new answers')
+    end
   end
 end
