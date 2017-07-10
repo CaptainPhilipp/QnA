@@ -1,4 +1,7 @@
 class SubscriptionsController < ApplicationController
+  before_action :autrhorize_subscriptions
+  after_action  :verify_authorized
+
   def create
     Subscription.find_or_create_by subscription_arguments
     redirect_to question_path(question_id)
@@ -10,6 +13,10 @@ class SubscriptionsController < ApplicationController
   end
 
   private
+
+  def autrhorize_subscriptions
+    authorize Subscription
+  end
 
   def subscription_arguments
     { question_id: question_id, user: user }
