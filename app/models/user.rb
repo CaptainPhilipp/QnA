@@ -29,8 +29,4 @@ class User < ApplicationRecord
     pass = Devise.friendly_token 64
     create({ password: pass, password_confirmation: pass }.merge args)
   end
-
-  def self.send_daily_digest
-    find_each { |user| DailyMailer.delay.digest(user) }
-  end
 end

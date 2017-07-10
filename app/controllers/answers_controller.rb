@@ -48,7 +48,7 @@ class AnswersController < ApplicationController
 
   def notify_question_subscribers
     return if @answer.errors.any?
-    InstantMailer.delay.notify_about_answer(@answer)
+    InstantMailer.notify_about_answer(@answer).deliver_now
   end
 
   def answers_params

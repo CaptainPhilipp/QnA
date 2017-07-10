@@ -41,6 +41,10 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
         let(:attributes) { attributes_for(:answer) }
 
         before do
+          Capybara.using_session(:user) do
+            login_user user
+          end
+
           Capybara.using_session(:other_user) do
             login_user other_user
             visit question_path(question)
@@ -51,13 +55,12 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
         end
 
         scenario 'with new answer' do
-          open_email(user.email)
-          expect(current_email).to have_content Answer.last.body
+          mail = ActionMailer::Base.deliveries.last # for deliver_later
+          expect(mail.body.encoded).to have_content Answer.last.body
         end
 
         xscenario 'click unsubscribe link' do
           Capybara.using_session(:user) do
-            login_user user
             open_email(user.email)
 
             current_email.click_link unsubscribe_link
