@@ -7,7 +7,7 @@ class DailyMailer < ApplicationMailer
   #
   def digest(user)
     @new_questions = Question.where('created_at > ?', Date.yesterday)
-                         .where.not(user_id: user.id)
+                             .where.not(user_id: user.id)
 
     mail to: user.email, subject: 'Daily digest' if @new_questions.any?
   end
