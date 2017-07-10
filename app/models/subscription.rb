@@ -2,12 +2,8 @@ class Subscription < ApplicationRecord
   belongs_to :question
   belongs_to :user
 
-  def email
-    user.email
-  end
-
   def self.emails
-    all.map(&:email)
+    all.map { |s| s.user.email }
   end
 
   def self.subscribe_author(question)

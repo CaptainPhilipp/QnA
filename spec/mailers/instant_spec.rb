@@ -14,7 +14,7 @@ RSpec.describe InstantMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq('New answer to your question')
       expect(mail.to).to eq(subscriber_emails)
-      expect(mail.to).to_not include(other_subscription.email)
+      expect(mail.to).to_not include(other_subscription.user.email)
       expect(mail.from).to eq(['from@example.com'])
     end
 

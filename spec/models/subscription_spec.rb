@@ -6,14 +6,6 @@ RSpec.describe Subscription, type: :model do
 
   assign_users
 
-  describe '#email' do
-    let(:subscription) { create :subscription, user: user }
-
-    it 'return users email' do
-      expect(subscription.email).to eq user.email
-    end
-  end
-
   describe '.emails' do
     let(:create_other_subscriptions) { create_list :subscription, 3 }
 
