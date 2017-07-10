@@ -52,7 +52,8 @@ gem 'pundit'
 gem 'doorkeeper'
 gem 'active_model_serializers'
 gem 'sidekiq'
-gem 'whenever', :require => false
+gem 'sinatra', '>= 1.3.0', require: false
+gem 'whenever', require: false
 
 group :test do
   gem 'shoulda-matchers'
