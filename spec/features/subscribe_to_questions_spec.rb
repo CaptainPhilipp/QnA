@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 RSpec.feature "SubscribeToQuestions", type: :feature do
   assign_users
