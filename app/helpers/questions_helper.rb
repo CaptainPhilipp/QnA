@@ -1,6 +1,5 @@
 module QuestionsHelper
   def subscribed_to?(question)
-    return unless current_user
-    current_user.subscriptions.where(question: question).exists?
+    current_user && current_user.subscribed_to?(question)
   end
 end

@@ -30,7 +30,7 @@ Rails.application.routes.draw do
           patch :best, on: :member
         end
 
-    resource :subscriptions, only: %i[create destroy] do
+    resource :subscription, only: %i[create destroy] do
       get :destroy, on: :collection # for mailer
     end
   end

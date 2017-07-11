@@ -16,6 +16,10 @@ class User < ApplicationRecord
     id == entity.user_id
   end
 
+  def subscribed_to?(question)
+    subscriptions.where(question: question).exists?
+  end
+
   def subscribe_to(question)
     subscriptions.find_or_create_by question: question
   end
@@ -27,6 +31,6 @@ class User < ApplicationRecord
 
   def self.create_without_pass(args)
     pass = Devise.friendly_token 64
-    create({ password: pass, password_confirmation: pass }.merge args)
+    create({ password: pass, password_confirmation: pass }.merge(args))
   end
 end
