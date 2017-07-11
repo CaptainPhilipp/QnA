@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :answer do
-    association :user
-    association :question
+    user
+    question
     sequence(:body) { |i| "Some answer #{i}" }
 
     factory :invalid_answer do

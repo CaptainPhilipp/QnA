@@ -6,18 +6,8 @@ RSpec.describe Subscription, type: :model do
 
   assign_users
 
-  describe '.emails' do
-    let(:create_other_subscriptions) { create_list :subscription, 3 }
-
-    it 'return users email' do
-      subscriptions = Subscription.all
-      create_other_subscriptions
-      expect(subscriptions.emails).to match_array(subscriptions.map { |s| s.user.email })
-    end
-  end
-
   describe '.subscribe_author(question)' do
-    let(:question) { create :question, user: user }
+    let!(:question) { create :question, user: user }
 
     it 'creates subscription' do
       expect { Subscription.subscribe_author question }.to change(Subscription, :count).by(1)

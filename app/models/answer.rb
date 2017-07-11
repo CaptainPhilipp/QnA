@@ -28,6 +28,6 @@ class Answer < ApplicationRecord
   private
 
   def notify_question_subscribers
-    InstantMailer.notify_about_answer(@answer).deliver_later
+    AnswerNotifyJob.perform_later(self)
   end
 end

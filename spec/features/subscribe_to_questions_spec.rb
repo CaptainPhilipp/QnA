@@ -38,6 +38,7 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
       end
 
       context 'receives mail' do
+        let!(:question) { create :question, user: user }
         let(:attributes) { attributes_for(:answer) }
 
         before do
@@ -45,18 +46,20 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
             login_user user
           end
 
-          Capybara.using_session(:other_user) do
-            login_user other_user
-            visit question_path(question)
+            Capybara.using_session(:other_user) do
+              login_user other_user
+              visit question_path(question)
 
-            fill_in Answer.human_attribute_name(:body), with: attributes[:body]
-            click_button I18n.t(:create, scope: 'answers.form')
+              Sidekiq::Testing.inline! do
+                fill_in Answer.human_attribute_name(:body), with: attributes[:body]
+                click_button I18n.t(:create, scope: 'answers.form')
+              end
           end
         end
 
         scenario 'with new answer' do
-          mail = ActionMailer::Base.deliveries.last # for deliver_later
-          expect(mail.body.encoded).to have_content Answer.last.body
+          open_email(user.email)
+          expect(current_email).to have_content Answer.last.body
         end
 
         xscenario 'click unsubscribe link' do

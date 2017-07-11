@@ -16,10 +16,9 @@ RSpec.describe Answer, type: :model do
   let(:best_answer) { create :answer, question: question, best: true }
 
   describe '.create' do
-    it 'sends mail notification' do
-      question
-      expect(InstantMailer).to receive(:notify_about_answer).and_call_original
-      answer
+    it 'runs mail notification job' do
+      expect(AnswerNotifyJob).to receive(:perform_later).and_call_original
+      create :answer
     end
   end
 

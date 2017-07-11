@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#subscribe_to(question)' do
-    let(:question) { create :question }
+    let!(:question) { create :question }
 
     it 'creates subscription' do
       expect { user.subscribe_to(question) }.to change(Subscription, :count).by(1)

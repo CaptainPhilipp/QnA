@@ -4,8 +4,7 @@ RSpec.describe DailyMailer, type: :mailer do
   assign_user
 
   describe '#digest' do
-    let(:mail) { DailyMailer.digest(user) }
-    let!(:users_questions) { create :question, user: user }
+    let(:mail) { DailyMailer.digest(user, questions) }
     let!(:questions) { create_list :question, 3 }
 
     it 'renders the headers' do
