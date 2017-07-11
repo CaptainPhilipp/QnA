@@ -11,9 +11,16 @@ RSpec.describe Question, type: :model do
   it { should validate_length_of(:title).is_at_least(6) }
   it { should validate_length_of(:body).is_at_least(6) }
 
-  let(:question) { create :question }
+  assign_user
+  let(:question) { create :question, user: user }
   let(:best_answer) { create :answer, question: question, best: true }
   let(:answers) { create_list :answer, 5, question: question }
+
+  describe '.create' do
+    it 'creates subscription for author' do
+      expect(question.subscriptions.pluck(:user_id).first).to eq user.id
+    end
+  end
 
   describe '#best_answer' do
     it 'returns nil if no one answer is marked as best' do

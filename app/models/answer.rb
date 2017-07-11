@@ -8,6 +8,8 @@ class Answer < ApplicationRecord
 
   scope :best, -> { where best: true }
 
+  after_create :notify_question_subscribers
+
   validates :body, length: { minimum: 6 }
 
   def best!
@@ -21,5 +23,11 @@ class Answer < ApplicationRecord
 
   def serialize_to_broadcast
     serializable_hash.merge('question_user_id' => question.user_id)
+  end
+
+  private
+
+  def notify_question_subscribers
+    InstantMailer.notify_about_answer(@answer).deliver_later
   end
 end

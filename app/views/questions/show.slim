@@ -7,7 +7,7 @@ blockquote = @question.title
       = render @question.attachments
   
   .subscription
-    - if subscribed?
+    - if subscribed_to?(@question)
       = link_to 'Unsubscribe from new answers', question_subscriptions_path(@question), method: :delete
     - else
       = link_to 'Subscribe to new answers', question_subscriptions_path(@question), method: :post

@@ -1,5 +1,5 @@
 module QuestionsHelper
-  def subscribed?
-    Subscription.where(user: current_user, question: @question).limit(1).count.positive?
+  def subscribed_to?(question)
+    current_user.subscriptions.where(question: question).exists?
   end
 end

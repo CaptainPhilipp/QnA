@@ -88,11 +88,6 @@ RSpec.describe QuestionsController, type: :controller do
         send_request
         should redirect_to question_path(assigns(:question))
       end
-
-      it 'creates subscription for author' do
-        send_request
-        expect(Question.last.subscriptions.first.user_id).to eq user.id
-      end
     end
 
     context 'with invalid attrs' do
