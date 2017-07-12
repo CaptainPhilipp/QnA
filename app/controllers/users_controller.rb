@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   def email
     @user  = OauthUserService.create_user_with(oauth_id, user_params)
     policy = Users::OauthPolicy.new(@user)
 
-    case
-    when policy.just_registered? then when_successful_registered
-    when policy.email_taken?     then when_email_taken
+    if policy.just_registered? then when_successful_registered
+    elsif policy.email_taken? then when_email_taken
     else render('email')
     end
   end

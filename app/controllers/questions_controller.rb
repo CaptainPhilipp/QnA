@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class QuestionsController < ApplicationController
   include Rated
 
-  before_action :authorize_questions, only: %i(index new create)
-  before_action :load_and_authorize_question, only: %i(show edit update destroy)
-  after_action  :broadcast_question, only: %i(create)
+  before_action :authorize_questions, only: %i[index new create]
+  before_action :load_and_authorize_question, only: %i[show edit update destroy]
+  after_action  :broadcast_question, only: %i[create]
   after_action  :verify_authorized
 
   respond_to :html, :js
@@ -52,7 +54,7 @@ class QuestionsController < ApplicationController
   end
 
   def questions_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
+    params.require(:question).permit(:title, :body, attachments_attributes: %i[file id _destroy])
   end
 
   def unauthorized_respond_to(format, exception)

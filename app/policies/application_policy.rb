@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationPolicy
   attr_reader :user, :record
 
@@ -6,13 +8,33 @@ class ApplicationPolicy
     @record = record
   end
 
-  def index?    ; true                end
-  def show?     ; true                end
-  def create?   ; user_confirmed?     end
-  def new?      ; create?             end
-  def update?   ; user_owns_entity?   end
-  def edit?     ; update?             end
-  def destroy?  ; user_owns_entity?   end
+  def index?
+    true
+  end
+
+  def show?
+    true
+  end
+
+  def create?
+    user_confirmed?
+  end
+
+  def new?
+    create?
+  end
+
+  def update?
+    user_owns_entity?
+  end
+
+  def edit?
+    update?
+  end
+
+  def destroy?
+    user_owns_entity?
+  end
 
   def scope
     Pundit.policy_scope!(user, record.class)

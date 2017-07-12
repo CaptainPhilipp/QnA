@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  before_action :authorize, only: %i(facebook twitter)
+  before_action :authorize, only: %i[facebook twitter]
 
-  def facebook
-  end
+  def facebook; end
 
-  def twitter
-  end
+  def twitter; end
 
   private
 

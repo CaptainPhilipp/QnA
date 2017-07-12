@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RatedHelper
   def entity_rated?(entity)
     current_user && entity.rated_by?(current_user)
@@ -5,8 +7,8 @@ module RatedHelper
 
   def vote_link_for(entity, value, text)
     link_to text,
-      { action: :vote, controller: controller_for(entity), id: entity, value: value },
-      { remote: true, method: :post, format: :json, data: { rateable_id: entity.id } }
+            { action: :vote, controller: controller_for(entity), id: entity, value: value },
+            remote: true, method: :post, format: :json, data: { rateable_id: entity.id }
   end
 
   private

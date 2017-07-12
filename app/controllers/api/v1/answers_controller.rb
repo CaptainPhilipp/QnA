@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api::V1
   class AnswersController < BaseController
     before_action :load_question, only: [:create]

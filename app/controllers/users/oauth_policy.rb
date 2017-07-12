@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Users
   class OauthPolicy
     def initialize(user)
