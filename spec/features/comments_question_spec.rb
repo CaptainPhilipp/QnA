@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'acceptance_helper'
 
-feature "User can leave comment to a question" do
+feature 'User can leave comment to a question' do
   assign_user
   let(:question) { create :question, user: user }
   let(:comment_body) { attributes_for(:comment)[:body] }

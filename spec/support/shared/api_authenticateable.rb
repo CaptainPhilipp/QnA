@@ -6,7 +6,6 @@ shared_examples_for 'Api authenticateable' do
 
     request_list.each do |http_method, subpaths_list|
       [*subpaths_list].each do |subpath|
-
         describe "#{http_method.upcase} /#{subpath}" do
           let!(:question) { create :question }
           let(:subpath) { subpath }

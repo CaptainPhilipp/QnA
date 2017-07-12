@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'acceptance_helper'
 
 feature 'Delete attachments from question' do
@@ -10,7 +12,7 @@ feature 'Delete attachments from question' do
   background { visit edit_question_path(question) }
 
   scenario 'User deletes attachment' do
-    within "#question" do
+    within '#question' do
       click_link Attachment.human_attribute_name(:delete)
       click_button I18n.t(:update, scope: 'helpers.submit', model: model_name)
 

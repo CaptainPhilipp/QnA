@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe OauthUserService do
@@ -8,9 +10,11 @@ RSpec.describe OauthUserService do
   let(:user)      { create :user, email: email }
   let(:auth_hash) { OmniAuth::AuthHash.new provider: provider, uid: uid }
 
-  let(:service) { OauthUserService.new provider: auth_hash.provider,
-                                       uid:      auth_hash.uid,
-                                       info:     auth_hash.info }
+  let(:service) do
+    OauthUserService.new provider: auth_hash.provider,
+                         uid:      auth_hash.uid,
+                         info:     auth_hash.info
+  end
 
   context '#get_user' do
     context 'when user exists' do

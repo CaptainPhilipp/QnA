@@ -1,7 +1,9 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 RSpec.describe InstantMailer, type: :mailer do
-  describe "#notify_about_answer" do
+  describe '#notify_about_answer' do
     assign_user
     let(:question) { create :question, user: user }
 

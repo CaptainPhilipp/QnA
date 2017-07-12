@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
@@ -21,11 +23,11 @@ RSpec.describe User, type: :model do
 
   describe '#owner?' do
     it 'returns false if other user owns entity' do
-      expect(user.owner? other_user_entity).to be false
+      expect(user.owner?(other_user_entity)).to be false
     end
 
     it 'returns true if user owns entity' do
-      expect(user.owner? users_entity).to be true
+      expect(user.owner?(users_entity)).to be true
     end
   end
 
@@ -68,13 +70,13 @@ RSpec.describe User, type: :model do
       let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
 
       it 'returns right user' do
-        expect(User.find_with_uid provider: auth_hash.provider, uid: auth_hash.uid).to eq user
+        expect(User.find_with_uid(provider: auth_hash.provider, uid: auth_hash.uid)).to eq user
       end
     end
 
     context 'when user is not exists' do
       it 'returns nil' do
-        expect(User.find_with_uid provider: auth_hash.provider, uid: auth_hash.uid).to be nil
+        expect(User.find_with_uid(provider: auth_hash.provider, uid: auth_hash.uid)).to be nil
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OmniauthMacros
   AuthHash = Struct.new :provider, :uid, :info
 

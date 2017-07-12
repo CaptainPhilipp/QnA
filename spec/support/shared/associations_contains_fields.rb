@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples_for 'Associations contains field' do |associations|
   associations.each do |association, field|
     it "#{association} association contains #{field}" do

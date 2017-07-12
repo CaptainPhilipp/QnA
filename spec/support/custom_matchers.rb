@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 require 'rspec/expectations'
 
 RSpec::Matchers.define :change_results do |entity, any: nil, all: nil|
-    match do |block|
-      raise ArgumentError, '`all: []` OR `any: []` required' if all && any || !all && !any
-      check, *methods = all ? [:all?, *all] : [:any?, *any]
+  match do |block|
+    raise ArgumentError, '`all: []` OR `any: []` required' if all && any || !all && !any
+    check, *methods = all ? [:all?, *all] : [:any?, *any]
 
-      old_results = methods.map { |method| entity.send method }
-      block.call
-      entity.try :reload
+    old_results = methods.map { |method| entity.send method }
+    block.call
+    entity.try :reload
 
-      methods.zip(old_results).to_h.send(check) do |method, old_result|
-        old_result != entity.send(method)
-      end
+    methods.zip(old_results).to_h.send(check) do |method, old_result|
+      old_result != entity.send(method)
     end
+  end
 
-    supports_block_expectations
+  supports_block_expectations
 end
 
 RSpec::Matchers.define :allow do |*actions|

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'Commentable concern' do
   with_model :CommentableDouble do
-    table { |t| t.timestamps }
+    table(&:timestamps)
     model { include Commentable }
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'acceptance_helper'
 
 feature 'User can change rating of answes', '
@@ -50,10 +52,10 @@ feature 'User can change rating of answes', '
     context 'and when already rated for question', js: true do
       before do
         question.vote!(1, other_user)
-        page.evaluate_script("window.location.reload()")
+        page.evaluate_script('window.location.reload()')
       end
 
-      scenario "User see current rating", js: true do
+      scenario 'User see current rating', js: true do
         within '#questions .body .rating .score' do
           expect(page).to have_content '1'
         end
@@ -65,7 +67,7 @@ feature 'User can change rating of answes', '
         end
       end
 
-      scenario "User can cancel his voice", js: true do
+      scenario 'User can cancel his voice', js: true do
         within '#questions .body .rating' do
           find('i.glyphicon-retweet').click
 

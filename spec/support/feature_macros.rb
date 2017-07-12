@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FeatureMacros
   def self.included(base)
     base.include ExampleMethods
@@ -22,7 +24,7 @@ module FeatureMacros
   module FeatureMethods
     def login_user(user = :user)
       assign_user(user)
-      before { instance_login_user(send user) }
+      before { instance_login_user(send(user)) }
     end
   end
 end

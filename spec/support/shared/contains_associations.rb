@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples_for 'Contains associations' do |associations_list|
   associations_list.each do |association|
     it "question contains #{association}" do
