@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
@@ -18,17 +20,15 @@ Rails.application.routes.draw do
   end
 
   concern :commentable do
-    resources :comments, only: %i(create)
+    resources :comments, only: %i[create]
   end
 
-  resources :questions, concerns: %i(rateable commentable) do
-    resources :answers, {
-        only: %i(new create show update destroy),
-        concerns: %i(rateable commentable),
-        shallow: true
-      } do
-          patch :best, on: :member
-        end
+  resources :questions, concerns: %i[rateable commentable] do
+    resources :answers,       only: %i[new create show update destroy],
+                              concerns: %i[rateable commentable],
+                              shallow: true do
+      patch :best, on: :member
+    end
 
     resource :subscription, only: %i[create destroy] do
       get :destroy, on: :collection # for mailer
@@ -37,11 +37,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :questions, only: %i(show index create) do
-        resources :answers, only: %i(show create), shallow: true
+      resources :questions, only: %i[show index create] do
+        resources :answers, only: %i[show create], shallow: true
       end
 
-      resources :profiles, only: %i(index) do
+      resources :profiles, only: %i[index] do
         get :me, on: :collection
       end
     end
