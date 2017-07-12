@@ -1,5 +1,5 @@
 class SearchService
-  TYPES = %w[Question].freeze
+  TYPES = %w[Question Answer Comment].freeze
 
   def initialize(query, types)
     @query = query
@@ -17,7 +17,7 @@ class SearchService
   end
 
   def classes
-    @classes ||= permit_types.map(&:constantize)
+    permit_types.map(&:constantize)
   end
 
   def permit_types
