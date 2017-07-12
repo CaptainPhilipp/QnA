@@ -46,14 +46,14 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
             login_user user
           end
 
-            Capybara.using_session(:other_user) do
-              login_user other_user
-              visit question_path(question)
+          Capybara.using_session(:other_user) do
+            login_user other_user
+            visit question_path(question)
 
-              Sidekiq::Testing.inline! do
-                fill_in Answer.human_attribute_name(:body), with: attributes[:body]
-                click_button I18n.t(:create, scope: 'answers.form')
-              end
+            Sidekiq::Testing.inline! do
+              fill_in Answer.human_attribute_name(:body), with: attributes[:body]
+              click_button I18n.t(:create, scope: 'answers.form')
+            end
           end
         end
 
