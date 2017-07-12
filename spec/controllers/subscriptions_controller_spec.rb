@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SubscriptionsController, type: :controller do
   login_user
   let!(:question) { create :question }
 
-  describe "POST #create" do
+  describe 'POST #create' do
     let(:send_request) { post :create, params: { question_id: question.id } }
 
     it 'creates subscription' do
@@ -19,7 +21,7 @@ RSpec.describe SubscriptionsController, type: :controller do
     end
   end
 
-  describe "DELETE #destroy" do
+  describe 'DELETE #destroy' do
     let!(:subscription) { create :subscription, user: user, question: question }
     let(:send_request) { delete :destroy, params: { question_id: question.id } }
 

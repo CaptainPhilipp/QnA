@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateOauthAuthorizations < ActiveRecord::Migration[5.0]
   def change
     create_table :oauth_authorizations do |t|
@@ -6,7 +8,7 @@ class CreateOauthAuthorizations < ActiveRecord::Migration[5.0]
       t.string :uid
 
       t.timestamps
-      t.index [:provider, :uid]
+      t.index %i[provider uid]
     end
   end
 end

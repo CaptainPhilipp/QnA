@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'acceptance_helper'
 
-RSpec.feature "SubscribeToQuestions", type: :feature do
+RSpec.feature 'SubscribeToQuestions', type: :feature do
   assign_users
   let(:question) { create :question }
   let(:subscribe_link) { 'Subscribe to new answers' }

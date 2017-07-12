@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'acceptance_helper'
 
 shared_examples :cant_change_voice, :js do
@@ -64,7 +66,7 @@ feature 'User can change rating of answes', '
         visit question_path(question)
       end
 
-      scenario "User see current rating", js: true do
+      scenario 'User see current rating', js: true do
         within '#answers .body .rating .score' do
           expect(page).to have_content '1'
         end
@@ -76,7 +78,7 @@ feature 'User can change rating of answes', '
         end
       end
 
-      scenario "User can cancel his voice", js: true do
+      scenario 'User can cancel his voice', js: true do
         within '#answers .body .rating' do
           find('i.glyphicon-retweet').click
 

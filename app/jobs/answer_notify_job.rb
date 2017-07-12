@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AnswerNotifyJob < ApplicationJob
   queue_as :default
 

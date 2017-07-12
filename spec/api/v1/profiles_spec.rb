@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Api::V1::ProfilesController, type: :request do
@@ -12,7 +14,7 @@ RSpec.describe Api::V1::ProfilesController, type: :request do
   context 'Authorized' do
     assign_user
 
-    let(:access_token) { create(:access_token, resource_owner_id: user.id ).token }
+    let(:access_token) { create(:access_token, resource_owner_id: user.id).token }
 
     describe 'GET /me' do
       let(:action) { 'me' }
@@ -38,13 +40,13 @@ RSpec.describe Api::V1::ProfilesController, type: :request do
         expect(response.body).to_not include_json(user.to_json)
       end
 
-      %w(id email created_at updated_at).each do |field|
+      %w[id email created_at updated_at].each do |field|
         it "records contains #{field}" do
           expect(response.body).to have_json_path("0/#{field}")
         end
       end
 
-      %w(password password_confirmation).each do |field|
+      %w[password password_confirmation].each do |field|
         it "records does not contains #{field}" do
           other_users.size.times do |i|
             expect(response.body).to_not have_json_path("#{i}/#{field}")

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
@@ -62,14 +64,16 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #update' do
     let(:attributes) { attributes_for :answer }
     let(:new_attributes) { attributes_for :new_answer }
-    let(:send_request) { patch :update, params: {
-      id: answer, format: :js, answer: { body: new_attributes[:body] }
-    } }
+    let(:send_request) do
+      patch :update, params: {
+        id: answer, format: :js, answer: { body: new_attributes[:body] }
+      }
+    end
 
     context 'when user is owner' do
       login_user
 
-      it "can update his answer" do
+      it 'can update his answer' do
         send_request
         expect(answer.reload.body).to eq new_attributes[:body]
       end

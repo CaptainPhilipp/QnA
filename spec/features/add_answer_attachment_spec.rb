@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'acceptance_helper'
 
 feature 'Attach files to answer', "
@@ -16,7 +18,7 @@ feature 'Attach files to answer', "
 
   scenario 'User adds a few attachments to answer', js: true do
     within 'form#new_answer' do
-      fill_in Answer.human_attribute_name(:body),  with: attributes[:body]
+      fill_in Answer.human_attribute_name(:body), with: attributes[:body]
       4.times { click_link Attachment.human_attribute_name(:add) }
 
       all('form .nested-fields').each_with_index do |a, i|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'Rateable concern' do
@@ -29,7 +31,7 @@ describe 'Rateable concern' do
     it 'shows rating of current record' do
       10.times { rateable.voices.create(user: create(:user), value: 1) }
       expect(rateable.rating).to eq 10
-      3.times  { rateable.voices.create(user: create(:user), value: -1) }
+      3.times { rateable.voices.create(user: create(:user), value: -1) }
       expect(rateable.rating).to eq 7
     end
   end
@@ -68,7 +70,7 @@ describe 'Rateable concern' do
       expect(rateable.rating).to eq(1)
     end
 
-    it "can cancel his voice" do
+    it 'can cancel his voice' do
       rateable.vote!('1', user)
       rateable.vote!('0', user)
       expect(rateable.rating).to eq(0)
@@ -83,23 +85,23 @@ describe 'Rateable concern' do
 
   context '#rated_by?' do
     it "returns false if user don't votes entity" do
-      expect(rateable.rated_by? user).to be_falsy
+      expect(rateable.rated_by?(user)).to be_falsy
     end
 
     it 'returns true if user votes for entity' do
       rateable.vote!('1', user)
-      expect(rateable.reload.rated_by? user).to be true
+      expect(rateable.reload.rated_by?(user)).to be true
     end
 
     it "returns false if user don't votes entity, but others do" do
       rateable.vote!('1', create(:user))
-      expect(rateable.rated_by? user).to be_falsy
+      expect(rateable.rated_by?(user)).to be_falsy
     end
 
-    it "returns false if user cancel his voice" do
+    it 'returns false if user cancel his voice' do
       rateable.vote!('1', create(:user))
       rateable.vote!('0', create(:user))
-      expect(rateable.rated_by? user).to be_falsy
+      expect(rateable.rated_by?(user)).to be_falsy
     end
   end
 end

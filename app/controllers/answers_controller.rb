@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class AnswersController < ApplicationController
   include Rated
 
-  before_action :authorize_answers, only: %i(create)
-  before_action :load_and_authorize_answer, only: %i(update destroy best)
-  before_action :load_question, only: %i(create)
+  before_action :authorize_answers, only: %i[create]
+  before_action :load_and_authorize_answer, only: %i[update destroy best]
+  before_action :load_question, only: %i[create]
 
   after_action :broadcast_answer, only: [:create]
   after_action :verify_authorized
@@ -11,7 +13,7 @@ class AnswersController < ApplicationController
   respond_to :html, :js
 
   def create
-    respond_with(@answer = @question.answers.create(answers_params.merge user: current_user))
+    respond_with(@answer = @question.answers.create(answers_params.merge(user: current_user)))
   end
 
   def update
@@ -46,7 +48,7 @@ class AnswersController < ApplicationController
   end
 
   def answers_params
-    params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
+    params.require(:answer).permit(:body, attachments_attributes: %i[file id _destroy])
   end
 
   def unauthorized_respond_to(format, exception)

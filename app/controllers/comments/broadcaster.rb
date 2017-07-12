@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Comments
   class Broadcaster
     def initialize(comment)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ControllerMacros
   def self.included(base)
     base.include ExampleMethods
@@ -17,7 +19,7 @@ module ControllerMacros
       yield
       entity.reload
       fields.each_with_index do |field, i|
-        expect(entity.send field).to eq old_values[i]
+        expect(entity.send(field)).to eq old_values[i]
       end
     end
   end

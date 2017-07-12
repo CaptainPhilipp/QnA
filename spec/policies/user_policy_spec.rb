@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UserPolicy do
-
   assign_users
   let(:new_user) { User.new }
 

@@ -1,4 +1,6 @@
-require "application_responder"
+# frozen_string_literal: true
+
+require 'application_responder'
 class ApplicationController < ActionController::Base
   include Pundit
   include ApplicationHelper

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api::V1
   class BaseController < ApplicationController
     before_action :doorkeeper_authorize!

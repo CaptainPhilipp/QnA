@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OauthUserService
   def initialize(provider: nil, uid: nil, info: nil)
     @provider = provider

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CommentPolicy do
-
   assign_user
   let(:guest) { nil }
 
