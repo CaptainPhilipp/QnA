@@ -34,7 +34,7 @@ class ApplicationPolicy
   protected
 
   def user_owns_entity?
-    user && record.user_id == user.id
+    user && record && record.user_id == user.id
   end
 
   def user_confirmed?
