@@ -16,12 +16,12 @@ class User < ApplicationRecord
     id == entity.user_id
   end
 
-  def subscribed_to?(question)
-    subscriptions.where(question: question).exists?
-  end
-
   def subscribe_to(question)
     subscriptions.find_or_create_by question: question
+  end
+
+  def subscribed_to?(question)
+    subscriptions.where(question: question).exists?
   end
 
   def self.find_with_uid(provider:, uid:)

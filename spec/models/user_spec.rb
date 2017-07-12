@@ -43,6 +43,26 @@ RSpec.describe User, type: :model do
     end
   end
 
+  fdescribe '#subscribed_to?(question)' do
+    context 'when subscription is not exists' do
+      let!(:question) { create :question }
+
+      it 'being false if user not subscribed' do
+        expect(user).to_not be_subscribed_to(question)
+      end
+    end
+
+    context 'when subscription exists' do
+      let(:question) { create :question }
+
+      before { Subscription.create user: user, question: question }
+
+      it 'being true if user subscribed' do
+        expect(user).to be_subscribed_to(question)
+      end
+    end
+  end
+
   describe '.find_with_uid' do
     context 'when user exists' do
       let!(:authentication) { create :oauth_authorization, provider: provider, uid: uid, user: user }
