@@ -1,22 +1,21 @@
 class SubscriptionsController < ApplicationController
-  before_action :autrhorize_subscriptions
-  after_action  :verify_authorized
+  after_action :verify_authorized
 
   def create
+    authorize Subscription
+
     Subscription.find_or_create_by subscription_arguments
     redirect_to question_path(question_id)
   end
 
   def destroy
-    Subscription.find_by(subscription_arguments).destroy
+    authorize subscription = Subscription.find_by(subscription_arguments)
+
+    subscription.destroy
     redirect_to question_path(question_id)
   end
 
   private
-
-  def autrhorize_subscriptions
-    authorize Subscription
-  end
 
   def subscription_arguments
     { question_id: question_id, user: current_user }

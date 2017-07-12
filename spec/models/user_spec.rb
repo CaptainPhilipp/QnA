@@ -43,7 +43,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  fdescribe '#subscribed_to?(question)' do
+  describe '#subscribed_to?(question)' do
     context 'when subscription is not exists' do
       let!(:question) { create :question }
 

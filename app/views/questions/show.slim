@@ -8,9 +8,9 @@ blockquote = @question.title
   
   .subscription
     - if current_user&.subscribed_to?(@question)
-      = link_to 'Unsubscribe from new answers', question_subscriptions_path(@question), method: :delete
+      = link_to 'Unsubscribe from new answers', question_subscription_path(@question), method: :delete
     - else
-      = link_to 'Subscribe to new answers', question_subscriptions_path(@question), method: :post
+      = link_to 'Subscribe to new answers', question_subscription_path(@question), method: :post
 
   - if policy(@question).edit? || policy(@question).destroy?
     .question-control
