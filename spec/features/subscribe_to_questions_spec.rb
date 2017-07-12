@@ -1,10 +1,11 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 RSpec.feature "SubscribeToQuestions", type: :feature do
   assign_users
   let(:question) { create :question }
   let(:subscribe_link) { 'Subscribe to new answers' }
   let(:unsubscribe_link) { 'Unsubscribe from new answers' }
+  let(:unsubscribe_url) { question_subscription_url(question) }
 
   context 'authorized' do
     context 'unsubscribed user' do
@@ -38,15 +39,22 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
       end
 
       context 'receives mail' do
+        let!(:question) { create :question, user: user }
         let(:attributes) { attributes_for(:answer) }
 
         before do
+          Capybara.using_session(:user) do
+            login_user user
+          end
+
           Capybara.using_session(:other_user) do
             login_user other_user
             visit question_path(question)
 
-            fill_in Answer.human_attribute_name(:body), with: attributes[:body]
-            click_button I18n.t(:create, scope: 'answers.form')
+            Sidekiq::Testing.inline! do
+              fill_in Answer.human_attribute_name(:body), with: attributes[:body]
+              click_button I18n.t(:create, scope: 'answers.form')
+            end
           end
         end
 
@@ -55,17 +63,21 @@ RSpec.feature "SubscribeToQuestions", type: :feature do
           expect(current_email).to have_content Answer.last.body
         end
 
-        xscenario 'click unsubscribe link' do
-          Capybara.using_session(:user) do
-            login_user user
-            open_email(user.email)
+        scenario 'find unsubscribe link in mail' do
+          open_email(user.email)
+          link = current_email.find_link unsubscribe_link
 
-            current_email.click_link unsubscribe_link
-
-            expect(page).to have_link subscribe_link
-            expect(page).to_not have_link unsubscribe_link
-          end
+          expect(current_email).to have_link link.text
+          expect(link[:href]).to eq unsubscribe_url
         end
+      end
+
+      scenario 'visit unsubscribe path' do
+        login_user user
+        visit unsubscribe_url
+
+        expect(page).to have_link subscribe_link
+        expect(page).to_not have_link unsubscribe_link
       end
     end
   end

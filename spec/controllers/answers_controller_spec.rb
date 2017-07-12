@@ -30,11 +30,6 @@ RSpec.describe AnswersController, type: :controller do
           it 'saves new answer' do
             expect { send_ajax_request }.to change(question.answers, :count).by 1
           end
-
-          it 'sends mail notification' do
-            expect(InstantMailer).to receive(:notify_about_answer).and_call_original
-            send_ajax_request
-          end
         end
 
         context 'with invalid attrs' do

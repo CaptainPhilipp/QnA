@@ -7,10 +7,10 @@ blockquote = @question.title
       = render @question.attachments
   
   .subscription
-    - if subscribed?
-      = link_to 'Unsubscribe from new answers', question_subscriptions_path(@question), method: :delete
+    - if current_user&.subscribed_to?(@question)
+      = link_to 'Unsubscribe from new answers', question_subscription_path(@question), method: :delete
     - else
-      = link_to 'Subscribe to new answers', question_subscriptions_path(@question), method: :post
+      = link_to 'Subscribe to new answers', question_subscription_path(@question), method: :post
 
   - if policy(@question).edit? || policy(@question).destroy?
     .question-control

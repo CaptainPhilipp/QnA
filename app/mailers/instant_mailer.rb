@@ -5,11 +5,9 @@ class InstantMailer < ApplicationMailer
   #
   #   en.instant_mailer.notify_about_answer.subject
   #
-  def notify_about_answer(answer)
+  def notify_about_answer(user, answer)
     @answer   = answer
     @question = answer.question
-    emails = @question.subscriptions.emails
-
-    mail to: emails, subject: 'New answer to your question' if emails.any?
+    mail to: user.email, subject: 'New answer to your question'
   end
 end

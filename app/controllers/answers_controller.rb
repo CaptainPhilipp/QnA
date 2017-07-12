@@ -6,7 +6,6 @@ class AnswersController < ApplicationController
   before_action :load_question, only: %i(create)
 
   after_action :broadcast_answer, only: [:create]
-  after_action :notify_question_subscribers, only: [:create]
   after_action :verify_authorized
 
   respond_to :html, :js
@@ -44,11 +43,6 @@ class AnswersController < ApplicationController
   def broadcast_answer
     return if @answer.errors.any?
     AnswersChannel.broadcast_to @question, AnswersSerializer.new(@answer).to_json
-  end
-
-  def notify_question_subscribers
-    return if @answer.errors.any?
-    InstantMailer.delay.notify_about_answer(@answer)
   end
 
   def answers_params

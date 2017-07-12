@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SubscriptionsController, type: :controller do
   login_user
-  let(:question) { create :question }
+  let!(:question) { create :question }
 
   describe "POST #create" do
     let(:send_request) { post :create, params: { question_id: question.id } }

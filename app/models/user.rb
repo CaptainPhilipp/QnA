@@ -20,6 +20,10 @@ class User < ApplicationRecord
     subscriptions.find_or_create_by question: question
   end
 
+  def subscribed_to?(question)
+    subscriptions.where(question: question).exists?
+  end
+
   def self.find_with_uid(provider:, uid:)
     oauth_arguments = { provider: provider, uid: uid }
     joins(:oauth_authorizations).find_by(oauth_authorizations: oauth_arguments)
@@ -27,10 +31,6 @@ class User < ApplicationRecord
 
   def self.create_without_pass(args)
     pass = Devise.friendly_token 64
-    create({ password: pass, password_confirmation: pass }.merge args)
-  end
-
-  def self.send_daily_digest
-    find_each { |user| DailyMailer.delay.digest(user) }
+    create({ password: pass, password_confirmation: pass }.merge(args))
   end
 end

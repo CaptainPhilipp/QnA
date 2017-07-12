@@ -13,7 +13,7 @@ RSpec.describe SubscriptionPolicy do
   end
 
   context 'For any user' do
-    let(:record) { Subscription }
+    let(:record) { create :subscription, user: user }
 
     it { should allow :create, :destroy }
   end

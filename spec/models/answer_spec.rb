@@ -15,7 +15,14 @@ RSpec.describe Answer, type: :model do
   let(:answer) { create :answer, question: question }
   let(:best_answer) { create :answer, question: question, best: true }
 
-  context '#best!' do
+  describe '.create' do
+    it 'runs mail notification job' do
+      expect(AnswerNotifyJob).to receive(:perform_later).and_call_original
+      create :answer
+    end
+  end
+
+  describe '#best!' do
     it 'should make answer best' do
       answer.best!
       expect(answer).to be_best
