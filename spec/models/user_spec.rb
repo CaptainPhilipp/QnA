@@ -5,6 +5,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:voices).dependent(:destroy) }
   it { should have_many(:oauth_authorizations).dependent(:destroy) }
+  it { should have_many(:subscriptions).dependent(:destroy) }
 
   assign_user :other_user
   let(:user) { create :user, email: email }
@@ -25,6 +26,20 @@ RSpec.describe User, type: :model do
 
     it 'returns true if user owns entity' do
       expect(user.owner? users_entity).to be true
+    end
+  end
+
+  describe '#subscribe_to(question)' do
+    let(:question) { create :question }
+
+    it 'creates subscription' do
+      expect { user.subscribe_to(question) }.to change(Subscription, :count).by(1)
+    end
+
+    it 'created subscription have right user and question' do
+      user.subscribe_to(question)
+      expect(Subscription.last.user).to eq user
+      expect(Subscription.last.question).to eq question
     end
   end
 
@@ -49,6 +64,19 @@ RSpec.describe User, type: :model do
 
     it 'creates user with right email' do
       expect(User.last.email).to eq email
+    end
+  end
+
+  describe '.send_daily_digest' do
+    let!(:users)     { create_list :user, 3 }
+    let!(:questions) { create_list :question, 3 }
+
+    it 'sends mail with digest to each user' do
+      User.find_each do |user|
+        expect(DailyMailer).to receive(:digest).with(user).and_call_original
+      end
+
+      User.send_daily_digest
     end
   end
 end

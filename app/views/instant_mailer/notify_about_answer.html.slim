@@ -1,0 +1,7 @@
+p = link_to 'Unsubscribe from new answers', question_subscriptions_url(@question)
+
+p Question:
+p = link_to @question.title, question_url(@question)
+br
+p New answer:
+p = @answer.body
