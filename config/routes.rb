@@ -3,6 +3,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  get 'searches/show'
+
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
@@ -46,6 +48,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get :search, to: 'searches#search', as: :search
 
   root 'questions#index'
 
