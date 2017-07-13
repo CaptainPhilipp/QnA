@@ -2,7 +2,7 @@
   = form_tag search_path, method: :get, class: 'input-group form-inline', id: 'search_form'
     = text_field_tag :query, '', placeholder: 'Search for...', class: 'form-control', autocomplete: false
 
-    div.btn-group data-toggle="buttons"
+    #select_type.btn-group data-toggle="buttons"
       - SearchService::TYPES.each do |type|
         label.btn.btn-default
           = check_box_tag type, type, false, name: 'types[]', autocomplete: false
