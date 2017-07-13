@@ -1,6 +1,5 @@
 class SearchService
   TYPES = %w[Question Answer Comment].freeze
-  TYPES_DELIMETER = ','.freeze
 
   def initialize(query, types)
     @query = query
@@ -9,14 +8,6 @@ class SearchService
 
   def call
     @types.empty? ? search : search(classes: classes)
-  end
-
-  def self.serialize_types(types)
-    [*types] * TYPES_DELIMETER
-  end
-
-  def self.deserialize_types(types)
-    types.split TYPES_DELIMETER
   end
 
   private

@@ -18,7 +18,7 @@ RSpec.feature "Searching", type: :feature, sphinx: true do
     it_behaves_like 'sends search request', entity: :comment_with_body
   end
 
-  fcontext 'with a few types of content' do
+  context 'with a few types of content' do
     let!(:question) { create :question, body: "#{query} KeywordQuestion" }
     let!(:answer)   { create :answer,   body: "#{query} KeywordAnswer" }
     let!(:comment)  { create :comment,  body: "#{query} KeywordComment" }
