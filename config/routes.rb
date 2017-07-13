@@ -49,7 +49,9 @@ Rails.application.routes.draw do
     end
   end
 
-  get :search, to: 'searches#search', as: :search
+  resource :search, only: [:new] do
+    get ':types/:query', action: :show, as: :show
+  end
 
   root 'questions#index'
 
