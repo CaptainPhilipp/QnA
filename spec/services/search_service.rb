@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.fdescribe SearchService do
+RSpec.describe SearchService do
   let(:query) { 'Search query' }
   let(:right_types) { %w[Question Answer Comment] }
 
