@@ -13,14 +13,19 @@ RSpec.configure do |config|
 
   config.use_transactional_fixtures = false
 
-  # перед запуском спеков, все таблицы дб обнуляются
   config.before(:suite) { DatabaseCleaner.clean_with :truncation }
-  # для каждого теста, контролировать бд транзакционно
   config.before(:each)  { DatabaseCleaner.strategy = :transaction }
-  # для каждого теста с js, контролировать бд обнулением
   config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
-  # начать отслеживание по выбранной стратегии
   config.before(:each)  { DatabaseCleaner.start }
-  # применить очищение по выбранной стратегии
   config.after(:each)   { DatabaseCleaner.clean }
+
+  # Ensure sphinx directories exist for the test environment
+  # Configure and start Sphinx, and
+  #   automatically stop Sphinx at the end of the test suite.
+  config.before(:suite, type: :feature) do
+    ThinkingSphinx::Test.init
+    ThinkingSphinx::Test.start_with_autostop
+  end
+  # Index data when running an acceptance spec.
+  config.before(:each, js: true) { index }
 end
