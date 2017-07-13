@@ -16,6 +16,7 @@ RSpec.configure do |config|
   config.before(:suite) { DatabaseCleaner.clean_with :truncation }
   config.before(:each)  { DatabaseCleaner.strategy = :transaction }
   config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
+  config.before(:each, sphinx: true) { DatabaseCleaner.strategy = :truncation }
   config.before(:each)  { DatabaseCleaner.start }
   config.after(:each)   { DatabaseCleaner.clean }
 
@@ -27,5 +28,5 @@ RSpec.configure do |config|
     ThinkingSphinx::Test.start_with_autostop
   end
   # Index data when running an acceptance spec.
-  config.before(:each, js: true) { index }
+  config.before(:each, type: :feature) { index }
 end

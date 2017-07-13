@@ -7,6 +7,16 @@ module SphinxMacros
   end
 
   def index_finished?
-    Dir[Rails.root.join(ThinkingSphinx::Test.config.indices_location, '*.{new,tmp}*')].empty?
+    Dir[indices_tmp_files].empty?
+  end
+
+  private
+
+  def indices_tmp_files
+    Rails.root.join(indices_location, '*.{new,tmp}*')
+  end
+
+  def indices_location
+    ThinkingSphinx::Test.config.indices_location
   end
 end
