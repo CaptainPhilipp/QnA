@@ -7,7 +7,7 @@ class SearchService
   end
 
   def call
-    @types.empty? ? search : search(classes: classes)
+    permited_types.empty? ? search : search(classes: classes)
   end
 
   private
@@ -17,11 +17,11 @@ class SearchService
   end
 
   def classes
-    permit_types.map(&:constantize)
+    permited_types.map(&:constantize)
   end
 
-  def permit_types
-    TYPES & @types
+  def permited_types
+    @permited_types ||= TYPES & @types
   end
 
   def escaped_query
