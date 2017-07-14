@@ -1,0 +1,6 @@
+#search_results
+  - if @results.any?
+    - @results.each do |result|
+      div.search_result
+        = render result.class.to_s.downcase, result: result
+        br

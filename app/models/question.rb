@@ -4,6 +4,7 @@ class Question < ApplicationRecord
   include Attachable
   include Rateable
   include Commentable
+  include HasDeltaAssociationUser
 
   belongs_to :user
 

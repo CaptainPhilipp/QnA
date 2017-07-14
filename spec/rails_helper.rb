@@ -40,9 +40,10 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
 
   config.include CommonMacros
-  config.include OmniauthMacros
   config.include ControllerMacros, type: :controller
-  config.include WaitForAjax, type: :feature
+  config.include OmniauthMacros
+  config.include SphinxMacros, type: :feature
+  config.include WaitForAjax,  type: :feature
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
