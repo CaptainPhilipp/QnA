@@ -1,5 +1,5 @@
 class SearchService
-  TYPES = %w[Question Answer Comment].freeze
+  TYPES = %w[Question Answer Comment User].freeze
 
   def initialize(query, types)
     @query = query

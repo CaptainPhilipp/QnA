@@ -7,7 +7,7 @@ RSpec.describe SearchService do
   let(:right_types) { %w[Question Answer Comment] }
 
   let(:service) { SearchService.new(query, types) }
-  let(:sphinx) { ThinkingSphinx }
+  let(:sphinx)  { ThinkingSphinx }
 
   context 'with right types' do
     let(:types) { %w[Question Answer] }
