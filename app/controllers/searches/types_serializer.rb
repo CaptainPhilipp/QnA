@@ -1,24 +1,18 @@
 module Searches
   class TypesSerializer
     TYPES_DELIMETER = ','.freeze
+    ALL_KEY = 'All'.freeze
 
-    def initialize(all_types:)
-      @all_types = all_types
-    end
+    class << self
+      def serialize(types)
+        return ALL_KEY if types.nil?
+        [*types] * TYPES_DELIMETER
+      end
 
-    def serialize(types)
-      return all_types if types.nil?
-      [*types] * TYPES_DELIMETER
-    end
-
-    def self.deserialize(types)
-      types.split TYPES_DELIMETER
-    end
-
-    private
-
-    def all_types
-      @all_types * TYPES_DELIMETER
+      def deserialize(types)
+        return nil if types == ALL_KEY
+        types.split TYPES_DELIMETER
+      end
     end
   end
 end
