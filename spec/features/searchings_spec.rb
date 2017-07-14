@@ -1,7 +1,7 @@
 require_relative 'acceptance_helper'
 
 RSpec.feature 'Searching', type: :feature, sphinx: true do
-  let(:query) { 'Searcheable' }
+  let(:query) { 'searchable' }
 
   before { visit root_path }
 
@@ -11,11 +11,13 @@ RSpec.feature 'Searching', type: :feature, sphinx: true do
     let(:question_with_body)  { create :question, body: body }
     let(:answer_with_body)    { create :answer,   body: body }
     let(:comment_with_body)   { create :comment,  body: body }
+    let(:user_with_email)     { create :user, email: "#{query}@mail.ru" }
 
     it_behaves_like 'sends search request', try_to_find: :question_with_title
     it_behaves_like 'sends search request', try_to_find: :question_with_body
     it_behaves_like 'sends search request', try_to_find: :answer_with_body
     it_behaves_like 'sends search request', try_to_find: :comment_with_body
+    it_behaves_like 'sends search request', try_to_find: :user_with_email
   end
 
   context 'with a few types of content' do
