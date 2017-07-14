@@ -1,6 +1,6 @@
 require_relative 'acceptance_helper'
 
-RSpec.feature "Searching", type: :feature, sphinx: true do
+RSpec.feature 'Searching', type: :feature, sphinx: true do
   let(:query) { 'Searcheable' }
 
   before { visit root_path }
@@ -12,18 +12,16 @@ RSpec.feature "Searching", type: :feature, sphinx: true do
     let(:answer_with_body)    { create :answer,   body: body }
     let(:comment_with_body)   { create :comment,  body: body }
 
-    it_behaves_like 'sends search request', entity: :question_with_title
-    it_behaves_like 'sends search request', entity: :question_with_body
-    it_behaves_like 'sends search request', entity: :answer_with_body
-    it_behaves_like 'sends search request', entity: :comment_with_body
+    it_behaves_like 'sends search request', try_to_find: :question_with_title
+    it_behaves_like 'sends search request', try_to_find: :question_with_body
+    it_behaves_like 'sends search request', try_to_find: :answer_with_body
+    it_behaves_like 'sends search request', try_to_find: :comment_with_body
   end
 
   context 'with a few types of content' do
     let!(:question) { create :question, body: "#{query} KeywordQuestion" }
     let!(:answer)   { create :answer,   body: "#{query} KeywordAnswer" }
     let!(:comment)  { create :comment,  body: "#{query} KeywordComment" }
-
-    before { index }
 
     scenario 'tryes to find Answer within Question type' do
       within '#search_form' do

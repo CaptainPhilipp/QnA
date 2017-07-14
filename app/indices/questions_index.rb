@@ -1,4 +1,4 @@
-ThinkingSphinx::Index.define :question, with: :active_record do
+ThinkingSphinx::Index.define :question, delta: true, with: :active_record do
   indexes title, sortable: true
   indexes body
   indexes user.email, as: :author_email, sortable: true
