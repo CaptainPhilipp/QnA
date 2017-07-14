@@ -1,4 +1,5 @@
 module Searches
+  # types serialization for search
   class TypesSerializer
     TYPES_DELIMETER = ','.freeze
     ALL_KEY = 'All'.freeze
