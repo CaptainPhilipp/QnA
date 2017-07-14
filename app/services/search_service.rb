@@ -4,7 +4,6 @@ class SearchService
   def initialize(query, types)
     @query = query
     @types = types
-    @types ||= []
   end
 
   def call
@@ -12,6 +11,8 @@ class SearchService
   end
 
   private
+
+  attr_reader :query
 
   def search(*args)
     ThinkingSphinx.search(escaped_query, *args)
@@ -22,10 +23,14 @@ class SearchService
   end
 
   def permited_types
-    @permited_types ||= TYPES & @types
+    @permited_types ||= TYPES & types
   end
 
   def escaped_query
-    ThinkingSphinx::Query.escape(@query)
+    ThinkingSphinx::Query.escape(query)
+  end
+
+  def types
+    @types ||= []
   end
 end
