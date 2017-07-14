@@ -49,7 +49,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :search, only: [:new] do
+  resource :search, only: [:create] do
     get ':types/:query', action: :show, as: :show
   end
 

@@ -2,7 +2,7 @@
   = menu_group do
     = menu_item Question.model_name.human(count: :other), root_path
   
-  = render 'layouts/search_bar'
+  = render 'layouts/search_form'
   
   = menu_group pull: :right do
     - if user_signed_in?

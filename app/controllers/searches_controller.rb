@@ -1,5 +1,5 @@
 class SearchesController < ApplicationController
-  def new
+  def create
     types = Searches::TypesSerializer.serialize params[:types]
 
     redirect_to action: :show, query: params[:query], types: types

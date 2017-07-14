@@ -1,5 +1,5 @@
 .col-md-8
-  = form_tag new_search_path, method: :get, class: 'input-group form-inline', id: 'search_form'
+  = form_tag search_path, class: 'input-group form-inline', id: 'search_form'
     = text_field_tag :query, '', placeholder: 'Search for...', class: 'form-control', autocomplete: false
 
     #select_type.btn-group data-toggle="buttons"
