@@ -22,17 +22,17 @@ RSpec.describe SearchService do
   context 'without types' do
     let(:types) {}
 
-    it 'calls Sphinx with right without types' do
+    it 'calls Sphinx for all indexes' do
       expect(sphinx).to receive(:search).with(query)
       service.call
     end
   end
 
-  context 'calls Sphinx with wrong and right types' do
+  context 'with wrong and right types' do
     let(:types) { %w[YourMom SomeOtherType] + right_types }
     let(:classes) { right_types.map(&:constantize) }
 
-    it 'calls Sphinx with right query and types' do
+    it 'calls Sphinx with right classes' do
       expect(sphinx).to receive(:search).with(query, classes: classes)
       service.call
     end
@@ -41,7 +41,7 @@ RSpec.describe SearchService do
   context 'calls Sphinx only with wrong types' do
     let(:types) { %w[YourMom SomeOtherType] }
 
-    it 'calls Sphinx with right query and types' do
+    it 'calls Sphinx with right classes' do
       expect(sphinx).to receive(:search).with(query)
       service.call
     end

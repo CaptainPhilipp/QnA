@@ -3,7 +3,8 @@ class SearchService
 
   def initialize(query, types)
     @query = query
-    @types = types || []
+    @types = types
+    @types ||= []
   end
 
   def call
