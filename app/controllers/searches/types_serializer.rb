@@ -6,7 +6,7 @@ module Searches
     class << self
       def serialize(types)
         return ALL_KEY if types.nil?
-        [*types] * TYPES_DELIMETER
+        [*types].join TYPES_DELIMETER
       end
 
       def deserialize(types)
