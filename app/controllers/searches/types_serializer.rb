@@ -11,7 +11,7 @@ module Searches
       end
 
       def deserialize(types)
-        return nil if types == ALL_KEY
+        return [] if types == ALL_KEY
         types.split TYPES_DELIMETER
       end
     end
