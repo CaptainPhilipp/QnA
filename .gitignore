@@ -18,7 +18,6 @@
 # Ignore Byebug command history file.
 .byebug_history
 config/database.yml
-config/secrets.yml
 dump.rdb
 config/*.sphinx.conf
 db/sphinx
