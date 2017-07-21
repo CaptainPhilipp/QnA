@@ -45,6 +45,8 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
+    airbrussh (1.3.0)
+      sshkit (>= 1.6.1, != 1.7.0)
     arel (7.1.4)
     bcrypt (3.1.11)
     better_errors (2.1.1)
@@ -56,6 +58,20 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.3)
     byebug (9.0.6)
+    capistrano (3.8.2)
+      airbrussh (>= 1.0.0)
+      i18n
+      rake (>= 10.0.0)
+      sshkit (>= 1.9.0)
+    capistrano-bundler (1.2.0)
+      capistrano (~> 3.1)
+      sshkit (~> 1.2)
+    capistrano-rails (1.3.0)
+      capistrano (~> 3.1)
+      capistrano-bundler (~> 1.1)
+    capistrano-rvm (0.1.2)
+      capistrano (~> 3.0)
+      sshkit (~> 1.2)
     capybara (2.14.3)
       addressable
       mime-types (>= 1.16)
@@ -97,6 +113,9 @@ GEM
     diff-lcs (1.3)
     doorkeeper (4.2.6)
       railties (>= 4.2)
+    dotenv (1.0.2)
+    dotenv-rails (1.0.2)
+      dotenv (= 1.0.2)
     erubis (2.7.0)
     execjs (2.7.0)
     factory_girl (4.8.0)
@@ -162,6 +181,9 @@ GEM
     multipart-post (2.0.0)
     mustermann (1.0.0)
     mysql2 (0.3.21)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (4.1.0)
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
@@ -313,6 +335,9 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    sshkit (1.14.0)
+      net-scp (>= 1.1.2)
+      net-ssh (>= 2.8.0)
     temple (0.8.0)
     thinking-sphinx (3.2.0)
       activerecord (>= 3.1.0)
@@ -361,6 +386,10 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   byebug
+  capistrano
+  capistrano-bundler
+  capistrano-rails
+  capistrano-rvm
   capybara
   capybara-email
   carrierwave
@@ -369,6 +398,8 @@ DEPENDENCIES
   database_cleaner
   devise
   doorkeeper
+  dotenv
+  dotenv-rails
   factory_girl_rails
   gon
   jbuilder (~> 2.5)
@@ -411,4 +442,4 @@ DEPENDENCIES
   with_model
 
 BUNDLED WITH
-   1.15.1
+   1.15.2
