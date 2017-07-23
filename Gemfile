@@ -88,10 +88,11 @@ group :development do
 
   gem 'capybara-email'
   gem 'letter_opener'
-  gem 'capistrano'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rails'
-  gem 'capistrano-rvm'
+  gem 'capistrano',         require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails',   require: false
+  gem 'capistrano-rvm',     require: false
+  gem 'capistrano-sidekiq', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
