@@ -10,7 +10,7 @@
 # set :output, "/path/to/my/cron_log.log"
 
 every :day, at: '7:00 pm' do
-  runner 'DailyDigestJob.perform'
+  runner 'DailyDigestJob.perform_now'
 end
 
 # every 1.day do
