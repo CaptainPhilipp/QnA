@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170714060224) do
+ActiveRecord::Schema.define(version: 20170725151313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,9 +20,9 @@ ActiveRecord::Schema.define(version: 20170714060224) do
     t.integer  "question_id",                 null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.integer  "user_id",                     null: false
     t.boolean  "best",        default: false, null: false
     t.boolean  "delta",       default: true,  null: false
+    t.integer  "user_id"
     t.index ["question_id", "best"], name: "index_answers_on_question_id_and_best", using: :btree
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
     t.index ["user_id"], name: "index_answers_on_user_id", using: :btree
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20170714060224) do
 
   create_table "comments", force: :cascade do |t|
     t.integer  "user_id",                         null: false
-    t.string   "commentable_type"
+    t.string   "commentable_type",                null: false
     t.integer  "commentable_id",                  null: false
     t.string   "body",                            null: false
     t.datetime "created_at",                      null: false
@@ -102,8 +102,8 @@ ActiveRecord::Schema.define(version: 20170714060224) do
     t.text     "body"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.integer  "user_id",                   null: false
     t.boolean  "delta",      default: true, null: false
+    t.integer  "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id", using: :btree
   end
 
@@ -142,12 +142,12 @@ ActiveRecord::Schema.define(version: 20170714060224) do
   end
 
   create_table "voices", force: :cascade do |t|
-    t.integer  "user_id",                   null: false
-    t.string   "rateable_type"
-    t.integer  "rateable_id",               null: false
-    t.integer  "value",         default: 0, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "user_id",       null: false
+    t.string   "rateable_type", null: false
+    t.integer  "rateable_id",   null: false
+    t.integer  "value"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.index ["rateable_type", "rateable_id"], name: "index_voices_on_rateable_type_and_rateable_id", using: :btree
     t.index ["user_id"], name: "index_voices_on_user_id", using: :btree
   end
