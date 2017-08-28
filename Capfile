@@ -11,6 +11,7 @@ require 'capistrano/sidekiq'
 require 'whenever/capistrano'
 require 'thinking_sphinx/capistrano'
 require 'capistrano/rails/console'
+require 'capistrano3/unicorn'
 
 # Load the SCM plugin appropriate to your project:
 #

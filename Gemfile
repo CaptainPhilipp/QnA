@@ -55,6 +55,7 @@ gem 'thinking-sphinx', '~> 3.2.0'
 gem 'twitter-bootstrap-rails'
 gem 'whenever', require: false
 gem 'with_model'
+gem 'unicorn'
 
 group :test do
   gem 'capybara'
@@ -94,6 +95,7 @@ group :development do
   gem 'capistrano-rvm',     require: false
   gem 'capistrano-sidekiq', require: false
   gem 'capistrano-rails-console', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
