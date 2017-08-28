@@ -5,13 +5,15 @@ set :application, "QnA"
 set :repo_url, 'https://github.com/CaptainPhilipp/QnA.git'
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/home/deploy/qna'
+set :deploy_to, '/home/deploy/qna/'
 
 # Default value for :linked_files is []
 append :linked_files, 'config/database.yml', 'config/secrets.yml', '.env'
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'public/uploads'
+
+set :rvm_ruby_version, '2.4.0@qna'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -32,6 +34,5 @@ namespace :deploy do
 
   after :publishing, :restart
 
-  before :publishing, 'thinking_sphinx:stop'
-  after :deploy, 'thinking_sphinx:start'
+  after :deploy, 'thinking_sphinx:restart'
 end

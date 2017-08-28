@@ -1,7 +1,7 @@
 test:
   mysql41: 9307
 production:
-  pid_file: shared/tmp/searchd.pid
-  indices_location: shared/db/sphinx
-  configuration_file: shared/production.sphinx.conf
-  binlog_path: shared/binlog
+  pid_file: tmp/searchd.pid
+  indices_location: db/sphinx
+  configuration_file: config/production.sphinx.conf
+  binlog_path: binlog
