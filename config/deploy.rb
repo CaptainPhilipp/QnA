@@ -8,10 +8,10 @@ set :repo_url, 'https://github.com/CaptainPhilipp/QnA.git'
 set :deploy_to, '/home/deploy/qna/'
 
 # Default value for :linked_files is []
-append :linked_files, 'config/database.yml', 'config/secrets.yml', '.env'
+append :linked_files, 'config/database.yml', 'config/production.sphinx.conf', 'config/secrets.yml', '.env'
 
 # Default value for linked_dirs is []
-append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'public/uploads'
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'public/uploads', 'db/sphinx'
 
 set :rvm_ruby_version, '2.4.0@qna'
 
