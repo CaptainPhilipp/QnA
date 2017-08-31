@@ -12,7 +12,10 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
+  config.action_mailer.default_url_options = { host: 'http://95.213.235.243/' }
+
   config.action_mailer.delivery_method = :sendmail
+
 
   config.action_mailer.smtp_settings = {
     port:      587,
