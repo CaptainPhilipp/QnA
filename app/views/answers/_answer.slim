@@ -1,42 +1,43 @@
 - if answer.persisted?
   div id="#{css_id_for answer}" data-answer-id="#{answer.id}" class="#{'best_answer' if answer.best?}"
     hr
-  
+
     .body.col-md-12
       .col-mb-1
         = render 'common/rate', entity: answer
-    
+
       .col-mb-2.col-md-offset-1
         - if policy(answer).best?
           = link_to Answer.human_attribute_name(:best), best_answer_path(answer),
             method: :patch, remote: true, data: { answer_id: answer.id }, class: 'best_answer_link'
-            
-      .col-md-8.col-md-offset-2
-        = answer.body
-          
+
+      - cache answer
+        .col-md-8.col-md-offset-2
+          = answer.body
+
       .col-md-2.col-md-offset-10
         - if policy(answer).edit?
           = link_to t(:edit), '', data: { answer_id: answer.id }, class: 'answer_edit_link'
         - if policy(answer).destroy?
           = link_to t(:delete), answer, method: :delete, remote: true, data: { confirm: t(:sure?) }
-          
-      .col-md-12
-        = render answer.attachments
-          
-    .clearfix
-    
-    = render 'comments/comments', commentable: answer
-    
-    .edit-form
-      = form_for answer, remote: true do |f|
-        .form-group class="#{has_errors_selector(answer, :body)}"
-          = f.label :body, class: 'control-label'
-          = error_massages_for(answer, :body)
-          = f.text_area :body, class: 'form-control'
 
-          = render 'common/fields_for_attachments', f: f
-          .btn-group
-            = f.submit t(:save), class: 'btn btn-default'
-            = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'cancel_answer_edit_link btn btn-default'
-        
-    
+      - cache [answer, :attachments]
+        .col-md-12
+          = render answer.attachments
+
+    .clearfix
+
+    = render 'comments/comments', commentable: answer
+
+    - cache [answer, :form]
+      .edit-form
+        = form_for answer, remote: true do |f|
+          .form-group class="#{has_errors_selector(answer, :body)}"
+            = f.label :body, class: 'control-label'
+            = error_massages_for(answer, :body)
+            = f.text_area :body, class: 'form-control'
+
+            = render 'common/fields_for_attachments', f: f
+            .btn-group
+              = f.submit t(:save), class: 'btn btn-default'
+              = link_to t(:cancel), '', data: { answer_id: answer.id }, class: 'cancel_answer_edit_link btn btn-default'

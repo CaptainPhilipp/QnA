@@ -32,9 +32,8 @@ module Rateable
   end
 
   def change_rate_by(amount, voter)
-    return if rated_by?(voter)
-    return if voter.owner?(self)
-    value = amount > 0 ? [amount, 1].min : [amount, -1].max
+    return if rated_by?(voter) || voter.owner?(self)
+    value = amount.positive? ? [amount, 1].min : [amount, -1].max
     create_voice(value, voter)
   end
 
