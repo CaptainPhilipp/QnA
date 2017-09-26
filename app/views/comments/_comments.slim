@@ -1,7 +1,10 @@
-.comments_container [data-commentable-id="#{commentable.id}" data-commentable-type="#{commentable.class}"]
+- cache commentable do
+  .comments_container [data-commentable-id="#{commentable.id}" data-commentable-type="#{commentable.class}"]
 
-  .comments
-    = render commentable.comments
+    - cache [commentable, :comments] do
+      .comments
+        = render commentable.comments
 
-  .comment_form
-    = render 'comments/form', commentable: commentable
+    - cache [commentable, :form] do
+      .comment_form
+        = render 'comments/form', commentable: commentable

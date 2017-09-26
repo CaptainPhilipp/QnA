@@ -23,4 +23,9 @@ class Question < ApplicationRecord
   def subscribe_author
     Subscription.subscribe_author(self)
   end
+
+  def cache_key
+    max_updated_at = maximum(:updated_at).try(:utc).try(:to_s, :number)
+    "#{to_s.pluralize}/collection-#{count}-#{max_updated_at}"
+  end
 end

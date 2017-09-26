@@ -3,8 +3,9 @@
     .form-group class="#{has_errors_selector(@answer, :body)}"
       = f.label :body, class: 'control-label'
       = f.text_area :body, class: 'form-control'
-      
-      = render 'common/fields_for_attachments', f: f
+
+      - cache [:attachments, @question, @answer] do
+        = render 'common/fields_for_attachments', f: f
 
     = f.submit t('.create'), class: 'btn btn-default'
 - else
